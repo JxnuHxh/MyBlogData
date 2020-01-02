@@ -1,0 +1,2003 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+     xmlns:content="http://purl.org/rss/1.0/modules/content/"
+     xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+     xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
+    <channel>
+        <title>Ryan Wang's Blog</title>
+        <atom:link href="/atom.xml" rel="self" type="application/rss+xml"/>
+        <link></link>
+        <description>Life is fantastic.</description>
+        <language>zh-CN</language>
+        <sy:updatePeriod>hourly</sy:updatePeriod>
+        <sy:updateFrequency>1</sy:updateFrequency>
+        <generator>https://halo.run</generator>
+    </channel>
+            <item>
+                <title><![CDATA[博客迁移到 Raspberry Pi]]></title>
+                <link>/archives/blog-migration-to-raspberry-pi</link>
+                <comments>/archives/blog-migration-to-raspberry-pi#comments</comments>
+                <pubDate>2019-12-23 19:40:02</pubDate>
+                <dc:creator><![CDATA[Ryan Wang]]></dc:creator>
+
+                        <category><![CDATA[学习笔记]]></category>
+                <description>
+                    <![CDATA[
+                        本着爱折腾之心，今天将博客搬到了吃灰已久的 Raspberry Pi 3B+。好吧，其实也是之前一个热心的网友送了我一年某平台的内网穿透，一直没用，所以秉承着中华人民拒绝浪费的美好传统，折腾开始了...
+                    ]]>
+                </description>
+                <content:encoded>
+                    <![CDATA[
+                            <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>本着爱折腾之心，今天将博客搬到了吃灰已久的 <code>Raspberry Pi 3B+</code>。好吧，其实也是之前一个热心的网友送了我一年<a href="http://www.zhexi.tech">哲西云</a>的内网穿透，一直没用，所以秉承着中华人民拒绝浪费的美好传统，折腾开始了...</p> 
+  </blockquote> 
+  <h2 id="配置"><a href="#配置" id="配置">配置</a></h2> 
+  <pre><code class="language-bash">    .',;:cc;,'.    .,;::c:,,.    root@raspberrypi
+   ,ooolcloooo:  'oooooccloo:    OS: Raspbian 10 buster
+   .looooc;;:ol  :oc;;:ooooo'    Kernel: armv7l Linux 4.19.75-v7+
+     ;oooooo:      ,ooooooc.     Uptime: 4h 4m
+       .,:;'.       .;:;'.       Packages: 588
+       .... ..'''''. ....        Shell: 5295
+     .''.   ..'''''.  ..''.      CPU: ARMv7 rev 4 (v7l) @ 1.4GHz
+     ..  .....    .....  ..      RAM: 386MiB / 926MiB
+    .  .'''''''  .''''''.  .
+  .'' .''''''''  .'''''''. ''.
+  '''  '''''''    .''''''  '''
+  .'    ........... ...    .'.
+    ....    ''''''''.   .''.
+    '''''.  ''''''''. .'''''
+     '''''.  .'''''. .'''''.
+      ..''.     .    .''..
+            .'''''''
+             ......
+</code></pre> 
+  <p>也就那样儿吧~</p> 
+  <h2 id="烧录镜像"><a href="#烧录镜像" id="烧录镜像">烧录镜像</a></h2> 
+  <p>这次搭建博客使用的镜像是官方的 <code>Raspbian Buster Lite</code>，之所以没选 <code>Desktop</code>，因为那玩意儿就是个玩具，没有实际用途，鹅且也不会用它，倒不如节省点内存。</p> 
+  <p>进入官网 <a href="https://www.raspberrypi.org/downloads/raspbian">https://www.raspberrypi.org/downloads/raspbian</a> ,找到 <code>Raspbian Buster Lite</code>，选择 <code>Download ZIP</code>。</p> 
+  <p>解压下载好的镜像得到 <code>xxxx-xx-xx-raspbian-buster-lite.img</code>。</p> 
+  <p>使用 <a href="https://github.com/balena-io/etcher">Etcher</a> 烧录镜像。当然，也有很多其他的烧录工具。</p> 
+  <h2 id="开启-ssh"><a href="#开启-ssh" id="开启-ssh">开启 SSH</a></h2> 
+  <p>这一步很简单，在烧录好的 SD 卡中，新建一个空白的 <code>ssh</code> 文件即可，需要注意的是，这个文件没有后缀，别搞个 <code>ssh.txt</code>、<code>ssh.avi</code> 啥的。</p> 
+  <h2 id="启动"><a href="#启动" id="启动">启动</a></h2> 
+  <p>插上 SD 和电源直接启动即可，默认用户名 <code>pi</code>，默认密码 <code>raspberry</code>，切换到 root 账户，<code>sudo su root</code>。</p> 
+  <h2 id="环境配置"><a href="#环境配置" id="环境配置">环境配置</a></h2> 
+  <p>Java</p> 
+  <pre><code class="language-bash">sudo apt-get install openjdk-8-jre-headless
+sudo apt-get install openjdk-8-jre
+</code></pre> 
+  <p>Vim</p> 
+  <pre><code class="language-bash">sudo apt-get install vim
+</code></pre> 
+  <p>Git</p> 
+  <pre><code class="language-bash">sudo apt-get install git
+</code></pre> 
+  <h2 id="迁移数据"><a href="#迁移数据" id="迁移数据">迁移数据</a></h2> 
+  <p>下载安装包</p> 
+  <pre><code>wget http://halo.ryanc.cc/release/halo-latest.jar -O halo-latest.jar
+</code></pre> 
+  <p>拉取备份的数据</p> 
+  <pre><code>git clone git@github.com:ruibaby/blog-data.git .halo
+</code></pre> 
+  <h2 id="启动-halo"><a href="#启动-halo" id="启动-halo">启动 Halo</a></h2> 
+  <pre><code>java -jar halo-latest.jar
+</code></pre> 
+  <p>测试没问题，再配置 <code>systemd</code> 进行管理，教程：<a href="https://halo.run/guide/install/install-with-linux.html#%E8%BF%9B%E9%98%B6%E9%85%8D%E7%BD%AE">https://halo.run/guide/install/install-with-linux.html#%E8%BF%9B%E9%98%B6%E9%85%8D%E7%BD%AE</a>。</p> 
+  <h2 id="域名解析"><a href="#域名解析" id="域名解析">域名解析</a></h2> 
+  <p>由于我是直接是用的 <a href="https://www.upyun.com">又拍云 CDN</a> 进行回源，所以也不需要安装 Nginx 啥的了，这个内网穿透服务提供了一个 <code>CNAME</code>，去解析一下就完事了。</p> 
+  <h2 id="哲西云"><a href="#哲西云" id="哲西云">哲西云</a></h2> 
+  <p>如有需要，可以去 <a href="http://www.zhexi.tech">http://www.zhexi.tech</a> 体验体验。优惠码 <code>GRRVFM</code></p> 
+  <h2 id="展示"><a href="#展示" id="展示">展示</a></h2> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/56ffb0f522663785f4b031d595c1f6a0.png" alt="Snipaste_2019-12-24_12-35-16"></p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/d15419a817ec66336297bd8e08157508.png" alt="Snipaste_2019-12-24_12-36-10"></p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/758cfbd207c38b9db27a6bba295618a2.png" alt="raspberry-pi"></p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/9e22bcea8ac55cd0c8a82d2c49b083c8.png" alt="developer-mode-1"></p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/87e60eb23320ee7c00fb5ed66942f631.png" alt="developer-mode-2"></p> 
+ </body>
+</html>
+                    ]]>
+                </content:encoded>
+            </item>
+            <item>
+                <title><![CDATA[Flarum 的安装与配置]]></title>
+                <link>/archives/flarum-install-and-config</link>
+                <comments>/archives/flarum-install-and-config#comments</comments>
+                <pubDate>2019-11-18 20:30:22</pubDate>
+                <dc:creator><![CDATA[Ryan Wang]]></dc:creator>
+
+                        <category><![CDATA[学习笔记]]></category>
+                <description>
+                    <![CDATA[
+                        Flarum是一款非常棒的开源论坛程序，Halo的论坛就是用Flarum搭建的。之前有人问过我Flarum如何搭建，所以下面讲一下Flarum的搭建过程（btw，官方的搭建教程实在草率）。前提域名需要提前解析。注意服务器是否需要备案，如果没备案，会被x掉。有一定的Linux基础。环境说明LinuxS
+                    ]]>
+                </description>
+                <content:encoded>
+                    <![CDATA[
+                            <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p><a href="https://flarum.org">Flarum</a> 是一款非常棒的开源论坛程序，<a href="https://bbs.halo.run">Halo 的论坛</a> 就是用 Flarum 搭建的。之前有人问过我 Flarum 如何搭建，所以下面讲一下 Flarum 的搭建过程（btw，官方的搭建教程实在草率）。</p> 
+  </blockquote> 
+  <h2 id="前提">前提</h2> 
+  <ul> 
+   <li>域名需要提前解析。</li> 
+   <li>注意服务器是否需要备案，如果没备案，会被 x 掉。</li> 
+   <li>有一定的 Linux 基础。</li> 
+  </ul> 
+  <h2 id="环境说明">环境说明</h2> 
+  <ul> 
+   <li>Linux Server（本文是用的 CentOS 7.6）</li> 
+   <li>Apache 或者 Nginx（本文是用的 Nginx）</li> 
+   <li>PHP 7.1+</li> 
+   <li>PHP 拓展： curl, dom, gd, json, mbstring, openssl, pdo_mysql, tokenizer, zip, fileinfo</li> 
+   <li>MySQL 5.6+ 或者 MariaDB 10.0.5+</li> 
+  </ul> 
+  <h2 id="部署环境安装">部署环境安装</h2> 
+  <h3 id="更新服务器软件包">更新服务器软件包</h3> 
+  <pre><code class="language-bash">yum update -y
+</code></pre> 
+  <h3 id="安装-nginxphpmysql">安装 Nginx/PHP/MySQL</h3> 
+  <blockquote> 
+   <p>这里我们使用 <a href="https://oneinstack.com">OneinStack</a> 一键安装，人生苦短，懒得自己编译了（绝不是因为我不会🌚）。当然，如果有时间，自己编译安装更好。</p> 
+  </blockquote> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/38771f8f695f99bd0539db42af0f2e69.png" alt="OneInStack"></p> 
+  <p>如上图，选择好需要的软件以及版本后，复制安装命令到服务器执行就行了，安装过程可能会有点慢，耐心等待就行了。</p> 
+  <blockquote> 
+   <p>需要注意的是，PHP 扩展中的 <code>fileinfo</code> 一定要勾选，Flarum 官方文档居然没有写需要这个扩展。(没错，这里我被坑了，嘤嘤嘤嘤~)</p> 
+  </blockquote> 
+  <p>安装完成应该会打印出这些东西： <img src="https://cdn.ryanc.cc/img/blog/thumbnails/6902ec905fc810f533910402cbd43662.png" alt="Oneinstack-success"></p> 
+  <h3 id="安装-composer">安装 Composer</h3> 
+  <pre><code class="language-bash">php -r "copy('https://install.phpcomposer.com/installer', 'composer-setup.php');"
+
+php composer-setup.php
+
+php -r "unlink('composer-setup.php');"
+
+mv composer.phar /usr/local/bin/composer
+</code></pre> 
+  <p>由于 <code>Composer</code> 的服务器在国外，可能导致下载 Flarum 已经依赖包会很慢，所以我们需要更换一下源地址。至于 <code>Composer</code> 是啥，其实就是 PHP 的一个包管理，类似 Java 的 <code>Maven</code> 和 <code>Gradle</code> 工具。</p> 
+  <pre><code class="language-bash">composer config -g repo.packagist composer https://packagist.phpcomposer.com
+</code></pre> 
+  <h2 id="安装-flarum">安装 Flarum</h2> 
+  <p>进入到 oneinstack 目录，执行 vhost.sh 脚本新建一个网站 <img src="https://cdn.ryanc.cc/img/blog/thumbnails/c608cda88c610ae302e895bf723e3515.png" alt="OneInStack-vhost"></p> 
+  <p>然后会提示 SSL 证书选项，网站目录之类的东西，按照自己的需求选择即可。</p> 
+  <p>创建完成后应该是这样子。</p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/56c950fe8a52e135b217e75026d48de8.png" alt="OneInStack-new-site"></p> 
+  <p>然后进入网站目录执行：</p> 
+  <pre><code class="language-bash">composer create-project flarum/flarum . --stability=beta
+</code></pre> 
+  <p>然后等待下载 Flarum 以及对应的依赖即可，安装完成应该是这个样子的：</p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/34286be66336e95f86ff2f59349cfa70.png" alt="Flarum-install-success"></p> 
+  <h2 id="配置运行">配置运行</h2> 
+  <p>上面其实就已经安装好了 Flarum，但是还需要进一步配置才能正确运行。</p> 
+  <h3 id="创建数据库">创建数据库</h3> 
+  <p>登陆 MySQL：</p> 
+  <pre><code class="language-bash">mysql -u root -p密码
+</code></pre> 
+  <p>创建数据库：</p> 
+  <pre><code class="language-bash">create database 数据库名 character set utf8mb4 collate utf8mb4_bin;
+</code></pre> 
+  <blockquote> 
+   <p>这里的字符集一定要是 <code>utf8mb4</code>，至于为什么是 <code>utf8mb4</code>，参考：<a href="https://www.jianshu.com/p/6967ce16a202">https://www.jianshu.com/p/6967ce16a202</a>。</p> 
+  </blockquote> 
+  <h3 id="修改-nginx-配置">修改 Nginx 配置</h3> 
+  <p>进入 Nginx 配置文件目录：</p> 
+  <pre><code>cd /usr/local/nginx/conf/vhost
+</code></pre> 
+  <p>修改网站的配置文件：</p> 
+  <pre><code>vim xxx.conf
+</code></pre> 
+  <p>需要修改的地方：</p> 
+  <ol> 
+   <li>root：需要在路径后面加上 <code>public</code>，比如我的原本是 <code>root /data/wwwroot/bbs.ryanwang.me;</code>，需要修改为 <code>root /data/wwwroot/bbs.ryanwang.me/public;</code>。</li> 
+   <li>引入 Flarum 提供的配置，在 server 大括号中任意位置加上 <code>include /data/wwwroot/xxx/.nginx.conf;</code>，<code>xxx</code> 为网站目录名。比如我的是 <code>include /data/wwwroot/bbs.ryanwang.me/.nginx.conf;</code></li> 
+  </ol> 
+  <p>最后的配置示例：</p> 
+  <pre><code class="language-nginx">server {
+  listen 80;
+  listen 443 ssl http2;
+  ssl_certificate /usr/local/nginx/conf/ssl/bbs.ryanwang.me.crt;
+  ssl_certificate_key /usr/local/nginx/conf/ssl/bbs.ryanwang.me.key;
+  ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+  ssl_ciphers TLS13-AES-256-GCM-SHA384:TLS13-CHACHA20-POLY1305-SHA256:TLS13-AES-128-GCM-SHA256:TLS13-AES-128-CCM-8-SHA256:TLS13-AES-128-CCM-SHA256:EECDH+CHACHA20:EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5;
+  ssl_prefer_server_ciphers on;
+  ssl_session_timeout 10m;
+  ssl_session_cache builtin:1000 shared:SSL:10m;
+  ssl_buffer_size 1400;
+  add_header Strict-Transport-Security max-age=15768000;
+  ssl_stapling on;
+  ssl_stapling_verify on;
+  server_name bbs.ryanwang.me;
+  access_log /data/wwwlogs/bbs.ryanwang.me_nginx.log combined;
+  index index.html index.htm index.php;
+  root /data/wwwroot/bbs.ryanwang.me/public;
+  if ($ssl_protocol = "") { return 301 https://$host$request_uri; }
+
+  include /usr/local/nginx/conf/rewrite/other.conf;
+  #error_page 404 /404.html;
+  #error_page 502 /502.html;
+
+  location ~ [^/]\.php(/|$) {
+    #fastcgi_pass remote_php_ip:9000;
+    fastcgi_pass unix:/dev/shm/php-cgi.sock;
+    fastcgi_index index.php;
+    include fastcgi.conf;
+  }
+
+  location ~ .*\.(gif|jpg|jpeg|png|bmp|swf|flv|mp4|ico)$ {
+    expires 30d;
+    access_log off;
+  }
+  location ~ .*\.(js|css)?$ {
+    expires 7d;
+    access_log off;
+  }
+  location ~ /(\.user\.ini|\.ht|\.git|\.svn|\.project|LICENSE|README\.md) {
+    deny all;
+  }
+  include /data/wwwroot/bbs.ryanwang.me/.nginx.conf;
+}
+
+</code></pre> 
+  <p>最后我们需要检查 Nginx 配置是否有误并重载 Nginx 配置：</p> 
+  <pre><code>nginx -t
+
+nginx: the configuration file /usr/local/nginx/conf/nginx.conf syntax is ok
+nginx: configuration file /usr/local/nginx/conf/nginx.conf test is successful
+</code></pre> 
+  <pre><code>nginx -s reload
+</code></pre> 
+  <h3 id="flarum-安装引导">Flarum 安装引导</h3> 
+  <p>如果出现下面的情况：</p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/7243e69819dd45fe52789c07ad88351f.png" alt="Flarum-install-page-1"></p> 
+  <p>是因为没有对网站目录写入的权限，我们加一下权限即可：</p> 
+  <pre><code class="language-bash"># xxx 为网站目录名称
+chmod -R 777 /data/wwwroot/xxx
+</code></pre> 
+  <p>然后刷新页面就可以看到安装表单了。</p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/6aa3c74ae3c3e54f7579b9ad34884dd8.png" alt="Flarum-install-page-2"></p> 
+  <p>然后填写数据库信息以及管理员信息，点击安装即可。</p> 
+  <p>安装部署部分到此结束。</p> 
+  <h2 id="常用插件安装">常用插件安装</h2> 
+  <blockquote> 
+   <p>安装完成后会发现不支持中文，所以我们需要安装中文语言包。还有一些常用的插件。</p> 
+  </blockquote> 
+  <p>进入网站目录：</p> 
+  <pre><code class="language-bash"># xxx 为网站目录名称
+cd /data/wwwroot/xxx
+</code></pre> 
+  <pre><code class="language-bash"># 简体中文语言包
+composer require csineneo/lang-simplified-chinese
+
+# 繁体中文语言包
+composer require csineneo/lang-traditional-chinese
+
+# 编辑器 Emoji 表情选择框
+composer require clarkwinkelmann/flarum-ext-emojionearea
+
+# Sitemap 生成器
+composer require flagrow/sitemap
+
+# Fancybox 插件
+composer require squeevee/flarum-ext-fancybox 
+</code></pre> 
+  <p>安装完成后去后台启用即可（后台地址：网址/admin）。</p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/168c9ee1aecd24300d8bdeb92755770b.png" alt="Flarum-extension"></p> 
+ </body>
+</html>
+                    ]]>
+                </content:encoded>
+            </item>
+            <item>
+                <title><![CDATA[使用 Caddy 自动部署 Gridea 博客]]></title>
+                <link>/archives/deploy-gridea-with-caddy</link>
+                <comments>/archives/deploy-gridea-with-caddy#comments</comments>
+                <pubDate>2019-10-13 21:05:28</pubDate>
+                <dc:creator><![CDATA[Ryan Wang]]></dc:creator>
+
+                        <category><![CDATA[学习笔记]]></category>
+                <description>
+                    <![CDATA[
+                        Gridea是一个静态博客客户端，也可以称之为博客生成器，和Hexo之类的静态博客生成器很类似，唯一不同的是，Gridea提供了一个非常好的可视化界面，非常容易就可以完成一个博客的搭建，而且配置都是可视化的，所以对小白来说非常友好。但是目前Gridea仅支持部署到Github和Coding，由于众所
+                    ]]>
+                </description>
+                <content:encoded>
+                    <![CDATA[
+                            <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>Gridea 是一个静态博客客户端，也可以称之为博客生成器，和 Hexo 之类的静态博客生成器很类似，唯一不同的是，Gridea 提供了一个非常好的可视化界面，非常容易就可以完成一个博客的搭建，而且配置都是可视化的，所以对小白来说非常友好。但是目前 Gridea 仅支持部署到 Github 和 Coding，由于众所周知的原因，Github Pages 会偶尔出现访问不了的情况（而且访问相对较慢），而且百度是不收录 Github Pages 的站点的。Coding 的话，抽风就更严重了。所以下面介绍一种方式，可以自动部署到自己的服务器。</p> 
+  </blockquote> 
+  <h2 id="前言">前言</h2> 
+  <p>在开始之前，你至少需要了解 Gridea 如何部署到 Github，并且需要熟悉 Linux 的一些基本命令。对了，此方法基于 Github Pages，所以最好先在 Github Pages 上部署好博客。</p> 
+  <h2 id="gridea-客户端配置">Gridea 客户端配置</h2> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/c948ccfe138ceb0f95e92e72723cbfd6.png" alt="image.png"></p> 
+  <p>需要注意的是，这里的域名一定要填写为解析到自己服务器 ip 的地址。</p> 
+  <h2 id="服务器环境配置">服务器环境配置</h2> 
+  <blockquote> 
+   <p>在这里我使用 Ubuntu 16.04 作为演示，其他发行版大同小异。</p> 
+  </blockquote> 
+  <h3 id="安装-git">安装 Git</h3> 
+  <pre><code class="language-bash">sudo apt-get install git
+</code></pre> 
+  <h3 id="安装-caddy">安装 Caddy</h3> 
+  <blockquote> 
+   <p>Caddy 是一个使用 Go 语言编写的 web 服务器。如果需要详细了解，请访问：<a href="https://caddyserver.com">https://caddyserver.com</a> 在这里就不在赘述。</p> 
+  </blockquote> 
+  <pre><code class="language-bash"># 安装 Caddy
+curl https://getcaddy.com | bash -s personal http.git
+</code></pre> 
+  <pre><code class="language-bash"># 配置 systemd，方便管理 Caddy 的运行状态
+wget https://raw.githubusercontent.com/caddyserver/caddy/master/dist/init/linux-systemd/caddy.service
+sudo cp caddy.service /etc/systemd/system/
+sudo chown root:root /etc/systemd/system/caddy.service
+sudo chmod 644 /etc/systemd/system/caddy.service
+sudo systemctl daemon-reload
+sudo systemctl start caddy.service
+</code></pre> 
+  <h3 id="编写-caddyfile">编写 Caddyfile</h3> 
+  <blockquote> 
+   <p>Caddyfile 即 Caddy 的站点配置文件，类似于 Nginx 的 nginx.conf。</p> 
+  </blockquote> 
+  <pre><code class="language-bash">touch /etc/caddy/Caddyfile
+
+vim /etc/caddy/Caddyfile
+</code></pre> 
+  <pre><code class="language-text">https://[DOMAIN] {
+    tls [EMAIL]
+    gzip
+    root [ROOT]
+    git {GITHUB} {
+        path [ROOT]
+        hook /webhook [SECRET]
+        hook_type github
+        clone_args --recursive
+        pull_args --recurse-submodules
+    }
+}
+</code></pre> 
+  <p>配置详解：</p> 
+  <ol> 
+   <li>[DOMAIN]：即博客地址，需要注意是否已经将服务器 ip 以 A 记录的类型解析到域名。</li> 
+   <li>[EMAIL]：SSL 证书申请邮箱，填写自己的即可。</li> 
+   <li>[ROOT]：静态页面存放地址，如：/data/wwwroot/gridea</li> 
+   <li>[SECRET]：Github 的 webhook secret key，下面会详解如何获取。</li> 
+  </ol> 
+  <p>根据自己的实际情况填写完成之后应该是类似这个样子的：</p> 
+  <pre><code class="language-text">https://gridea.ryanc.cc {
+    tls i@ryanc.cc
+    gzip
+    root /data/wwwroot/gridea.ryanc.cc
+    git github.com/ruibaby/ruibaby.github.io {
+        path /data/wwwroot/gridea.ryanc.cc
+        hook /webhook 123456
+        hook_type github
+        clone_args --recursive
+        pull_args --recurse-submodules
+    }
+}
+</code></pre> 
+  <h3 id="github-的-webhook-设置">Github 的 Webhook 设置</h3> 
+  <blockquote> 
+   <p>为啥需要设置这个？因为我们需要做到每次更新到 Github Pages 的时候，让 Caddy 知道有更新，然后会自动拉取最新的静态页面资源，完成自动更新网站内容。</p> 
+  </blockquote> 
+  <p>找到部署的仓库，然后选择 Settings -&gt; Webhooks。点击 Add Webhook。</p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/139402b4c4a6437c6b56299085217358.png" alt="image.png"></p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/7fb5a1274050e4b5918dcad542ee7550.png" alt="image.png"></p> 
+  <ol> 
+   <li>Payload URL 的填写规则为：博客地址/webhook。</li> 
+   <li>Secret 自行设置。</li> 
+   <li>然后点击 Add webhook 即可。</li> 
+   <li>将填写好的 Secret 填写到上面 Caddyfile 的 [SECRET]。</li> 
+  </ol> 
+  <h3 id="启动-caddy">启动 Caddy</h3> 
+  <p>进行到这里，我们只需要启动 Caddy 服务即可。</p> 
+  <pre><code class="language-bash"># 开机自启 Caddy
+sudo systemctl enable caddy.service
+</code></pre> 
+  <pre><code class="language-bash"># 启动 Caddy
+sudo service caddy start
+</code></pre> 
+  <pre><code class="language-bash"># 重启 Caddy
+sudo service caddy restart
+</code></pre> 
+  <pre><code class="language-bash"># 停止 Caddy
+sudo service caddy stop
+</code></pre> 
+  <h2 id="结尾">结尾</h2> 
+  <p>其实这种方式适用于任何部署在 Github Pages 的静态博客，有兴趣的小伙伴可以自己去折腾试试。</p> 
+ </body>
+</html>
+                    ]]>
+                </content:encoded>
+            </item>
+            <item>
+                <title><![CDATA[玩玩 IFTTT]]></title>
+                <link>/archives/try-ifttt</link>
+                <comments>/archives/try-ifttt#comments</comments>
+                <pubDate>2019-10-12 16:56:18</pubDate>
+                <dc:creator><![CDATA[Ryan Wang]]></dc:creator>
+
+                        <category><![CDATA[其他]]></category>
+                <description>
+                    <![CDATA[
+                        很早就听说过IFTTT这个神器了，但是迟迟没有上手。这次趁有空闲时间，简单把玩了一下，发现确实可以带来一些便利。什么是IFTTTIFTTT，是一个新生的网络服务平台，通过其他不同平台的条件来决定是否执行下一条命令。即对网络服务通过其他网络服务作出反应。IFTTT得名为其口号“ifthisthenth
+                    ]]>
+                </description>
+                <content:encoded>
+                    <![CDATA[
+                            <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>很早就听说过 IFTTT 这个神器了，但是迟迟没有上手。这次趁有空闲时间，简单把玩了一下，发现确实可以带来一些便利。</p> 
+  </blockquote> 
+  <h2 id="什么是-ifttt">什么是 IFTTT</h2> 
+  <p><a href="https://ifttt.com">IFTTT</a>，是一个新生的网络服务平台，通过其他不同平台的条件来决定是否执行下一条命令。即对网络服务通过其他网络服务作出反应。IFTTT 得名为其口号“if this then that”。</p> 
+  <p>IFTTT的官方念法类似英语单词“gift”的“ift”，即不要发“g”的音。(摘自维基百科)</p> 
+  <h2 id="实现原理">实现原理</h2> 
+  <p>IFTTT 基于任务的条件触发，类似编程语言，即：“若 XXX 进行 YYY 行为，执行 ZZZ。”。每一个可以触发或者作为任务的网站叫做一个 Channel，触发的条件叫做 Triggers，之后执行的任务叫做 Actions，综合上面的一套流程叫做 Task。(摘自维基百科)</p> 
+  <h2 id="几个小案例">几个小案例</h2> 
+  <blockquote> 
+   <p>下面几个我使用的小案例，包括自动分享博文到微博或 Twitter 等社交平台，还有推送 <a href="https://halo.run">Halo</a> 新版本到 Telegram 或者 Twitter 等等。（注册 IFTTT之类的就不多说了，网址是：<a href="https://ifttt.com">https://ifttt.com</a>）</p> 
+  </blockquote> 
+  <h3 id="1-自动分享新博文到各种社交平台">1. 自动分享新博文到各种社交平台。</h3> 
+  <blockquote> 
+   <p>其原理是获取博客的 RSS 地址定时更新，如果有新的博文，就会触发推送到各个社交平台的事件。</p> 
+  </blockquote> 
+  <p>点击右上角头像，选择 <code>Create</code>。就会出现新建一组流程的界面，如下图： <img src="https://cdn.ryanc.cc/img/blog/thumbnails/0f2fc90d672238ef5130606203565a10.png" alt="image.png"></p> 
+  <p>点击 <code>This</code>，会出现很多 <code>service</code>。 <img src="https://cdn.ryanc.cc/img/blog/thumbnails/110faa7dd55535a2f4c59d4c83ff6fd5.png" alt="image.png"></p> 
+  <p>各个 <code>service</code> 当中会有一些可供选择的事件。这里我们找到 <code>RSS Feed</code>。 <img src="https://cdn.ryanc.cc/img/blog/thumbnails/0589a8402fe7f18f85bc4f17224ad1c3.png" alt="image.png"></p> 
+  <p>然后点击这个大大的 RSS 图标，会出现一些我们可以选择的事件，如下图。</p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/f5d89f2842a51c665e2a506a5f9b8ff6.png" alt="image.png"></p> 
+  <p>可以看到，这里有两个事件可供我们选择，第一个是，一有新的更新就会执行下一个操作，也就是执行 <code>That</code> 中的事件。第二个是，当新的更新匹配到自定的关键字才会触发下一个操作。这里我们选择第一个即可。</p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/0761b6f1d276a5bd89af5e217d0a392d.png" alt="image.png"></p> 
+  <p>这里我们需要输入我们博客的 RSS 地址，如：<a href="https://ryanc.cc/atom.xml">https://ryanc.cc/atom.xml</a>。然后点击创建 <code>Create trigger（触发器）</code> 即可。</p> 
+  <p>然后就会回到下面这个界面，可以看到 This 前面有个 RSS 的图标，这就说明触发器以及创建好了，下面就需要选择触发之后的事件了。 <img src="https://cdn.ryanc.cc/img/blog/thumbnails/9d806a69b777de498222791b80e6d788.png" alt="image.png"></p> 
+  <p>下面以 Twitter 为例，也就是当博文有更新时，自动推送到自己的 Twitter 账户，发表新的动态。第一次使用 Twitter 这个 <code>service</code> 的时候，需要登录你的 Twitter 账户。 <img src="https://cdn.ryanc.cc/img/blog/thumbnails/75e29aff9c6a5322a517fc741c045321.png" alt="image.png"></p> 
+  <p>选择 Twitter 之后，可以看到四个事件。这里我们选择第一个（发一条新的推）即可。 <img src="https://cdn.ryanc.cc/img/blog/thumbnails/94193007b20827c5799c35be4609b25d.png" alt="image.png"></p> 
+  <p>之后点击 <code>Create action</code> 即可。 <img src="https://cdn.ryanc.cc/img/blog/thumbnails/bade613e644ea5539708dac98d1d8570.png" alt="image.png"></p> 
+  <p>到此这个流程就创建完毕了，接下来就可以用同样的方式创建推送到其他社交平台的流程了。比如微博，Facebook，Ins 之类的。当然，微信朋友圈，QQ 空间之类的就别想了。</p> 
+  <h3 id="2-自动推送-github-项目的新版本信息到各种社交平台">2. 自动推送 Github 项目的新版本信息到各种社交平台</h3> 
+  <blockquote> 
+   <p>突然发现这个和上面那个案例是一毛一样的...那就不详细赘述了。</p> 
+  </blockquote> 
+  <p>这里可能会问，博客有 RSS 功能，那么 Github 怎么办？其实 Github 针对各个项目也提供了 RSS 地址的。比如 Halo：<a href="https://github.com/halo-dev/halo/releases.atom">https://github.com/halo-dev/halo/releases.atom</a>。</p> 
+  <p>如果你想关注其他项目的版本动态，只需要改一下地址即可，例如：</p> 
+  <ul> 
+   <li>Vue.js(<a href="https://github.com/vuejs/vue/releases.atom">https://github.com/halo-dev/halo/releases.atom</a>)</li> 
+   <li>SpringBoot(<a href="https://github.com/spring-projects/spring-boot/releases.atom">https://github.com/spring-projects/spring-boot/releases.atom</a>)</li> 
+  </ul> 
+  <p>我使用这个主要是方便推送 Halo 的更新信息，可以自动推送到 Twitter，以及 Halo 的 <a href="https://t.me/halo_dev">Telegram Channel</a>。</p> 
+  <h2 id="最后">最后</h2> 
+  <p>玩一圈下来发现，在国内能玩儿的其实就那么几个，当然如果你在用很多国外的应用，这个服务还是挺方便的。当然，IFTTT 可以做的远不止此，还有诸如 <code>Evernote</code>，<code>Github</code>，<code>Google Drive</code>，<code>YouTube</code>，<code>WordPress</code> 等的 <code>service</code>，还有很多玩法需要去探索啦。</p> 
+ </body>
+</html>
+                    ]]>
+                </content:encoded>
+            </item>
+            <item>
+                <title><![CDATA[中国移动，你太坏了。]]></title>
+                <link>/archives/china-mobile-you-are-so-bad</link>
+                <comments>/archives/china-mobile-you-are-so-bad#comments</comments>
+                <pubDate>2019-9-25 22:37:56</pubDate>
+                <dc:creator><![CDATA[Ryan Wang]]></dc:creator>
+
+                        <category><![CDATA[日志]]></category>
+                <description>
+                    <![CDATA[
+                        起因本人于今年五月份左右办理了中国移动的电话卡，至于为啥要办移动的卡呢？是因为我一直都想逃离中国联通这个坑。你能想象去商店里买东西付款的时候木有信号吗？所以，我就办了张移动卡以作为备用，然后慢慢从联通切过去。毕竟我联通卡用了好长一段时间了，什么都绑定的这张卡。要先换绑，然后在换卡，这是常识。经过使用
+                    ]]>
+                </description>
+                <content:encoded>
+                    <![CDATA[
+                            <html>
+ <head></head>
+ <body>
+  <h2 id="起因">起因</h2> 
+  <p>本人于今年五月份左右办理了 <code>中国移动</code> 的电话卡，至于为啥要办移动的卡呢？是因为我一直都想逃离 <code>中国联通</code> 这个坑。你能想象去商店里买东西付款的时候木有信号吗？所以，我就办了张移动卡以作为备用，然后慢慢从联通切过去。毕竟我联通卡用了好长一段时间了，什么都绑定的这张卡。要先换绑，然后在换卡，这是常识。</p> 
+  <h2 id="经过">经过</h2> 
+  <p>使用过程中，一直好好的，话费我也有好好地交，尽管不常用。而且一直是放在备用机上面的，偶尔开机使用一下。结果到了九月份的时候，突然就给我停机了，拨打电话提示“您已停机，请续交话费”，我开始天真的以为是没有话费了，然后我分几次差不多冲了100左右的话费。结果还是“您已停机，请续交话费”。然后我就拨打 10086 查询了一次话费，提示还有余额。这就奇怪了，为啥有余额还是停机呢？于是上网搜了搜，大部分都说是“停机保号”，一般一天左右就恢复。就这样我等了几天，还是木有恢复。</p> 
+  <p>然后在某个风和日丽的早上我打了 10086 人工客服，对方称并不是所谓的“停机保号”，而是我在试用期间违规发送大量短信和拨打了违规电话。于是乎，我就要求提供详细的通话记录以及短信记录。对方说不能提供。也就是说，说我作恶，又不提供证据？就像是我说你在外面有几个私生子，你问我证据，我说不能提供。一个意思是吗？</p> 
+  <p>客服给我的解决方案是叫我去当地的营业厅提交一张免冠照，然后就给我开通。我说我没在号码归属地，他让我把我免冠照发送到他们邮箱。WTF，凭啥？店大欺客是吧。</p> 
+  <h2 id="结果">结果</h2> 
+  <p>我去黑猫投诉查询了一下 10086 栏目下的投诉记录，发现不少和我类似的经历，于是乎我也投诉了一遍。希望能快些处理。</p> 
+  <h2 id="后话">后话</h2> 
+  <p>这到底是 <code>中国移动</code> 的系统错误还是他们故意作恶？如果是系统错误，为什么还不修复？你可是三大运营商之首啊，技术这么垃圾？如果是故意作恶，那我倒是能理解了。不作恶怎么赚钱嘛，是吧？</p> 
+  <h2 id="附">附</h2> 
+  <p>黑猫投诉中国移动栏目链接：<a href="https://tousu.sina.com.cn/company/view/?couid=1991428685">https://tousu.sina.com.cn/company/view/?couid=1991428685</a></p> 
+ </body>
+</html>
+                    ]]>
+                </content:encoded>
+            </item>
+            <item>
+                <title><![CDATA[记一次拯救我的博客]]></title>
+                <link>/archives/record-how-to-save-my-blog</link>
+                <comments>/archives/record-how-to-save-my-blog#comments</comments>
+                <pubDate>2019-9-21 17:52:56</pubDate>
+                <dc:creator><![CDATA[Ryan Wang]]></dc:creator>
+
+                        <category><![CDATA[日志]]></category>
+                <description>
+                    <![CDATA[
+                        事情的缘由是我服务器到期了，又没来得及续费，导致无法上服务器备份数据（使用的腾讯云老版本的学生机，每月一块钱的那种，这个月刚好到期，所以不想再用原价续费了，而且1g内存可能满足不了以后的需求，所以索性重新买了一台...）数据咋办？既然不想续费了，所以是无法上服务器备份数据的，正当我想去咬牙续费的时候
+                    ]]>
+                </description>
+                <content:encoded>
+                    <![CDATA[
+                            <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>事情的缘由是我服务器到期了，又没来得及续费，导致无法上服务器备份数据（使用的腾讯云老版本的学生机，每月一块钱的那种，这个月刚好到期，所以不想再用原价续费了，而且 1g 内存可能满足不了以后的需求，所以索性重新买了一台...）</p> 
+  </blockquote> 
+  <h2 id="数据咋办">数据咋办？</h2> 
+  <p>既然不想续费了，所以是无法上服务器备份数据的，正当我想去咬牙续费的时候，突然想起来曾经把数据备份到 Github 上过... 那么这就相当好办了。</p> 
+  <h2 id="重装博客">重装博客</h2> 
+  <p>晒一张我在 Github 上的备份，虽然是五天前备份的了，但是影响不大，好在我这几天都没怎么操作。 <img src="https://cdn.ryanc.cc/img/blog/thumbnails/5c26a8586222dda543f8ae759eb0fdce.jpg" alt="Screenshot_20190921175629921_com.thirtydegreesray.openhub.jpg"></p> 
+  <p>嗯，得益于我用的 <a href="https://github.com/halo-dev/halo">Halo</a> 博客系统，所以只需要备份这一个目录就完全 OK，所有数据都不会丢失。因为这个系统他的用户数据和程序本身是完全分开的(数据库 db，上传的附件 upload，配置文件 application.yaml)，当然，所有主题也是在这个目录的，但是因为主题是可以另外下载的，而且主题的配置数据也在数据库，所以我没有备份。</p> 
+  <p>接下来我只需要把这个仓库克隆到服务器就好了。</p> 
+  <pre><code class="language-bash">git clone https://github.com/ruibaby/blog-data.git .halo
+</code></pre> 
+  <p>然后配置个 Java 环境，下载个 Halo 运行包。启动就完事。</p> 
+  <h3 id="配置服务器">配置服务器</h3> 
+  <p>这个环节没啥做的，配置个 Java 环境就好了，一行命令的事。</p> 
+  <p>然后我跟着这个教程就完成了所有事情。<a href="https://halo.run/guide/install/install-with-linux.html">https://halo.run/guide/install/install-with-linux.html</a></p> 
+  <p>当然，我并没有配置反向代理，因为我是使用的又拍云的 cdn 全站加速，去控制台改改服务器 ip (源站地址)就好了。</p> 
+  <h2 id="自动备份脚本">自动备份脚本</h2> 
+  <blockquote> 
+   <p>考虑到后面可能会忘记备份数据，所以写了个自动提交的脚本。</p> 
+  </blockquote> 
+  <pre><code class="language-bash">#! /bin/bash
+
+message=`date -u +"%Y_%m_%d_%H_%M"`
+
+cd /root/.halo
+
+git add application.yaml upload/ db/
+
+git commit -m $message
+
+git push
+</code></pre> 
+  <ol> 
+   <li>将其写入到一个 <code>sh</code> 文件里面。</li> 
+   <li>赋予执行权限 <code>chmod +x {NAME}.sh</code>。</li> 
+   <li>初始化 <code>~/.halo</code> 仓库，<code>cd ~/.halo &amp; git init</code>。</li> 
+   <li>去 Github 配置 <code>ssh key</code>。这一步不详细讲，自行百度。目的是在 <code>push</code> 的时候不需要输入用户名和密码。</li> 
+   <li>执行 <code>crontab -e</code> 添加 <code>00 03 * * * /bin/sh {NAME}.sh 的绝对路径</code>。（<code>00 03 * * *</code> 表示每天三点执行）。</li> 
+   <li>执行 <code>service crond restart</code> 使配置的定时任务生效。</li> 
+  </ol> 
+  <h2 id="结尾">结尾</h2> 
+  <p>数据无价，还好这次有备份数据。</p> 
+ </body>
+</html>
+                    ]]>
+                </content:encoded>
+            </item>
+            <item>
+                <title><![CDATA[Halo v1.0 is coming]]></title>
+                <link>/archives/halo-v1-is-coming</link>
+                <comments>/archives/halo-v1-is-coming#comments</comments>
+                <pubDate>2019-5-9 0:24:36</pubDate>
+                <dc:creator><![CDATA[Ryan Wang]]></dc:creator>
+
+                        <category><![CDATA[学习笔记]]></category>
+                <description>
+                    <![CDATA[
+                        非常感谢大家对Halo的支持，经过接近两个月的重构，Halov1.0就快要发布了，非常感谢@JohnNiang做出的贡献。希望大家会喜欢新版的Halov1.0。组织地址：https://github.com/halo-dev废话少说，先看东西
+                    ]]>
+                </description>
+                <content:encoded>
+                    <![CDATA[
+                            <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>非常感谢大家对 Halo 的支持，经过接近两个月的重构，Halo v1.0 就快要发布了，非常感谢 @JohnNiang 做出的贡献。希望大家会喜欢新版的 Halo v1.0。</p> 
+  </blockquote> 
+  <p>组织地址：<a href="https://github.com/halo-dev">https://github.com/halo-dev</a></p> 
+  <h2 id="废话少说先看东西">废话少说，先看东西</h2> 
+  <p><img src="https://i.loli.net/2019/05/08/5cd2fc3e478dc.png" alt="anatole.png"></p> 
+  <p><img src="https://i.loli.net/2019/05/08/5cd2fc3e4e587.png" alt="casper.png"></p> 
+  <p><img src="https://i.loli.net/2019/05/08/5cd2fc3e78012.png" alt="material.png"></p> 
+  <p><img src="https://i.loli.net/2019/05/08/5cd2fcae89cae.png" alt="admin-install.png"></p> 
+  <p><img src="https://i.loli.net/2019/05/08/5cd2fcae6a3fa.png" alt="admin-login.png"></p> 
+  <p><img src="https://i.loli.net/2019/05/08/5cd2fcaf1b2d2.png" alt="admin-dashboard.png"></p> 
+  <p><img src="https://i.loli.net/2019/05/08/5cd2fcaf18c37.png" alt="admin-posts.png"></p> 
+  <p><img src="https://i.loli.net/2019/05/08/5cd2fcae9bea2.png" alt="admin-write.png"></p> 
+  <p><img src="https://i.loli.net/2019/05/08/5cd2fcaf6a1ac.png" alt="admin-write1.png"></p> 
+  <p><img src="https://i.loli.net/2019/05/08/5cd2fcb08ea2d.png" alt="admin-write2.png"></p> 
+  <p><img src="https://i.loli.net/2019/05/08/5cd2fcb1c752e.png" alt="admin-attachment.png"></p> 
+  <p><img src="https://i.loli.net/2019/05/08/5cd2fcb21fc76.png" alt="admin-themes.png"></p> 
+  <p><img src="https://i.loli.net/2019/05/08/5cd2fcb04f9c3.png" alt="admin-theme-settings.png"></p> 
+  <p><img src="https://i.loli.net/2019/05/08/5cd2fccee89f5.png" alt="admin-profile.png"></p> 
+  <p><img src="https://i.loli.net/2019/05/08/5cd2fccedc309.png" alt="admin-options.png"></p> 
+ </body>
+</html>
+                    ]]>
+                </content:encoded>
+            </item>
+            <item>
+                <title><![CDATA[正确提问方式]]></title>
+                <link>/archives/1555381003047</link>
+                <comments>/archives/1555381003047#comments</comments>
+                <pubDate>2019-4-16 10:17:50</pubDate>
+                <dc:creator><![CDATA[Ryan Wang]]></dc:creator>
+
+                        <category><![CDATA[日志]]></category>
+                <description>
+                    <![CDATA[
+                        本文转载自正确提问方式-友人C,如需转载请注明该作者链接.发这篇文章的原因，因为每天会接收到各种问题。我希望用最少的时间，在一个和谐的气氛回答完这些问题，达到双方共赢。已经有提问的智慧这么优秀全面的文章，但我还想再写一篇。因为这篇文章实在是太长了，一个普通用户很难有耐心看完。所以我站在我的角度写一些
+                    ]]>
+                </description>
+                <content:encoded>
+                    <![CDATA[
+                            <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>本文转载自<a href="https://www.ihewro.com/archives/931/">正确提问方式 - 友人C</a>,如需转载请注明该作者链接.</p> 
+  </blockquote> 
+  <p>发这篇文章的原因，因为每天会接收到各种问题。</p> 
+  <p>我希望用<strong>最少的时间，在一个和谐的气氛回答完这些问题</strong>，达到双方共赢。</p> 
+  <p>已经有<a href="https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/master/README-zh_CN.md">提问的智慧</a>这么优秀全面的文章，但我还想再写一篇。因为这篇文章实在是太长了，一个普通用户很难有耐心看完。所以我站在我的角度写一些我的摘抄。</p> 
+  <h2>核心：首先不要质疑开发者</h2> 
+  <p>我讲一个我高中的故事。我高中有一个同桌，他是理科学霸。所以我经常问他问题。经常，他先给我讲一遍，我自己琢磨，然后马上反过来反击“<strong>你这讲的不对啊！</strong>”，然后一顿操作，最后发现还是我理解的不对。</p> 
+  <p><strong>每当我反击的时候，我的同桌都是不高兴的</strong>。但是我们关系不错，有一次他半开玩笑笑着说<strong>不要质疑我好不好！</strong>。</p> 
+  <p>我当时还很轻蔑说<strong>质疑你怎么了，你又不是没有错过</strong>。当时的我没有理解，<strong>当你潜意识是对方错误的时候，其实这个氛围就已经不是询问问题应有的态度了</strong>。</p> 
+  <p><strong>而且，作为对方已经思考很久的内容/作品，你开头就是一句不对，有想过对方的愤怒吗？有想过对方考虑很多方面花费的时间吗？你一句你错了，对方第一想法一定是“你sha ba，会不会用”</strong>。</p> 
+  <blockquote> 
+   <p>举个例子：</p> 
+  </blockquote> 
+  <ul> 
+   <li>A：xxx这个地方不对啊，是不是你写错了</li> 
+   <li>B：没有</li> 
+   <li>这一定是你写错了</li> 
+   <li>B：（你不会会用啊，你是不是不会看文档，你识字吗！！）没有。。。</li> 
+  </ul> 
+  <h2>其次：考虑对方是否有义务或者有多少义务为你服务</h2> 
+  <p><strong>开源作品</strong>，对方开源的原因是希望获得对作品的肯定以及更多人参与开源，<strong>而不是被无穷无尽无价值的问题（骚扰）搞乱生活</strong>。</p> 
+  <p><strong>付费内容</strong>，请先看清对方的服务的范围。不是付费后就希望对方全手包帮。开启付费的原因是希望通过自己的时间获取对应的酬报，而不是被无穷无尽无价值的问题（骚扰）搞乱生活。</p> 
+  <h2>最后：考虑你问问题的方式，拒绝没有信息的提问</h2> 
+  <h3>不要发一些没有信息的单方面的请求帮助信息</h3> 
+  <p>比如：</p> 
+  <ul> 
+   <li>1</li> 
+   <li>在（甚至连问号都没有）</li> 
+   <li>在吗？</li> 
+  </ul> 
+  <p>站在提问者角度，是想获取对方及时的回复反馈，但提问者需要谨记的是<strong>对方不是你的男朋友，不是你的女朋友，只是一个想用最少时间内尽快回答你的问题的人</strong>。</p> 
+  <p>所以提问者<strong>请务必减少毫无意义的信息，减少请求对方发信息的轮次，最好让对方在一个回合中结束问题对话</strong>。</p> 
+  <p>因为网络生活和真实生活很不同，在于对方不了解你。如果对你之前有所了解还好一些，否则真的一点好感都没有。礼貌对方只是对方的礼仪和素质，疯狂挑衅谁都受不了了。</p> 
+  <h3>礼貌与尊重永远是相互的</h3> 
+  <p><strong>即使因为你的付费，对方有义务为你提供一定范围的服务，但礼貌和尊重永远是相互的，而不是仅仅因为付费而变得无所顾忌</strong>。</p> 
+  <p>开发者和淘宝店主有一定区别。即使是淘宝店主，也不欢迎不礼貌的咨询，即使你希望购买，但对方由于你的态度也未必想卖给你。</p> 
+  <p><strong>可以用表情包，但请不要用挑衅、质疑表情包</strong>。</p> 
+  <p>和第一条一样。</p> 
+  <p><strong>适当</strong>的可爱的表情包可以活跃气氛，也可以增加好感。但也不要发一连串与问题无关的问题，增加对方的回复轮次。</p> 
+  <h3>不仅仅是必要，充足的信息更好</h3> 
+  <p>在对方未回复前，就详细说明清楚问题的内容。</p> 
+  <p><strong>说明清楚（提供必要信息）</strong> 对于绝大部分人是很难做到的事情。所以你可以按照格式提供<strong>你所知道的充足信息</strong>。</p> 
+  <ul> 
+   <li>问题<strong>内容</strong>、与之相关的<strong>网址、截图、私密</strong>信息（如果有必要的账号密码等）</li> 
+   <li>出现该问题之前做了<strong>哪些操作</strong>，以及出了问题后你做了<strong>哪些尝试</strong></li> 
+   <li>你认为<strong>可能</strong>（绝不是断言，质疑）的问题</li> 
+  </ul> 
+  <h2>正确的提问方式举例</h2> 
+  <ul> 
+   <li>提问：你好，这个地方出现了这个问题，具体截图看下下面这条消息。这个地方我是开启了CDN某个设置后出现的问题。我后面关掉这个设置还是不行，可能是程序某个问题，也有可能是哪里我没有设置好。[截图]</li> 
+   <li>回答：你试着关掉程序的某个设置开关后再试试</li> 
+   <li>提问：我关掉了该设置开关还是不行。这是我的网址，以及服务器账号密码</li> 
+   <li>回答：（通常简单的问题，一轮回复就可以解决，复杂的话开发者通过线上调试解决问题）</li> 
+  </ul> 
+  <h2>致歉</h2> 
+  <p>对于认真提问的问题，我一般都认真回复。</p> 
+  <p>但是仍有一些认真提问的问题，由于我自己也还很弱，自己不会所以没能给出帮助，甚至忘记回复（因为第一眼看过去我不过，潜意识就不太想回复），在这里说一声抱歉。</p> 
+  <p>有一些不是很了解正确提问方式的人，我可能没有足够耐心回复，在这里也说一声抱歉。</p> 
+  <p><strong>以上内容也是对我的一个自我提醒，毕竟好好提问，好好说话是一辈子学习的技能</strong>。</p> 
+  <blockquote> 
+   <p>本文转载自<a href="https://www.ihewro.com/archives/931/">正确提问方式 - 友人C</a>,如需转载请注明该作者链接.</p> 
+  </blockquote> 
+ </body>
+</html>
+                    ]]>
+                </content:encoded>
+            </item>
+            <item>
+                <title><![CDATA[Spring Data JPA 之 And 与 Or 的坑]]></title>
+                <link>/archives/spring-data-jpa-and-or</link>
+                <comments>/archives/spring-data-jpa-and-or#comments</comments>
+                <pubDate>2019-1-12 13:03:00</pubDate>
+                <dc:creator><![CDATA[Ryan Wang]]></dc:creator>
+
+                        <category><![CDATA[学习笔记]]></category>
+                <description>
+                    <![CDATA[
+                        最近写Halo的搜索功能的时候，发现一个JPA的坑，网上查了很多资料才解决，遂水文记录一下。缘由Halo的搜索功能需要根据关键字来索引文章的标题以及内容，于是乎，按照JPA的命名规定，我在Repository下写了这个方法：Page&lt;Post&gt;findByPostTitleLikeOrP
+                    ]]>
+                </description>
+                <content:encoded>
+                    <![CDATA[
+                            <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>最近写 Halo 的搜索功能的时候，发现一个JPA的坑，网上查了很多资料才解决，遂水文记录一下。</p> 
+  </blockquote> 
+  <h2 id="缘由">缘由</h2> 
+  <p>Halo 的搜索功能需要根据关键字来索引文章的标题以及内容，于是乎，按照 JPA 的命名规定，我在 Repository 下写了这个方法：</p> 
+  <pre><code class="language-java">Page&lt;Post&gt; findByPostTitleLikeOrPostContentLike(String postTitle,String postContent,Pageable pageable);
+</code></pre> 
+  <p>然后需要自己在传参的时候手动拼接关键字：</p> 
+  <pre><code class="language-java">postRepository.findByPostTitleLikeOrPostContentLike("%"+keyword+"%","%"+keyword+"%",pageable)
+</code></pre> 
+  <p>当然，这样进行对文章的模糊查询是完全没有问题的，根据方法名拼接好的 SQL 语句大概是这样子的：</p> 
+  <pre><code class="language-sql">select * from halo_post where post_title like '%keyword%' or post_content like '%keyword%'
+</code></pre> 
+  <p>那么问题在哪儿呢？很显然，在博客上搜索文章，不可能把草稿箱和回收站的文章也查询出来吧，于是问题就来了，我们必须要加上两个条件，也就是 postType 以及 postStatus。于是乎，我又把查询方法给改了下：</p> 
+  <pre><code class="language-java">Page&lt;Post&gt; findByPostTitleLikeOrPostContentLikeAndPostTypeAndPostStatus(String postTitle,String postContent,String postType,Integer postStatus,Pageable pageable);
+</code></pre> 
+  <p>这样看上去也是没有啥问题的，但是实际查询的时候问题就来了，还是把所有的文章都查出来了，包括草稿箱和回收站的，根据方法名拼接好的 SQL 语句大概是这样的：</p> 
+  <pre><code class="language-sql">select * from halo_post where post_title like '%keyword%' or post_content like '%keyword%' and post_type='post' and post_status = 0
+</code></pre> 
+  <p>是不是看出啥问题来了？两个 like 是需要用()括起来的，把这两个 like 当成一个整体才行。我们要的 SQL 语句应该是这样子的：</p> 
+  <pre><code class="language-sql">select * from halo_post where (post_title like '%keyword%' or post_content like '%keyword%') and post_type='post' and post_status = 0
+</code></pre> 
+  <h2 id="解决方案">解决方案</h2> 
+  <pre><code class="language-java">Page&lt;Post&gt; findByPostTypeAndPostStatusAndPostTitleLikeOrPostTypeAndPostStatusAndPostContentLike(
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String postType0,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Integer postStatus0,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String postTitle,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String postType1,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Integer postStatus1,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String postContent,
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pageable pageable
+);
+</code></pre> 
+  <p>这样写就可以组成 <code>(postType And postStatus And postTitle) or (postType And postStatus And postContent)</code>，至于为什么要在 postType 和 postStatus 参数上加上0 和 1，我猜测 JPA 是按照参数传入的顺序来组成 SQL 语句的，而且当有两个相同的参数的时候，必须要加上序号以区别两者的顺序，于是乎，整个方法名就这么长。不得不说，JPA是比较方便，但是有复杂查询的时候，整个方法名就会变得异常的长。虽然可以自己写 SQL ，但是我觉得把 SQL 语句放在代码里面看着实在不舒服。</p> 
+ </body>
+</html>
+                    ]]>
+                </content:encoded>
+            </item>
+            <item>
+                <title><![CDATA[2018 年个人总结]]></title>
+                <link>/archives/2018-summary</link>
+                <comments>/archives/2018-summary#comments</comments>
+                <pubDate>2019-1-1 21:52:00</pubDate>
+                <dc:creator><![CDATA[Ryan Wang]]></dc:creator>
+
+                        <category><![CDATA[日志]]></category>
+                <description>
+                    <![CDATA[
+                        关于工作今年一共有两份工作，第一份是我刚毕业，啥都不懂，进了一家很小的外包公司，干了半年啥都没学到，当时面试的时候老板还信誓旦旦的说外包比普通公司要学到的更多，个人能力也提升的更快，可当我进去干了一段时间才知道，公司现有的技术可能还没我所掌握的技术多，于是乎，到了8月份就辞职了，辞职的时候老板还极力
+                    ]]>
+                </description>
+                <content:encoded>
+                    <![CDATA[
+                            <html>
+ <head></head>
+ <body>
+  <h2>关于工作</h2> 
+  <p>今年一共有两份工作，第一份是我刚毕业，啥都不懂，进了一家很小的外包公司，干了半年啥都没学到，当时面试的时候老板还信誓旦旦的说外包比普通公司要学到的更多，个人能力也提升的更快，可当我进去干了一段时间才知道，公司现有的技术可能还没我所掌握的技术多，于是乎，到了8月份就辞职了，辞职的时候老板还极力挽留，给我加工资啥的。可是工资并不是最重要的，我要的是能展现我个人价值的公司。</p> 
+  <p>到了8月份中旬的时候，我就追随我喜欢的一个妹子来到了深圳，找了大概两周的工作，最后是群里的一位大佬（波神）把我内推到了他们公司，没有经历面试什么的（我发现我这两次找工作的过程中都没怎么面试...以后再找工作的时候可咋办，一点面试技巧都没有），最后很顺利的拿到了offer，并且拿到一份自认为不错的薪资，在此非常感谢波神。在这接近4个月的工作过程中，也学到了不少东西，但是自认为自己为公司所付出的价值还达不到我所拿到的薪资，所以继续努力吧，为公司创造更大的价值，在此也非常感谢小龙，在工作中帮助了我很多。</p> 
+  <h2>关于开源</h2> 
+  <p>今年开源了一个博客程序，名叫 Halo。这也是我的一个毕业设计，令我比较欣慰的是，从开源到现在，几乎是零差评。也移植了其他平台几个质量比较好的模板，在此由衷的感谢这些模板作者。不过比较遗憾的是，由于前端功底比较差，所以一直想为 Halo 写一个模板，尝试过几次，但是都放弃了。明年有计划重新开始写一个，有可能会收费，但是不会太贵，应该也就一碗重庆小面的价格，不加肉的那种。最后，非常感谢支持 Halo 的那群人，是你们让我有更多动力来维护它，让它变得更好。</p> 
+  <h2>关于生活</h2> 
+  <p>2018年算是我活的最蛋疼的一年吧，算了，不想提。</p> 
+  <h2>2019 的目标</h2> 
+  <h3>关于生活</h3> 
+  <p>很简单，从原来的生存变成生活就行了。</p> 
+  <h3>关于工作</h3> 
+  <p>更加努力的工作。</p> 
+  <h3>关于学习</h3> 
+  <ul> 
+   <li>继续深入学习 Java 的相关知识。</li> 
+   <li>继续深入学习 Web 页面的开发。</li> 
+   <li>继续学习Linux的常用技巧。</li> 
+   <li>学习Golang。</li> 
+   <li>学习一个JS框架，暂定VUE。</li> 
+  </ul> 
+  <h3>关于开源</h3> 
+  <ul> 
+   <li>继续打磨 Halo。</li> 
+   <li>写一套 Halo 的主题。</li> 
+   <li>写一套 CMS 系统。</li> 
+  </ul> 
+  <h3>其他</h3> 
+  <ul> 
+   <li>攒钱和女朋友出门玩一圈（先国内吧）。</li> 
+   <li>攒钱给自己买个 Macbook Pro。</li> 
+  </ul> 
+ </body>
+</html>
+                    ]]>
+                </content:encoded>
+            </item>
+            <item>
+                <title><![CDATA[Docker 环境变量的运用]]></title>
+                <link>/archives/docker-env</link>
+                <comments>/archives/docker-env#comments</comments>
+                <pubDate>2018-12-29 23:44:00</pubDate>
+                <dc:creator><![CDATA[Ryan Wang]]></dc:creator>
+
+                        <category><![CDATA[学习笔记]]></category>
+                <description>
+                    <![CDATA[
+                        前段时间发布了Halo的DockerCompose部署教程，该方法可以自动完成Nginx配置以及SSL证书的配置，实现了Halo最便捷的部署方式，可最近确发现了一个问题，就是部署的时候不太方便修改内置数据库的用户名和密码，使用的是默认的admin和123456，当初考虑到安全问题，就禁用了h2数据库
+                    ]]>
+                </description>
+                <content:encoded>
+                    <![CDATA[
+                            <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>前段时间发布了 Halo 的 Docker Compose 部署教程，该方法可以自动完成 Nginx 配置以及 SSL 证书的配置，实现了 Halo 最便捷的部署方式，可最近确发现了一个问题，就是部署的时候不太方便修改内置数据库的用户名和密码，使用的是默认的admin和123456，当初考虑到安全问题，就禁用了 h2数据库的在线控制台。可有时候还是需要修改一些数据啥的，虽然使用频率并不高，但是非要使用的时候还是挺头疼的，于是乎就搜索了相关资料，并完美的解决了修改用户名和密码的问题，所以水文记录一下。</p> 
+  </blockquote> 
+  <h2>原理</h2> 
+  <p>Dockerfile 在构建镜像的时候其实是提供了一个参数可供配置的，那就是 <code>ENV</code>，在 Dockerfile 里面配置之后是可以在构建和创建容器的时候调用的，正好，Spring Boot 打包之后的 Jar 包，在启动的时候也是可以加参数以替代默认配置文件里面的配置项的，所以利用这个特性，就可以完成我们想要的效果啦。</p> 
+  <h2>Dockerfile 解析</h2> 
+  <pre><code class="language-docker">FROM maven:3
+LABEL maintainer="Ryan Wang&lt;i@ryanc.cc&gt;"
+
+WORKDIR /opt/halo
+ADD . /tmp
+ENV TZ=Asia/Shanghai \
+DB_USER="admin" \
+DB_PASSWORD="123456"
+
+RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime &amp;&amp; echo ${TZ} &gt; /etc/timezone
+
+RUN cd /tmp &amp;&amp; mvn package -Pci &amp;&amp; mv target/dist/halo/* /opt/halo/ \
+    &amp;&amp; rm -rf /tmp/* &amp;&amp; rm -rf ~/.m2
+
+EXPOSE 8090
+
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/opt/halo/halo-latest.jar","--spring.datasource.username=${DB_USER}","--spring.datasource.password=${DB_PASSWORD}"]
+</code></pre> 
+  <p>如上代码，我们可以看到，我们在 <code>ENV</code> 参数里面一共配置了三个属性， <code>TZ</code> <code>DB_USER</code> <code>DB_PASSWORD</code> ，这三个分别是：时区，数据库用户名和数据库密码。时区我们很好理解，就是指定一下容器内的时区而已，保证容器和宿主机的时区一致，防止出现时区不同步的问题。</p> 
+  <p>重点我们看到 <code>DB_USER</code> 和 <code>DB_PASSWORD</code> ，这两个都是配置有默认值的，如果说在创建容器不指定这两个环境变量的话就会使用这两个默认值。环境变量写好了，我们在看到最后一行 <code>ENTRYPOINT</code> 这个是在创建容器之后，容器内启动应用所执行的命令，可以用脚本代替（写上脚本文件名就行），也可以直接写命令，在这里我们组合起来就是：</p> 
+  <pre><code class="language-bash">java -jar /opt/halo/halo-latest.jar --spring.datasource.username=${DB_USER} --spring.datasource.password=${DB_PASSWORD}
+</code></pre> 
+  <p>又因为我们在上面指定了 <code>DB_USER</code> 和 <code>DB_PASSWORD</code> 这两个环境变量，所以实际执行的命令就是</p> 
+  <pre><code class="language-bash">java -jar /opt/halo/halo-latest.jar --spring.datasource.username=admin --spring.datasource.password=admin
+</code></pre> 
+  <p>所以这样启动之后，数据库用户名和密码就被应用获取到，然后创建DataSource了。如果大家还不理解为啥是 <code>spring.datasource.username</code> 和 <code>spring.datasource.password</code> 这两个参数的话，看看 Spring Boot 的配置文件就知道了。</p> 
+  <pre><code class="language-yaml">spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    # H2database 配置
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:file:~/halo/halo
+    username: admin
+    password: 123456
+</code></pre> 
+  <h2>创建容器指定环境变量</h2> 
+  <p>上面我们讲解到在 Dockerfile 里面指定环境变量，其实我们在使用 Docker 镜像创建容器的时候也是可以手动指定环境变量的值的，不然从 Docker Hub 拉取下来的镜像怎么修改配置丫。</p> 
+  <p>在创建容器的时候，是有个参数的，那就是 <code>-e</code> ，这个e应该就代表 <code>ENV</code> 吧，在 <code>-e</code> 后面就可以指定环境变量名和值啦，具体写法：<code>-e 环境变量名=值</code> 我们只需要在创建容器的时候加上这个参数就行啦，完整命令如下（假设创建 Halo 的应用容器）：</p> 
+  <pre><code class="language-bash">docker run -d --name halo -p 8090:8090 -v ~/halo:/root/halo -e DB_USER=root -e DB_PASSWORD=67890 ruibaby/halo
+</code></pre> 
+  <p>这样执行之后，用户名就变成了 <code>root</code> ，密码就变成了 <code>67890</code>。这样就可以愉快的使用 H2数据库控制台啦。</p> 
+  <h2>Docker Compose 指定环境变量</h2> 
+  <p>Halo 也提供了 <code>Docker Compose</code> 的创建文件，如今我们支持了手动传参修改数据库用户名和密码后，在 <code>Docker Compose</code> 文件里我们也是可以自己配置的，如下：</p> 
+  <pre><code class="language-docker">  halo:
+    restart: always
+    image: ruibaby/halo
+    container_name: halo
+    ports:
+      - 8090:8090
+    environment:
+      - VIRTUAL_PORT=8090
+      - VIRTUAL_HOST=localhost  # 监听的地址（务必修改）
+      - LETSENCRYPT_HOST=localhost # 证书的域名 （务必修改）
+      - LETSENCRYPT_EMAIL=i@example.com # 证书所有者的邮箱，快过期时会提醒（务必修改）
+      - DB_USER=admin # h2数据库用户名，自定义（务必修改）
+      - DB_PASSWORD=123456 # h2数据库密码，自定义（务必修改）
+    volumes:
+      - ~/halo:/root/halo
+</code></pre> 
+  <p>其中在 <code>environment</code> 节点就是所有需要的环境变量，按需修改即可，修改完成之后，执行 docker-compose up -d 就可以完美部署好应用了。</p> 
+  <h2>小疑问</h2> 
+  <p>有人知道如果在 Docker Hub 上的镜像有更新，我们需要更新自己已创建的容器咋整呢？就是说根据新的 Docker 镜像更新容器内的内容以平滑升级应用。这个问题已经困惑我好久了，搜了很多相关资料都没解惑，不可能手动销毁容器然后用新镜像创建容器吧？如果有大佬知道如果整，欢迎在下面留言。</p> 
+ </body>
+</html>
+                    ]]>
+                </content:encoded>
+            </item>
+            <item>
+                <title><![CDATA[Docker Compose 部署JPress教程]]></title>
+                <link>/archives/docker-compose-run-jpress</link>
+                <comments>/archives/docker-compose-run-jpress#comments</comments>
+                <pubDate>2018-12-10 14:29:00</pubDate>
+                <dc:creator><![CDATA[Ryan Wang]]></dc:creator>
+
+                        <category><![CDATA[学习笔记]]></category>
+                <description>
+                    <![CDATA[
+                        安装Docker和DockerCompose这里使用的服务器系统版本为CentOS7.3，其他Linux发行版安装Docker和DockerCompose的方式大同小异，大家自行查阅资料。安装必要依赖sudoyuminstall-yyum-utilsdevice-mapper-persistent-
+                    ]]>
+                </description>
+                <content:encoded>
+                    <![CDATA[
+                            <html>
+ <head></head>
+ <body>
+  <h2>安装 Docker 和 Docker Compose</h2> 
+  <p>这里使用的服务器系统版本为 CentOS 7.3，其他 Linux发行版安装 Docker 和 Docker Compose 的方式大同小异，大家自行查阅资料。</p> 
+  <h3>安装必要依赖</h3> 
+  <pre><code class="language-bash">sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+</code></pre> 
+  <h3>添加软件源</h3> 
+  <pre><code class="language-bash">sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+</code></pre> 
+  <h3>更新 yum 缓存</h3> 
+  <pre><code class="language-bash">sudo yum makecache fast
+</code></pre> 
+  <h3>安装 Docker</h3> 
+  <pre><code class="language-bash">sudo yum -y install docker-ce
+</code></pre> 
+  <h3>启动 Docker</h3> 
+  <pre><code class="language-bash">sudo systemctl start docker
+</code></pre> 
+  <h3>设置 Docker 为开机启动</h3> 
+  <pre><code class="language-bash">sudo systemctl enable docker
+</code></pre> 
+  <h3>安装 Docker Compose</h3> 
+  <pre><code class="language-bash">sudo yum -y install docker-compose
+</code></pre> 
+  <h3>添加国内镜像源</h3> 
+  <p>添加或修改 <code>/etc/docker/daemon.json</code> 这个文件，加入下面的配置。</p> 
+  <pre><code class="language-json">{
+  "registry-mirrors": ["http://hub-mirror.c.163.com"]
+}
+</code></pre> 
+  <h3>重启 Docker 使配置生效</h3> 
+  <pre><code class="language-bash">service docker restart
+</code></pre> 
+  <h2>下载 Docker Compose 文件</h2> 
+  <p>好了，经过上面一顿操作之后，服务器的 Docker 和 Docker Compose 就已经可以正常使用了。下面我们就可以正式开始部署 JPress 了。首先我们需要下载好 <code>docker-compose.yaml</code> 文件，这个文件在项目目录里面有，我们可以直接使用 <code>wget</code> 命令从 github 上下载下来，如下操作：</p> 
+  <pre><code class="language-bash">yum install -y wget &amp;&amp; wget -O docker-compose.yaml https://raw.githubusercontent.com/JpressProjects/jpress/master/docker/docker-compose-nginxssl.yml
+</code></pre> 
+  <h2>修改 Docker Compose 文件</h2> 
+  <p>假设你现在已经下载好了 <code>docker-compose.yaml</code> 文件，那么在部署之前需要做的就是简单修改以下这个文件。因为我们需要绑定域名以申请SSL证书，所以你需要在 <code>docker-compose.yaml</code> 文件中修改以下配置：</p> 
+  <pre><code class="language-docker">  jpress:
+    restart: always
+    depends_on:
+      - db
+    links:
+      - db
+    image: fuhai/jpress:latest
+    ports:
+      - "8080:8080"
+    container_name: jpress
+    environment:
+      TZ: Asia/Shanghai
+      JPRESS_DB_HOST: db
+      JPRESS_DB_PORT: 3306
+      JPRESS_DB_NAME: jpress
+      JPRESS_DB_USER: jpress
+      JPRESS_DB_PASSWORD: jpress
+      VIRTUAL_PORT: 8080 #监听的端口
+      VIRTUAL_HOST: localhost  #监听的地址
+      LETSENCRYPT_HOST: localhost #证书的域名
+      LETSENCRYPT_EMAIL: i@example.com #证书所有者的邮箱，快过期时会提醒
+</code></pre> 
+  <p>如上配置，我们需要修改 <code>VIRTUAL_HOST</code> , <code>LETSENCRYPT_HOST</code> 为自己的域名，<strong>注意注意注意！</strong>，在部署之前最好先将外网IP解析到域名，因为申请 SSL 证书需要域名可以正常访问。另外，<code>LETSENCRYPT_EMAIL</code> 这个节点是证书申请者的邮箱，当证书要过期的时候，会提醒你续签。修改完成之后保存文件备用。</p> 
+  <h2>下载配置文件模板</h2> 
+  <p>因为要涉及到 Nginx 反向代理，所以我们需要使用模板生成一个 Nginx 的配置文件，以配置好需要代理的地址以及后面 SSL 证书的配置。这个模板人家已经写好了，所以我们直接下载下来即可，下载下来我们就不需要管了。</p> 
+  <pre><code class="language-bash">curl https://raw.githubusercontent.com/jwilder/nginx-proxy/master/nginx.tmpl &gt; /etc/nginx/nginx.tmpl
+</code></pre> 
+  <h2>运行</h2> 
+  <p>如果你顺利进行了上面所述步骤，那么已经离成功不远了，现在我们只需要执行一条命令即可完成 JPress 的部署。</p> 
+  <pre><code class="language-bash">docker-compose up -d
+</code></pre> 
+  <h2>注意事项</h2> 
+  <ol> 
+   <li>最好提前解析好IP，绑定域名。</li> 
+   <li>运行完成之后可能得等几分钟，HTTPS才会配置好，如果不能访问属正常现象，等待几分钟就可以看到 JPress 安装的界面了。</li> 
+  </ol> 
+  <h2>参考文章/使用的开源镜像</h2> 
+  <ul> 
+   <li><a href="https://www.cnblogs.com/chenug/p/6916639.html">在容器中利用Nginx-proxy实现多域名的自动反向代理、免费SSL证书</a></li> 
+   <li><a href="https://github.com/jwilder/docker-gen">jwilder/docker-gen</a></li> 
+   <li><a href="https://github.com/jwilder/nginx-proxy">jwilder/nginx-proxy</a></li> 
+  </ul> 
+ </body>
+</html>
+                    ]]>
+                </content:encoded>
+            </item>
+            <item>
+                <title><![CDATA[Docker Compose 部署Halo教程]]></title>
+                <link>/archives/docker-compose-run-halo</link>
+                <comments>/archives/docker-compose-run-halo#comments</comments>
+                <pubDate>2018-12-8 14:31:00</pubDate>
+                <dc:creator><![CDATA[Ryan Wang]]></dc:creator>
+
+                        <category><![CDATA[学习笔记]]></category>
+                <description>
+                    <![CDATA[
+                        上一篇文章讲到了使用Docker运行Halo，但是仅仅只是运行起来了Halo，并没有讲到如何使用Nginx进行反向代理以绑定域名，也没有讲到如何配置HTTPS，所以这篇文章将向大家演示一下如何使用DockerCompose部署Halo，并自动配置Nginx以及SSL证书。整个过程最慢不超过10分钟。
+                    ]]>
+                </description>
+                <content:encoded>
+                    <![CDATA[
+                            <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>上一篇文章讲到了使用 Docker 运行 Halo，但是仅仅只是运行起来了 Halo，并没有讲到如何使用 Nginx进行反向代理以绑定域名，也没有讲到如何配置 HTTPS，所以这篇文章将向大家演示一下如何使用 Docker Compose 部署Halo，并自动配置 Nginx 以及 SSL证书。整个过程最慢不超过10分钟。</p> 
+  </blockquote> 
+  <h2 id="前言">前言</h2> 
+  <p>此教程适用于语文及格的同学，不需要你精通什么杂七杂八的技术，所有配置都已经放在 <code>docker-compose.yaml</code> 里面了（我都配置好了）。你只需要在其中改一下域名，持有者邮箱，数据库用户密码什么的就行了。另外，该 <code>Docker</code> 镜像默认使用的是 <code>H2Database</code> ，用户名和密码是自定义的。所以请不要再问我 MySQL 怎么装？？数据库用户名和密码是什么？？讲真，就算你一点都不会 <code>Docker</code>，你按照这个教程一步一步来，安装失败算我输。</p> 
+  <h2 id="安装-docker-和-docker-compose">安装 Docker 和 Docker Compose</h2> 
+  <p>这里使用的服务器系统版本为 CentOS 7.3，其他 Linux发行版安装 Docker 和 Docker Compose 的方式大同小异，大家自行查阅资料。</p> 
+  <h3 id="安装必要依赖">安装必要依赖</h3> 
+  <pre><code class="language-bash">sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+</code></pre> 
+  <h3 id="添加软件源">添加软件源</h3> 
+  <pre><code class="language-bash">sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+</code></pre> 
+  <h3 id="更新-yum-缓存">更新 yum 缓存</h3> 
+  <pre><code class="language-bash">sudo yum makecache fast
+</code></pre> 
+  <h3 id="安装-docker">安装 Docker</h3> 
+  <pre><code class="language-bash">sudo yum -y install docker-ce
+</code></pre> 
+  <h3 id="启动-docker">启动 Docker</h3> 
+  <pre><code class="language-bash">sudo systemctl start docker
+</code></pre> 
+  <h3 id="设置-docker-为开机启动">设置 Docker 为开机启动</h3> 
+  <pre><code class="language-bash">sudo systemctl enable docker
+</code></pre> 
+  <h3 id="安装-docker-compose">安装 Docker Compose</h3> 
+  <pre><code class="language-bash">sudo yum -y install docker-compose
+</code></pre> 
+  <h3 id="添加国内镜像源">添加国内镜像源</h3> 
+  <p>添加或修改 <code>/etc/docker/daemon.json</code> 这个文件，加入下面的配置。</p> 
+  <pre><code class="language-json">{
+  "registry-mirrors": ["http://hub-mirror.c.163.com"]
+}
+</code></pre> 
+  <h3 id="重启-docker-使配置生效">重启 Docker 使配置生效</h3> 
+  <pre><code class="language-bash">service docker restart
+</code></pre> 
+  <h2 id="下载-docker-compose-文件">下载 Docker Compose 文件</h2> 
+  <p>好了，经过上面一顿操作之后，服务器的 Docker 和 Docker Compose 就已经可以正常使用了。下面我们就可以正式开始部署 Halo 了。首先我们需要下载好 <code>docker-compose.yaml</code> 文件，这个文件在项目目录里面有，我们可以直接使用 <code>wget</code> 命令从 github 上下载下来，如下操作：</p> 
+  <pre><code class="language-bash">yum install -y wget &amp;&amp; wget -O docker-compose.yaml https://git.io/fpS8N
+</code></pre> 
+  <h2 id="修改-docker-compose-文件">修改 Docker Compose 文件</h2> 
+  <p>假设你现在已经下载好了 <code>docker-compose.yaml</code> 文件，那么在部署之前需要做的就是简单修改以下这个文件。因为我们需要绑定域名以申请SSL证书，所以你需要在 <code>docker-compose.yaml</code> 文件中修改以下配置：</p> 
+  <pre><code class="language-docker">  halo:
+    restart: always
+    image: ruibaby/halo
+    container_name: halo
+    ports:
+      - 8090:8090
+    environment:
+      - VIRTUAL_PORT=8090
+      - VIRTUAL_HOST=localhost  # 监听的地址（务必修改）
+      - LETSENCRYPT_HOST=localhost # 证书的域名 （务必修改）
+      - LETSENCRYPT_EMAIL=i@example.com # 证书所有者的邮箱，快过期时会提醒（务必修改）
+      - DB_USER=admin # h2数据库用户名，自定义（务必修改）
+      - DB_PASSWORD=123456 # h2数据库密码，自定义（务必修改）
+    volumes:
+      - ~/halo:/root/halo
+</code></pre> 
+  <p>参考配置：</p> 
+  <pre><code class="language-docker">  halo:
+    restart: always
+    image: ruibaby/halo
+    container_name: halo
+    ports:
+      - 8090:8090
+    environment:
+      - VIRTUAL_PORT=8090
+      - VIRTUAL_HOST=blog.ryanc.cc  # 监听的地址（务必修改）
+      - LETSENCRYPT_HOST=blog.ryanc.cc # 证书的域名 （务必修改）
+      - LETSENCRYPT_EMAIL=i@ryanc.cc # 证书所有者的邮箱，快过期时会提醒（务必修改）
+      - DB_USER=ruibaby # h2数据库用户名，自定义（务必修改）
+      - DB_PASSWORD=qwert123 # h2数据库密码，自定义（务必修改）
+    volumes:
+      - ~/halo:/root/halo
+</code></pre> 
+  <p>如上配置，我们需要修改 <code>VIRTUAL_HOST</code> , <code>LETSENCRYPT_HOST</code> 为自己的域名，<strong>注意注意注意！</strong>，在部署之前最好先将外网IP解析到域名，因为申请 SSL 证书需要域名可以正常访问。另外，<code>LETSENCRYPT_EMAIL</code> 这个节点是证书申请者的邮箱，当证书要过期的时候，会提醒你续签，<code>DB_USER</code> 和 <code>DB_PASSWORD</code> 分别为 <code>H2Database</code> 的用户名和密码，请务必要修改，这个是自定义的，不要使用默认的，修改完成之后保存文件备用。</p> 
+  <h2 id="下载配置文件模板">下载配置文件模板</h2> 
+  <p>因为要涉及到 Nginx 反向代理，所以我们需要使用模板生成一个 Nginx 的配置文件，以配置好需要代理的地址以及后面 SSL 证书的配置。这个模板人家已经写好了，所以我们直接下载下来即可，下载下来我们就不需要管了。</p> 
+  <pre><code class="language-bash">cd /etc &amp;&amp; mkdir nginx
+
+curl https://raw.githubusercontent.com/jwilder/nginx-proxy/master/nginx.tmpl &gt; /etc/nginx/nginx.tmpl
+</code></pre> 
+  <h2 id="运行">运行</h2> 
+  <p>如果你顺利进行了上面所述步骤，那么已经离成功不远了，现在我们只需要执行一条命令即可完成 Halo 的部署。</p> 
+  <pre><code class="language-bash">docker-compose up -d
+</code></pre> 
+  <h2 id="版本更新">版本更新</h2> 
+  <pre><code class="language-bash"># 拉取最新的 Halo 镜像
+docker pull ruibaby/halo
+
+# 暂停 Docker 容器运行
+docker-compose stop
+
+# 重新构建容器
+docker-compose up -d --build
+</code></pre> 
+  <h2 id="常用命令">常用命令</h2> 
+  <pre><code class="language-bash"># 停止容器运行
+docker-compose stop
+
+# 启动容器
+docker-compose start
+
+# 重启容器
+docker-compose restart
+</code></pre> 
+  <h2 id="注意事项">注意事项</h2> 
+  <ol> 
+   <li>最好提前解析好IP，绑定域名。</li> 
+   <li>运行完成之后可能得等几分钟，HTTPS才会配置好，如果不能访问属正常现象，等待几分钟就可以看到 Halo 安装的界面了。</li> 
+   <li>Docker 镜像使用的是 H2 数据库，所以不需要你自己安装，服务启动就可以自动创建了，求求你们别再问我 H2 数据库怎么安装了。</li> 
+  </ol> 
+  <h2 id="参考文章使用的开源镜像">参考文章/使用的开源镜像</h2> 
+  <ul> 
+   <li><a href="https://www.cnblogs.com/chenug/p/6916639.html">在容器中利用Nginx-proxy实现多域名的自动反向代理、免费SSL证书</a></li> 
+   <li><a href="https://github.com/jwilder/docker-gen">jwilder/docker-gen</a></li> 
+   <li><a href="https://github.com/jwilder/nginx-proxy">jwilder/nginx-proxy</a></li> 
+  </ul> 
+ </body>
+</html>
+                    ]]>
+                </content:encoded>
+            </item>
+            <item>
+                <title><![CDATA[无刷新加载下一页方案解析]]></title>
+                <link>/archives/no-refresh-to-next-page</link>
+                <comments>/archives/no-refresh-to-next-page#comments</comments>
+                <pubDate>2018-12-6 11:35:00</pubDate>
+                <dc:creator><![CDATA[Ryan Wang]]></dc:creator>
+
+                        <category><![CDATA[学习笔记]]></category>
+                <description>
+                    <![CDATA[
+                        前段时间移植了一个Ghost的主题的时候（就是我现在用的这个），发现这个下拉加载下一页特别有意思，只用了短短几行代码，且后端没有重写请求方法，就轻而易举的实现了，于是乎就简单分析了一下。以供有需要的人参考一下。之前是这样做的我之前做这种无刷新加载下一页都是用的字符串拼接，把html代码和新的数据拼接
+                    ]]>
+                </description>
+                <content:encoded>
+                    <![CDATA[
+                            <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>前段时间移植了一个Ghost的主题的时候（就是我现在用的这个），发现这个下拉加载下一页特别有意思，只用了短短几行代码，且后端没有重写请求方法，就轻而易举的实现了，于是乎就简单分析了一下。以供有需要的人参考一下。</p> 
+  </blockquote> 
+  <h1 id="之前是这样做的">之前是这样做的</h1> 
+  <p>我之前做这种无刷新加载下一页都是用的字符串拼接，把html代码和新的数据拼接起来然后append进去。这种方法虽然可以实现功能，但是有很多缺点，比如如果修改了页面的样式，那么很可能就要重新写拼接的字符串，而且整个代码看起来非常不好看（我有代码洁癖）。就像下面代码一样，宛如一坨shit...</p> 
+  <pre><code class="language-javascript">$.each(data,function (n,value) {
+	$('.post-list').append('' +
+			'&lt;div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 post-list-item" data-aos="fade-up"&gt;\n' +
+			'&lt;div class="post-item-main"&gt;\n' +
+			'&lt;a href="/archives/'+value.postUrl+'"&gt;\n' +
+			'&lt;div class="post-item-thumbnail lazy" style="background-image: url(/halo/source/img/pic12.jpg)"&gt;&lt;/div&gt;\n' +
+			'&lt;/a&gt;\n' +
+			'&lt;div class="post-item-info"&gt;\n' +
+			'&lt;div class="post-info-title"&gt;\n' +
+			'&lt;a href="/archives/'+value.postUrl+'"&gt;&lt;span&gt;'+value.postTitle+'&lt;/span&gt;&lt;/a&gt;&lt;br&gt;\n' +
+			'&lt;/div&gt;\n' +
+			'&lt;div&gt;\n' +
+			'&lt;span class="post-info-desc"&gt;\n' +
+			''+value.postSummary+'...' +
+			'&lt;/span&gt;\n' +
+			'&lt;/div&gt;\n' +
+			'&lt;div class="post-info-other" style="text-align: right"&gt;\n' +
+			'&lt;a href="#"&gt;MORE&gt;&lt;/a&gt;\n' +
+			'&lt;/div&gt;\n' +
+			'&lt;/div&gt;\n' +
+			'&lt;/div&gt;\n' +
+			'&lt;/div&gt;'
+	);
+});
+</code></pre> 
+  <h1 id="新学到的方法">新学到的方法</h1> 
+  <p>废话少说，先上代码，地址<a href="https://github.com/TryGhost/Casper/blob/master/assets/js/infinitescroll.js">https://github.com/TryGhost/Casper/blob/master/assets/js/infinitescroll.js</a>。</p> 
+  <pre><code class="language-javascript">/* global maxPages */
+var maxPages = parseInt(totalPages);
+
+// Code snippet inspired by https://github.com/douglasrodrigues5/ghost-blog-infinite-scroll
+$(function ($) {
+    var currentPage = 1;
+    var pathname = window.location.pathname;
+    var $document = $(document);
+    var $result = $('.post-feed');
+    var buffer = 300;
+
+    var ticking = false;
+    var isLoading = false;
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $document.height();
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $document.height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(infiniteScroll);
+        }
+        ticking = true;
+    }
+
+    function sanitizePathname(path) {
+        var paginationRegex = /(?:page\/)(\d)(?:\/)$/i;
+
+        // remove hash params from path
+        path = path.replace(/#(.*)$/g, '').replace('////g', '/');
+
+        // remove pagination from the path and replace the current pages
+        // with the actual requested page. E. g. `/page/3/` indicates that
+        // the user actually requested page 3, so we should request page 4
+        // next, unless it's the last page already.
+        if (path.match(paginationRegex)) {
+            currentPage = parseInt(path.match(paginationRegex)[1]);
+
+            path = path.replace(paginationRegex, '');
+        }
+
+        return path;
+    }
+
+    function infiniteScroll() {
+        // sanitize the pathname from possible pagination or hash params
+        pathname = sanitizePathname(pathname);
+
+        // return if already loading
+        if (isLoading) {
+            return;
+        }
+
+        // return if not scroll to the bottom
+        if (lastScrollY + lastWindowHeight &lt;= lastDocumentHeight - buffer) {
+            ticking = false;
+            return;
+        }
+
+        /**
+        * maxPages is defined in default.hbs and is the value
+        * of the amount of pagination pages.
+        * If we reached the last page or are past it,
+        * we return and disable the listeners.
+        */
+        if (currentPage &gt;= maxPages) {
+            window.removeEventListener('scroll', onScroll, {passive: true});
+            window.removeEventListener('resize', onResize);
+            return;
+        }
+
+        isLoading = true;
+
+        // next page
+        currentPage += 1;
+
+        // Load more
+        var nextPage = pathname + 'page/' + currentPage + '/';
+
+        $.get(nextPage, function (content) {
+            var parse = document.createRange().createContextualFragment(content);
+            var posts = parse.querySelectorAll('.post');
+            if (posts.length) {
+                [].forEach.call(posts, function (post) {
+                    $result[0].appendChild(post);
+                });
+            }
+        }).fail(function (xhr) {
+            // 404 indicates we've run out of pages
+            if (xhr.status === 404) {
+                window.removeEventListener('scroll', onScroll, {passive: true});
+                window.removeEventListener('resize', onResize);
+            }
+        }).always(function () {
+            lastDocumentHeight = $document.height();
+            isLoading = false;
+            ticking = false;
+        });
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize);
+
+    infiniteScroll();
+});
+</code></pre> 
+  <p>我们知道的是，很多CMS系统，博客系统（Wordpress，typecho，Hexo等）的下一页路径几乎都是<code>/page/页码</code>，所以上面的方法几乎可以通用，就算不是，改改也是可以的。好了，下面详细来解析一下上面的代码吧。</p> 
+  <h2 id="获取总页数">获取总页数</h2> 
+  <p>在最上面有一行代码<code>var maxPages = parseInt(totalPages);</code> 是用于定义总页数的，不知道？那么想办法后端返回一个吧，这个有什么用呢？看下面：</p> 
+  <pre><code class="language-javascript">if (currentPage &gt;= maxPages) {
+	window.removeEventListener('scroll', onScroll, {passive: true});
+	window.removeEventListener('resize', onResize);
+	return;
+}
+</code></pre> 
+  <p>就是说当当前页面大于等于总页数的的时候就停止执行下面的代码，而下面的代码则是加载下一页的，所以说需要有这个判断，当获取到最后一页的时候就停止获取。</p> 
+  <h2 id="加载下一页">加载下一页</h2> 
+  <p>可以看到，方法的最上面定义了一个变量<code>var currentPage = 1;</code>，这个变量代表着第一页的页码，当页面滑动到最底部的时候就会调用<code>infiniteScroll</code>方法，并且给<code>currentPage</code>加上一，然后就请求下一页的数据。此时的请求路径也就是<code>/page/2</code>。</p> 
+  <h2 id="解析请求的路径">解析请求的路径</h2> 
+  <p>我们看到这一段：</p> 
+  <pre><code class="language-javascript">$.get(nextPage, function (content) {
+	var parse = document.createRange().createContextualFragment(content);
+	var posts = parse.querySelectorAll('.post');
+	if (posts.length) {
+		[].forEach.call(posts, function (post) {
+			$result[0].appendChild(post);
+		});
+	}
+})
+</code></pre> 
+  <p>使用get方式请求下一页的数据，需要注意的是，虽然是使用ajax请求的，但是是请求的下一页整个页面的内容，所以请求获得的数据便是整个页面的html代码。所以这里使用到了<code>querySelectorAll</code>这个方法，截取全部以<code>post</code>类的html代码，并存入<code>posts</code>变量中，然后在遍历<code>posts</code>，得到单个文章列表项，最后再追加到页面中，整个过程一气呵成。</p> 
+  <h2 id="总结">总结</h2> 
+  <p>整个获取下一页数据的基本流程为：</p> 
+  <ol> 
+   <li>判断页面是否滑动到底部，如已滑动到底部，则调用加载页面的方法，并把<code>currentPage</code>在原基础上加1，并需要判断当前页码是否大于总页数，如大于，则不调用加载页面的方法。</li> 
+   <li>使用ajax请求下一页的数据。</li> 
+   <li>解析请求下一页所获得的数据，并截取所有以<code>post</code>类的html代码。注意：并非所有单个文章列表项的class都为post，请按实际情况来。</li> 
+   <li>追加到当前页面的文章列表中。</li> 
+  </ol> 
+ </body>
+</html>
+                    ]]>
+                </content:encoded>
+            </item>
+            <item>
+                <title><![CDATA[Halo博客系统-Docker版]]></title>
+                <link>/archives/halo-docker</link>
+                <comments>/archives/halo-docker#comments</comments>
+                <pubDate>2018-10-18 21:00:06</pubDate>
+                <dc:creator><![CDATA[Ryan Wang]]></dc:creator>
+
+                        <category><![CDATA[学习笔记]]></category>
+                <description>
+                    <![CDATA[
+                        好消息，Halo现已加入Docker自动构建套餐。鉴于之前有很多对Java不是很熟悉的人想要部署Halo而又问题重重，于是乎，在多次调教下，Halo现在已经自动在DockerHub构建了。废话少说，先上图使用方法安装Docker安装Docker有很多方式，按照你系统环境来安装吧，具体教程请看：Doc
+                    ]]>
+                </description>
+                <content:encoded>
+                    <![CDATA[
+                            <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>好消息，Halo现已加入Docker自动构建套餐。鉴于之前有很多对Java不是很熟悉的人想要部署Halo而又问题重重，于是乎，在多次调教下，Halo现在已经自动在Docker Hub构建了。</p> 
+  </blockquote> 
+  <h2>废话少说，先上图</h2> 
+  <p><img src="/upload/2018/9/image-153986743963920181018205745496.png" alt="file"> <img src="https://ryanc.cc/upload/2018/9/image-153986751237620181018205857943.png" alt=""></p> 
+  <h2>使用方法</h2> 
+  <h3>安装Docker</h3> 
+  <p>安装Docker有很多方式，按照你系统环境来安装吧，具体教程请看：<a href="http://www.runoob.com/docker/docker-tutorial.html">Docker 教程 | 菜鸟教程</a>，里面有<code>Ubuntu</code>，<code>CentOS</code>，<code>Windows</code>以及<code>macOS</code>的对Docker的详细安装教程，可参阅。</p> 
+  <h3>拉取Docker镜像</h3> 
+  <pre><code class="language-bash">docker pull ruibaby/halo
+</code></pre> 
+  <h3>创建Docker容器并运行</h3> 
+  <pre><code class="language-bash">docker run -d --name halo -p 8090:8090 -v ~/halo:/root/halo ruibaby/halo
+</code></pre> 
+  <h3>参数解析</h3> 
+  <ul> 
+   <li><code>-d</code>：运行之后返回容器编号</li> 
+   <li><code>--name</code>：容器名称</li> 
+   <li><code>-p</code>：运行端口，宿主机:应用端口，可以直接80:8090就可以绑定域名了，如需配置SSL，建议使用Nginx反向代理。</li> 
+   <li><code>-v</code>：Volume，将宿主机的目录映射到容器内</li> 
+  </ul> 
+  <h3>注意事项</h3> 
+  <ul> 
+   <li>仅支持<a href="https://ryanc.cc/archives/how-to-use-h2-database">H2Database</a>。</li> 
+   <li>H2的Console是不打开的，如果需要临时打开修改数据，请进入容器内的<code>/opt/halo/resources</code>下修改配置文件。</li> 
+   <li>latest为稳定分支，dev为开发分支。</li> 
+   <li>如果拉取镜像特别缓慢，推荐使用<a href="https://www.daocloud.io/mirror">Daocloud</a>镜像源。</li> 
+  </ul> 
+ </body>
+</html>
+                    ]]>
+                </content:encoded>
+            </item>
+            <item>
+                <title><![CDATA[Spring Boot另类的打包方式]]></title>
+                <link>/archives/springboot-package</link>
+                <comments>/archives/springboot-package#comments</comments>
+                <pubDate>2018-9-25 18:37:36</pubDate>
+                <dc:creator><![CDATA[Ryan Wang]]></dc:creator>
+
+                        <category><![CDATA[学习笔记]]></category>
+                <description>
+                    <![CDATA[
+                        这一篇是我很久之前发在头条上的，今天转过来。SpringBoot在近来是非常受开发者欢迎的，简化了配置方式，不需要再配置繁琐的xml，内嵌web容器等等。相对于SSM，本人更喜欢使用SpringBoot开发Web项目。总所周知，SpringBoot提供了两种打包方式，即Jar和War。前者内置了we
+                    ]]>
+                </description>
+                <content:encoded>
+                    <![CDATA[
+                            <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>这一篇是我很久之前发在头条上的，今天转过来。</p> 
+  </blockquote> 
+  <blockquote> 
+   <p>Spring Boot在近来是非常受开发者欢迎的，简化了配置方式，不需要再配置繁琐的xml，内嵌web容器等等。相对于SSM，本人更喜欢使用Spring Boot开发Web项目。</p> 
+  </blockquote> 
+  <p>总所周知，Spring Boot提供了两种打包方式，即Jar和War。前者内置了web容器，使用一条命令就可以运行，后者需要单独安装Tomcat容器。对比下来，我更喜欢打包成Jar，不想单独安装一个Tomcat，费时费力...</p> 
+  <p>那么问题就来了，一个打包成Jar包之后，体积大的不忍直视。因为里面不仅包含了资源文件，还有很多依赖Jar包，导致体积一般都在40M以上。</p> 
+  <p>所以在这里教大家一种打包方式，这种方式会把依赖Jar包，resources目录，运行Jar包分开。所以，第一次部署需要把这三部分都上传上去，但是以后的更新迭代就只需要上传覆盖resources目录（如果有修改的话），运行Jar包就可以了。</p> 
+  <p>打包好的项目结构如下图： <img src="/upload/2018/8/image-153787163222120180925183414988.jpg" alt="file"></p> 
+  <p>好了，开始正题，这种打包方式运用到了Maven的一个打包插件maven-assembly-plugin，没了解过的同学可以去百度了解一下。</p> 
+  <h2>修改pom.xml</h2> 
+  <p>首先我们需要修改pom.xml里面默认的
+   <build></build>代码块，如下</p> 
+  <pre><code class="language-xml">&lt;build&gt;
+	&lt;finalName&gt;halo&lt;/finalName&gt;
+	&lt;resources&gt;
+		&lt;resource&gt;
+			&lt;directory&gt;src/main/java&lt;/directory&gt;
+			&lt;filtering&gt;false&lt;/filtering&gt;
+			&lt;excludes&gt;
+				&lt;exclude&gt;**/*.java&lt;/exclude&gt;
+			&lt;/excludes&gt;
+		&lt;/resource&gt;
+	&lt;/resources&gt;
+	&lt;plugins&gt;
+		&lt;!-- 跳过单元测试，不然打包的时候会因为加载不了application.yaml报错 --&gt;
+		&lt;plugin&gt;
+			&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+			&lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+			&lt;configuration&gt;
+				&lt;skip&gt;true&lt;/skip&gt;
+			&lt;/configuration&gt;
+		&lt;/plugin&gt;
+
+		&lt;plugin&gt;
+			&lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+			&lt;configuration&gt;
+				&lt;source&gt;1.8&lt;/source&gt;
+				&lt;target&gt;1.8&lt;/target&gt;
+				&lt;encoding&gt;UTF-8&lt;/encoding&gt;
+			&lt;/configuration&gt;
+		&lt;/plugin&gt;
+
+		&lt;plugin&gt;
+			&lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;
+			&lt;configuration&gt;
+				&lt;appendAssemblyId&gt;false&lt;/appendAssemblyId&gt;
+				&lt;descriptors&gt;
+					&lt;descriptor&gt;assembly.xml&lt;/descriptor&gt;
+				&lt;/descriptors&gt;
+				&lt;outputDirectory&gt;${project.build.directory}/dist/&lt;/outputDirectory&gt;
+			&lt;/configuration&gt;
+			&lt;executions&gt;
+				&lt;execution&gt;
+					&lt;id&gt;make-assembly&lt;/id&gt;
+					&lt;phase&gt;package&lt;/phase&gt;
+					&lt;goals&gt;
+						&lt;goal&gt;single&lt;/goal&gt;
+					&lt;/goals&gt;
+				&lt;/execution&gt;
+			&lt;/executions&gt;
+		&lt;/plugin&gt;
+
+		&lt;!-- 打包成jar文件，并指定lib文件夹以及resources资源文件夹 --&gt;
+		&lt;plugin&gt;
+			&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+			&lt;artifactId&gt;maven-jar-plugin&lt;/artifactId&gt;
+			&lt;version&gt;3.1.0&lt;/version&gt;
+			&lt;configuration&gt;
+				&lt;archive&gt;
+					&lt;manifest&gt;
+						&lt;mainClass&gt;cc.ryanc.halo.Application&lt;/mainClass&gt;
+						&lt;classpathPrefix&gt;lib/&lt;/classpathPrefix&gt;
+						&lt;addClasspath&gt;true&lt;/addClasspath&gt;
+					&lt;/manifest&gt;
+					&lt;manifestEntries&gt;
+						&lt;Class-Path&gt;resources/&lt;/Class-Path&gt;
+					&lt;/manifestEntries&gt;
+				&lt;/archive&gt;
+			&lt;/configuration&gt;
+		&lt;/plugin&gt;
+	&lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre> 
+  <h2>创建assembly.xml</h2> 
+  <p>在项目根目录创建assembly.xml文件</p> 
+  <pre><code class="language-xml">&lt;assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd"&gt;
+
+    &lt;id&gt;distribution&lt;/id&gt;
+    &lt;formats&gt;
+        &lt;format&gt;dir&lt;/format&gt;
+    &lt;/formats&gt;
+
+    &lt;includeBaseDirectory&gt;false&lt;/includeBaseDirectory&gt;
+
+    &lt;fileSets&gt;
+        &lt;fileSet&gt;
+            &lt;directory&gt;src/main/resources/&lt;/directory&gt;
+            &lt;outputDirectory&gt;/resources&lt;/outputDirectory&gt;
+        &lt;/fileSet&gt;
+        &lt;fileSet&gt;
+            &lt;directory&gt;bin/&lt;/directory&gt;
+            &lt;outputDirectory&gt;/&lt;/outputDirectory&gt;
+        &lt;/fileSet&gt;
+    &lt;/fileSets&gt;
+
+    &lt;dependencySets&gt;
+        &lt;dependencySet&gt;
+            &lt;outputDirectory&gt;/lib&lt;/outputDirectory&gt;
+            &lt;scope&gt;runtime&lt;/scope&gt;
+            &lt;excludes&gt;
+                &lt;exclude&gt;${project.groupId}:${project.artifactId}&lt;/exclude&gt;
+            &lt;/excludes&gt;
+        &lt;/dependencySet&gt;
+        &lt;dependencySet&gt;
+            &lt;outputDirectory&gt;/&lt;/outputDirectory&gt;
+            &lt;includes&gt;
+                &lt;include&gt;${project.groupId}:${project.artifactId}&lt;/include&gt;
+            &lt;/includes&gt;
+        &lt;/dependencySet&gt;
+    &lt;/dependencySets&gt;
+&lt;/assembly&gt;
+</code></pre> 
+  <p>好了，接下来在控制台执行mvn clean package，等待打包完成之后，就可以在target/dist里面看到打包好的项目了，只需要执行根目录的Jar就行了(java -jar 包名)。如果需要部署在服务端，建议使用shell脚本运行项目，不然退出控制台之后，应用就会被kill掉。</p> 
+ </body>
+</html>
+                    ]]>
+                </content:encoded>
+            </item>
+            <item>
+                <title><![CDATA[来深圳一月后有感]]></title>
+                <link>/archives/lai-shen-zhen-yi-yue-hou-you-gan</link>
+                <comments>/archives/lai-shen-zhen-yi-yue-hou-you-gan#comments</comments>
+                <pubDate>2018-9-24 13:03:44</pubDate>
+                <dc:creator><![CDATA[Ryan Wang]]></dc:creator>
+
+                        <category><![CDATA[日志]]></category>
+                <description>
+                    <![CDATA[
+                        来深圳也有一个多月了，也慢慢习惯这边的生活了，遂撰文记录一下这难忘的一月。难忘的第一天还是第一次一个人出远门，父母担心我的安全，所以坚持让我坐飞机过来，不让我坐火车（还没有做过火车）。于是乎买了凌晨5点的特价飞机票，由于第一次坐飞机怕没经验导致误机，所以我两点多就到了机场（一夜没睡），早早的把登机牌
+                    ]]>
+                </description>
+                <content:encoded>
+                    <![CDATA[
+                            <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>来深圳也有一个多月了，也慢慢习惯这边的生活了，遂撰文记录一下这难忘的一月。</p> 
+  </blockquote> 
+  <h1 id="难忘的第一天">难忘的第一天</h1> 
+  <p>还是第一次一个人出远门，父母担心我的安全，所以坚持让我坐飞机过来，不让我坐火车（还没有做过火车）。于是乎买了凌晨5点的特价飞机票，由于第一次坐飞机怕没经验导致误机，所以我两点多就到了机场（一夜没睡），早早的把登机牌取了。然后就是漫长的等待，好在我两个基友陪我来的，不然还真挺无聊。飞机场给我的第一感觉就是太大了，着实让我开了一把眼界，原来去登机还要坐车去的... 而且还坐了10几分钟。好在虽然是第一次坐飞机，但是也没有出现什么岔子，从取登机牌到过安检，再到登机一气呵成。睡了俩小时就安全的到达了宝安T3机场。</p> 
+  <p>然后比较蛋疼的事情就发生了... 就在要到达目的地的时候（坐的地铁，离宝安T3还是有点远的），我爹来了个电话，说我包在别人那里，我就纳闷了，我就带了一个背包和一个箱子，但他们都在我这啊... 于是乎我就检查了一下我的箱子... 没错！这就是我的，然后又打开背包看了一下... 靠！背包拿错了，我电脑还在里面啊... 电脑丢了无所谓，但是我的东西还在里面啊！（非常戏剧化的是，我的包包和他的包包是一毛一样的，而且都放在同一个位置，登机牌和身份证都是放在最外层的那个小包包里，我下飞机的时候还无意识的专门翻了一下这个小包包，发现身份证和登机牌都在，就确认是我的了...），然后我爸把他电话给我，然后就联系到了他，只好返回去做交易。好在这哥们儿人特别好，在那里等了我很久，最后交换背包道谢之后，就做再次坐地铁到达目的地了。</p> 
+  <p>然后又比较蛋疼的事发生了，由于种种原因我还不能进屋（暂住女朋友家），于是乎就找了个网吧上网，一直从早上上到了下午5点多（一直没有睡觉啊），然后才真正到达目的地...</p> 
+  <h1 id="找工作">找工作</h1> 
+  <p>对于找工作我是一直都不着急的（佛系，随缘就好），于是乎我就边玩边投简历，结果几乎没有邀面试的... 第一周就收到了一个外包公司的面试邀请，当他说他们是外包公司的时候，我就直接拒绝了。所以后面只要有面试电话，我就直接问是不是外包，是的话就不去了，浪费时间。终于在第二周接近周末的时候，有人直接拉我进他们公司了，在此对他表示感谢。</p> 
+  <h1 id="食">食</h1> 
+  <p>在这方面我就有点不习惯了，我最受不了的就是在食物里面加甜味了... 而且我觉得广东这边可能对辣味有什么误解。总之目前为止我还没吃到有啥合我口味的，我本来就不是太挑食的一个人。算了，能吃就行，而且晚上也是在家做饭。怀恋重庆的小面。by the way 我发现这边的大多数饭店的桌子上都是没有纸巾的，这也是一个不习惯的地方。</p> 
+  <h1 id="住">住</h1> 
+  <p>暂时是住在女朋友这里的，另外还有几个人一起合租，相处过程中，暂时没有发现有什么不合的。而且这房子家电也都很齐全，冰箱，洗衣机都有，算是很方便了。唯一不太习惯的就是，我没有我自己的桌子。之前在重庆的时候，我认为啥都不重要，有个桌子能放下我电脑就行（当然还得有舒服的椅子），然后就能开开心心的写bug了。but，我现在只能把电脑放在客厅的沙发上，端个小凳子坐...（哎我的老腰）。等过两个月攒点工资就搬出去了。</p> 
+  <h1 id="行">行</h1> 
+  <p>不得不说，深圳的交通要比重庆好太多，至少到现在我都还没有堵过车。而且公交和地铁都可以用手机支付，可以说非常方便了。之前在重庆的时候还要排队买票或充值。感觉深圳的地铁也不是太挤（可能是我还没去其他地方转转），而且很大几率有座位，在重庆，上车有座位的几率简直微乎其微，不管是在哪儿都一样。</p> 
+  <h1 id="昨天">昨天</h1> 
+  <p>趁着中秋小长假，出去浪了一把，去的是最近的莲花山。没啥好玩的，而且还被最近的<strong>山竹</strong>摧残了一番，逛了一下午，啥都没玩到，倒是让我的老腰又疼了一把。不知道从啥时候开始，我只要站久了腰就会痛，去年就打算回老家看病的，结果一直耽搁到现在。然后返程的时候去微信的X雨医生咨询了一下，他说是由于我长期坐着的原因，叫我躺一周...（职业病现在就有了？我才20啊。），好在不是啥腰椎间盘突出啥的，不然就有点可怕了。</p> 
+  <h1 id="结尾">结尾</h1> 
+  <p>算了，不说了，躺尸去了。</p> 
+ </body>
+</html>
+                    ]]>
+                </content:encoded>
+            </item>
+            <item>
+                <title><![CDATA[Halo-部署教程]]></title>
+                <link>/archives/halo-run-with-git-maven</link>
+                <comments>/archives/halo-run-with-git-maven#comments</comments>
+                <pubDate>2018-7-23 14:10:00</pubDate>
+                <dc:creator><![CDATA[Ryan Wang]]></dc:creator>
+
+                        <category><![CDATA[学习笔记]]></category>
+                <description>
+                    <![CDATA[
+                        11月22号更新安装视频教程环境要求JDK1.8以上。Maven3.x。数据库MySQL5.5以上MariaDB或者直接使用H2Database，免安装。Git再次声明，不需要单独安装Tomcat之类的web容器。需要注意的是：如果使用一键安装脚本（后面会讲到），那么你只需要安装数据库即可（如果使用
+                    ]]>
+                </description>
+                <content:encoded>
+                    <![CDATA[
+                            <html>
+ <head></head>
+ <body>
+  <h2 id="2019年6月1日更新">2019年6月1日更新</h2> 
+  <p>这个教程已经不适用于新版，具体安装教程请参考：<a href="https://halo.run">https://halo.run</a></p> 
+  <h2 id="11月22号更新">11月22号更新</h2> 
+  <blockquote> 
+   <p>安装视频教程</p> 
+  </blockquote> 
+  <iframe src="//player.bilibili.com/player.html?aid=35788047&amp;cid=62793757&amp;page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="100%" height="600px"> </iframe> 
+  <h2 id="环境要求">环境要求</h2> 
+  <ul> 
+   <li>JDK1.8以上。</li> 
+   <li>Maven3.x。</li> 
+   <li>数据库 
+    <ul> 
+     <li>MySQL5.5以上</li> 
+     <li>MariaDB</li> 
+     <li>或者直接使用H2Database，免安装。</li> 
+    </ul> </li> 
+   <li>Git</li> 
+   <li>再次声明，不需要单独安装 <code>Tomcat</code> 之类的 web 容器。</li> 
+  </ul> 
+  <blockquote> 
+   <p>需要注意的是：如果使用一键安装脚本（后面会讲到），那么你只需要安装数据库即可（如果使用MySQL或者MariaDB的话）。如果不使用MySQL或者MariaDB，那么你什么都不需要安装，直接执行脚本即可。</p> 
+  </blockquote> 
+  <h2 id="二进制安装不推荐">二进制安装（不推荐）</h2> 
+  <blockquote> 
+   <p>这种方式安装非常简单且快速（但是并不方便升级），你只需要下载安装包上传到服务器上解压运行即可，需要注意的是，运行之前别忘了参考下面的配置修改application.yaml文件。</p> 
+  </blockquote> 
+  <h3 id="配置文件详解">配置文件详解</h3> 
+  <pre><code class="language-yaml">server:
+  port: 8080
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    # H2database 配置
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:file:~/halo/halo
+    username: admin
+    password: 123456
+
+    # MySql配置
+    #driver-class-name: com.mysql.jdbc.Driver
+    #url: jdbc:mysql://127.0.0.1:3306/halodb?characterEncoding=utf8&amp;useSSL=false
+    #username: root
+    #password: 123456
+
+  h2:
+    console:
+      settings:
+        web-allow-others: true
+      path: /h2-console
+      enabled: true
+</code></pre> 
+  <p>注意：默认使用的是H2Database，如需MySQL，将H2Database相关的配置注释或者删掉，再把MySql的相关配置取消注释即可。</p> 
+  <p>详解：</p> 
+  <ul> 
+   <li> <p><code>server.port</code>: 运行程序的端口，默认8080。当然你要修改成6666也行，然后你访问的地址就是<code>localhost:6666</code>（使用halo-cli部署可以提示输入并修改）</p> </li> 
+   <li> <p><code>spring.datasource.type</code>: 数据源类型，不需要修改。</p> </li> 
+   <li> <p><code>spring.datasource.driver-class-name</code>: 数据库驱动程序，不需要修改。</p> </li> 
+   <li> <p><code>spring.datasource.url</code>: 数据库物理文件路径，建议不要修改。默认是*~/halo/halo*。</p> </li> 
+   <li> <p><code>spring.datasource.username</code>: 数据库用户名，一定要修改，这是可以自定义的（使用halo-cli部署可以提示输入并修改）。</p> </li> 
+   <li> <p><code>spring.datasource.password</code>: 数据库密码，一定要修改，这也是可以自定义的（使用halo-cli部署可以提示输入并修改）。</p> </li> 
+   <li> <p><code>spring.h2.console.settings.web-allow-others</code>: 是否启用h2数据库可视化后台。</p> </li> 
+   <li> <p><code>spring.h2.console.path</code>: h2数据库可视化后台路径，可以自定义。</p> </li> 
+   <li> <p><code>spring.h2.console.enabled:</code>: 是否启动H2控制台。</p> </li> 
+  </ul> 
+  <blockquote> 
+   <p>如果对h2数据库不熟悉，可以上网搜一下相关信息，非常好的一个嵌入式数据库。</p> 
+  </blockquote> 
+  <h3 id="如何运行halo">如何运行Halo</h3> 
+  <ol> 
+   <li>上传安装包到服务器。</li> 
+   <li>解压安装包。</li> 
+   <li>修改配置文件（数据库配置）。</li> 
+   <li>执行<code>sh halo.sh start</code>。</li> 
+  </ol> 
+  <h3 id="如何升级">如何升级</h3> 
+  <ol> 
+   <li>上传新的安装包到服务器。</li> 
+   <li>解压覆盖之前的文件。</li> 
+   <li>执行<code>sh halo.sh restart</code>。</li> 
+  </ol> 
+  <h3 id="其他命令">其他命令</h3> 
+  <ul> 
+   <li>启动Halo : <code>sh halo.sh start</code></li> 
+   <li>停止Halo : <code>sh halo.sh stop</code></li> 
+   <li>重启Halo : <code>sh halo.sh restart</code></li> 
+   <li>查看状态 : <code>sh halo.sh status</code></li> 
+  </ul> 
+  <h3 id="发布版本">发布版本</h3> 
+  <table> 
+   <thead> 
+    <tr>
+     <th>版本号</th>
+     <th>发布日期</th>
+     <th>下载</th>
+    </tr> 
+   </thead> 
+   <tbody> 
+    <tr>
+     <td>0.0.7</td>
+     <td>2018/08/31</td>
+     <td><a href="http://static.ryanc.cc/halo/releases/halo-0.0.7.zip">ZIP</a></td>
+    </tr> 
+    <tr>
+     <td>0.0.9</td>
+     <td>2018/10/14</td>
+     <td><a href="http://static.ryanc.cc/halo/releases/halo-0.0.9.zip">ZIP</a></td>
+    </tr> 
+   </tbody> 
+  </table> 
+  <h2 id="源码安装">源码安装</h2> 
+  <h3 id="一键安装脚本方式一">一键安装脚本（方式一）</h3> 
+  <h4 id="注意事项">注意事项</h4> 
+  <ul> 
+   <li>如果脚本出现错误，请使用<strong>dos2unix</strong>转换一下。</li> 
+   <li>安装过程中会提示输入一些信息，如运行端口，数据库配置等信息，请知晓。</li> 
+   <li>下载依赖过程中可能会比较久，通常在10-15分钟。</li> 
+  </ul> 
+  <h4 id="执行自动安装脚本">执行自动安装脚本</h4> 
+  <pre><code class="language-bash">yum install -y wget &amp;&amp; wget -O halo-cli.sh https://git.io/fxHqp &amp;&amp; bash halo-cli.sh -i
+</code></pre> 
+  <h4 id="如何运行">如何运行</h4> 
+  <p>耐心等待安装完成之后，执行<code>systemctl start halo</code>或<code>service halo start</code>。</p> 
+  <h4 id="如何更新">如何更新</h4> 
+  <pre><code class="language-bash">bash halo-cli.sh -u
+systemctl restart halo 或者 service halo restart
+</code></pre> 
+  <h4 id="如何加入开机自启">如何加入开机自启</h4> 
+  <pre><code class="language-bash">systemctl enable halo
+</code></pre> 
+  <h3 id="自动打包脚本方式二">自动打包脚本（方式二）</h3> 
+  <blockquote> 
+   <p>这种安装方式适用于所有Linux发行版，其中，<strong>deploy.sh</strong>在项目根目录。</p> 
+  </blockquote> 
+  <h4 id="注意事项-1">注意事项</h4> 
+  <ul> 
+   <li>服务器为Linux。</li> 
+   <li>JDK1.8以上（需要自己配置）。</li> 
+   <li>Maven3.x（需要自己配置）。</li> 
+   <li>Git。</li> 
+  </ul> 
+  <h4 id="拉取源码">拉取源码</h4> 
+  <pre><code class="language-bash">git clone https://github.com/ruibaby/halo
+#或者
+git clone https://gitee.com/babyrui/halo
+</code></pre> 
+  <h4 id="如何运行-1">如何运行</h4> 
+  <ol> 
+   <li>进入到源码根目录。</li> 
+   <li>修改配置文件，<code>src/main/resources/application.yaml</code>，请参考上面的配置文件详解。</li> 
+   <li>执行<code>sh deploy.sh</code>。</li> 
+  </ol> 
+  <h4 id="如何更新-1">如何更新</h4> 
+  <ol> 
+   <li>进入到源码根目录。</li> 
+   <li>执行<code>git pull</code>。</li> 
+   <li>执行<code>sh deploy.sh</code>。</li> 
+  </ol> 
+  <h2 id="docker部署">Docker部署</h2> 
+  <pre><code class="language-bash"># 拉取镜像
+docker pull ruibaby/halo
+# 运行
+docker run -d --name halo -p 8090:8090 -v ~/halo:/root/halo ruibaby/halo
+</code></pre> 
+  <h2 id="docker-compose-部署">Docker Compose 部署</h2> 
+  <p>参考：<a href="https://ryanc.cc/archives/docker-compose-run-halo">Docker Compose 部署Halo教程</a></p> 
+ </body>
+</html>
+                    ]]>
+                </content:encoded>
+            </item>
+            <item>
+                <title><![CDATA[Halo-菜单栏添加菜单教程]]></title>
+                <link>/archives/halo-add-menu</link>
+                <comments>/archives/halo-add-menu#comments</comments>
+                <pubDate>2018-7-8 23:45:59</pubDate>
+                <dc:creator><![CDATA[Ryan Wang]]></dc:creator>
+
+                        <category><![CDATA[学习笔记]]></category>
+                <description>
+                    <![CDATA[
+                        之前有部分人反馈说不知道菜单栏可以添加哪些菜单，而且添加菜单的时候也不可以选择路径（会有的），于是乎只能慢慢探索可以添加的路径，下面就详细罗列一下可以添加的路径。系统预设路径名称路径说明首页/主页路径归档页面/archives文章归档的页面友情链接/links友情链接页面，需要主题自带图库/gall
+                    ]]>
+                </description>
+                <content:encoded>
+                    <![CDATA[
+                            <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>之前有部分人反馈说不知道菜单栏可以添加哪些菜单，而且添加菜单的时候也不可以选择路径（会有的），于是乎只能慢慢探索可以添加的路径，下面就详细罗列一下可以添加的路径。</p> 
+  </blockquote> 
+  <h2 id="系统预设路径">系统预设路径</h2> 
+  <table> 
+   <thead> 
+    <tr>
+     <th>名称</th>
+     <th>路径</th>
+     <th>说明</th>
+    </tr> 
+   </thead> 
+   <tbody> 
+    <tr>
+     <td>首页</td>
+     <td>/</td>
+     <td>主页路径</td>
+    </tr> 
+    <tr>
+     <td>归档页面</td>
+     <td>/archives</td>
+     <td>文章归档的页面</td>
+    </tr> 
+    <tr>
+     <td>友情链接</td>
+     <td>/links</td>
+     <td>友情链接页面，需要主题自带</td>
+    </tr> 
+    <tr>
+     <td>图库</td>
+     <td>/gallery</td>
+     <td>图库页面，需要主题自带</td>
+    </tr> 
+    <tr>
+     <td>标签</td>
+     <td>/tags</td>
+     <td>标签云页面，需要主题自带</td>
+    </tr> 
+    <tr>
+     <td>RSS页面</td>
+     <td>/feed或/feed.xml</td>
+     <td>RSS订阅，一般不添加到菜单</td>
+    </tr> 
+    <tr>
+     <td>站点地图</td>
+     <td>/sitemap.xml</td>
+     <td>站点地图，一般不添加到菜单</td>
+    </tr> 
+   </tbody> 
+  </table> 
+  <h2 id="自定义页面路径">自定义页面路径</h2> 
+  <table> 
+   <thead> 
+    <tr>
+     <th>名称</th>
+     <th>路径</th>
+     <th>说明</th>
+    </tr> 
+   </thead> 
+   <tbody> 
+    <tr>
+     <td>#</td>
+     <td>/p/页面路径</td>
+     <td>页面路径在新建页面可以设置</td>
+    </tr> 
+    <tr>
+     <td>例：关于页面</td>
+     <td>/p/about</td>
+     <td>关于页面</td>
+    </tr> 
+   </tbody> 
+  </table> 
+  <h2 id="自定义静态页面路径">自定义静态页面路径</h2> 
+  <blockquote> 
+   <p>关于如何自定义静态页面，参考<a href="https://ryanc.cc/archives/halo-add-html-page">Halo-自助添加HTML静态页面</a>，另外，这种方式是可以支持vue/react等应用的，亲测可行。</p> 
+  </blockquote> 
+  <table> 
+   <thead> 
+    <tr>
+     <th>名称</th>
+     <th>路径</th>
+     <th>说明</th>
+    </tr> 
+   </thead> 
+   <tbody> 
+    <tr>
+     <td>#</td>
+     <td>/文件夹/页面.html</td>
+     <td>必须添加后缀</td>
+    </tr> 
+    <tr>
+     <td>例：测试页面</td>
+     <td>/test/index.html</td>
+     <td>test为上传的文件夹名</td>
+    </tr> 
+   </tbody> 
+  </table> 
+  <h2 id="其他">其他</h2> 
+  <blockquote> 
+   <p>如果你想将一篇文章添加到菜单，或者标签下所有文章页面也是可以的，如下。</p> 
+  </blockquote> 
+  <table> 
+   <thead> 
+    <tr>
+     <th>名称</th>
+     <th>路径</th>
+     <th>说明</th>
+    </tr> 
+   </thead> 
+   <tbody> 
+    <tr>
+     <td>#</td>
+     <td>/archives/文章路径</td>
+     <td>文章路径可以在文章编辑页面自定义</td>
+    </tr> 
+    <tr>
+     <td>例：Hello Halo</td>
+     <td>/archives/hello-halo</td>
+     <td>Hello Halo文章页面</td>
+    </tr> 
+    <tr>
+     <td>#</td>
+     <td>/tags/标签路径</td>
+     <td>标签路径可自定义</td>
+    </tr> 
+    <tr>
+     <td>例：Java标签下的文章</td>
+     <td>/tags/java</td>
+     <td>展示所有Java标签下的文章</td>
+    </tr> 
+   </tbody> 
+  </table> 
+  <blockquote> 
+   <p>暂时就是这些可以自助添加到菜单栏，如果后面有其他的，这篇文章会同步更新，下面附上我网站菜单设置。以供参考。</p> 
+  </blockquote> 
+  <p><img src="https://ryanc.cc/upload/2018/7/halo-menu20180708234559725.png" alt=""></p> 
+ </body>
+</html>
+                    ]]>
+                </content:encoded>
+            </item>
+            <item>
+                <title><![CDATA[Halo-自助添加HTML静态页面]]></title>
+                <link>/archives/halo-add-html-page</link>
+                <comments>/archives/halo-add-html-page#comments</comments>
+                <pubDate>2018-6-24 12:52:58</pubDate>
+                <dc:creator><![CDATA[Ryan Wang]]></dc:creator>
+
+                        <category><![CDATA[学习笔记]]></category>
+                <description>
+                    <![CDATA[
+                        昨天有人问我怎么在Halo添加HTML静态页面，开始想的是把静态页面放到resources/static目录下，这样略麻烦。后面想了想，可以通过主题的方式来上传静态页面，非常方便。实现原理Halo给resources/templates/themes添加了资源映射，所以访问themes目录的资源只需
+                    ]]>
+                </description>
+                <content:encoded>
+                    <![CDATA[
+                            <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>昨天有人问我怎么在Halo添加HTML静态页面，开始想的是把静态页面放到<code>resources/static</code>目录下，这样略麻烦。后面想了想，可以通过主题的方式来上传静态页面，非常方便。</p> 
+  </blockquote> 
+  <h2 id="实现原理">实现原理</h2> 
+  <p>Halo给<code>resources/templates/themes</code>添加了资源映射，所以访问themes目录的资源只需要<code>/主题文件夹/文件</code>这种路径格式就行了，所以我们可以把我们需要使用的静态页面打包从后台<code>主题管理</code>上传上去。</p> 
+  <pre><code class="language-java">@Override
+public void addResourceHandlers(ResourceHandlerRegistry registry) {
+registry.addResourceHandler("/**") .addResourceLocations("classpath:/templates/themes/")
+}
+</code></pre> 
+  <h2 id="具体操作">具体操作</h2> 
+  <h3 id="新建一个文件夹">新建一个文件夹</h3> 
+  <p>用于存放html和静态资源文件，如下图目录结构 <img src="https://ryanc.cc/upload/2018/6/add-html-page20180624125026955.png" alt=""></p> 
+  <h3 id="编写页面">编写页面</h3> 
+  <p>看看html和css文件的内容 <img src="https://ryanc.cc/upload/2018/6/add-html-page-220180624125035920.png" alt=""> <img src="https://ryanc.cc/upload/2018/6/add-html-page-320180624125035864.png" alt=""> 需要注意的是引用资源文件的路径，可以看到上图html文件里面引用css的时候在前面是加上了<code>/test</code>的，也就是文件夹名，为什么要这么做？可以参考上面的资源映射。</p> 
+  <h3 id="上传html页面">上传HTML页面</h3> 
+  <p>页面做完之后就可以上传了，首先我们将文件夹压缩成zip压缩包，然后在Halo后台的<code>主题管理</code>上传压缩包就可以了。</p> 
+  <h3 id="访问页面">访问页面</h3> 
+  <p>按照这个格式访问就可以了：<code>域名/html文件夹/页面.html</code>就行了，如<a href="https://ryanc.cc/test/index.html。">https://ryanc.cc/test/index.html。</a></p> 
+  <h3 id="添加菜单">添加菜单</h3> 
+  <p>如图所示 <img src="https://ryanc.cc/upload/2018/6/add-html-page-420180624125043725.png" alt=""> <img src="https://ryanc.cc/upload/2018/6/add-html-page-520180624125042108.png" alt=""></p> 
+ </body>
+</html>
+                    ]]>
+                </content:encoded>
+            </item>
+</rss>

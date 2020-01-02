@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Docker 环境变量的运用 - Ryan Wang's Blog</title>
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Ryan Wang">
+    <meta name="description" content="前段时间发布了Halo的DockerCompose部署教程，该方法可以自动完成Nginx配置以及SSL证书的配置，实现了Halo最便捷的部署方式，可最近确发现了一个问题，就是部署的时候不太方便修改内置数据库的用户名和密码，使用的是默认的admin和123456，当初考虑到安全问题，就禁用了h2数据库">
+    <meta name="keywords" content="Docker 环境变量的运用,ryan0up,halo博客,halo,java,ruibaby,ryanwang,">
+    <link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml">
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="renderer" content="webkit">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="/halo-theme-Journal/source/css/journal.min.css">
+        <meta name="robots" content="none">
+    <meta name="generator" content="Halo "/>
+    <script data-ad-client="ca-pub-5271828906478846" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        <link rel="shortcut icon" type="images/x-icon" href="https://ryanc.cc/upload/2018/4/favicon.png">
+    <script src="/halo-theme-Journal/source/js/loadCSS.js"></script>
+
+    <!-- Import prettify css  -->
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify.min.css">
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify/github-v2.min.css">
+
+    <script>
+        loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Material+Icons");
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110780416-1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-110780416-1');
+</script>
+
+    <noscript>
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora|Montserrat|Anonymous+Pro:400|Material+Icons"/>
+    </noscript>
+</head>
+<body>
+<div id="top"></div>
+<div id="app"><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+                            <a class="a-block drawer-menu-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block drawer-menu-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block drawer-menu-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block drawer-menu-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block drawer-menu-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+            <a class="a-block drawer-menu-item" href="/atom.xml">
+                RSS
+            </a>
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="">
+            Ryan Wang's Blog
+        </a>
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">Ryan Wang's Blog</div>
+        <div class="single-column-header-subtitle">Life is fantastic.</div>
+    </a>
+</div><div ref="sideContainer" class="side-container">
+    <a class="a-block nav-head " href="">
+        <div class="nav-title">
+            Ryan Wang's Blog
+        </div>
+        <div class="nav-subtitle">
+            Life is fantastic.
+        </div>
+    </a>
+
+    <div class="nav-link-list">
+
+                <a class="a-block nav-link-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block nav-link-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block nav-link-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block nav-link-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block nav-link-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+        <a class="a-block no-tint nav-link-item" href="/atom.xml">
+            RSS
+        </a>
+    </div>
+
+    <div class="nav-footer">
+        Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+        &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+    </div>
+</div><div ref="extraContainer" class="extra-container">
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+
+    </div>
+</div>
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            <div class="post-head-wrapper" style="background-image: url('https://cdn.ryanc.cc/img/blog/thumbnails/d547a574b359cb543fbdc6b69887c70e.jpg')"
+                 >
+                <div class="post-title">
+                    Docker 环境变量的运用
+                    <div class="post-meta">
+                        <time datetime="2018-12-29 23:44:00" itemprop="datePublished">
+                            2018-12-29 23:44
+                        </time>&nbsp;
+                            <i class="material-icons" style="">folder</i>
+                                <a href='/categories/study-notes'>学习笔记</a>
+
+                            <i class="material-icons" style="">label</i>
+                                <a href='/tags/java'>Java</a>, 
+                                <a href='/tags/springboot'>SpringBoot</a>, 
+                                <a href='/tags/docker'>Docker</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-body-wrapper">
+                <div class="post-body" v-pre>
+                    <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>前段时间发布了 Halo 的 Docker Compose 部署教程，该方法可以自动完成 Nginx 配置以及 SSL 证书的配置，实现了 Halo 最便捷的部署方式，可最近确发现了一个问题，就是部署的时候不太方便修改内置数据库的用户名和密码，使用的是默认的admin和123456，当初考虑到安全问题，就禁用了 h2数据库的在线控制台。可有时候还是需要修改一些数据啥的，虽然使用频率并不高，但是非要使用的时候还是挺头疼的，于是乎就搜索了相关资料，并完美的解决了修改用户名和密码的问题，所以水文记录一下。</p> 
+  </blockquote> 
+  <h2>原理</h2> 
+  <p>Dockerfile 在构建镜像的时候其实是提供了一个参数可供配置的，那就是 <code>ENV</code>，在 Dockerfile 里面配置之后是可以在构建和创建容器的时候调用的，正好，Spring Boot 打包之后的 Jar 包，在启动的时候也是可以加参数以替代默认配置文件里面的配置项的，所以利用这个特性，就可以完成我们想要的效果啦。</p> 
+  <h2>Dockerfile 解析</h2> 
+  <pre><code class="language-docker">FROM maven:3
+LABEL maintainer="Ryan Wang&lt;i@ryanc.cc&gt;"
+
+WORKDIR /opt/halo
+ADD . /tmp
+ENV TZ=Asia/Shanghai \
+DB_USER="admin" \
+DB_PASSWORD="123456"
+
+RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime &amp;&amp; echo ${TZ} &gt; /etc/timezone
+
+RUN cd /tmp &amp;&amp; mvn package -Pci &amp;&amp; mv target/dist/halo/* /opt/halo/ \
+    &amp;&amp; rm -rf /tmp/* &amp;&amp; rm -rf ~/.m2
+
+EXPOSE 8090
+
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/opt/halo/halo-latest.jar","--spring.datasource.username=${DB_USER}","--spring.datasource.password=${DB_PASSWORD}"]
+</code></pre> 
+  <p>如上代码，我们可以看到，我们在 <code>ENV</code> 参数里面一共配置了三个属性， <code>TZ</code> <code>DB_USER</code> <code>DB_PASSWORD</code> ，这三个分别是：时区，数据库用户名和数据库密码。时区我们很好理解，就是指定一下容器内的时区而已，保证容器和宿主机的时区一致，防止出现时区不同步的问题。</p> 
+  <p>重点我们看到 <code>DB_USER</code> 和 <code>DB_PASSWORD</code> ，这两个都是配置有默认值的，如果说在创建容器不指定这两个环境变量的话就会使用这两个默认值。环境变量写好了，我们在看到最后一行 <code>ENTRYPOINT</code> 这个是在创建容器之后，容器内启动应用所执行的命令，可以用脚本代替（写上脚本文件名就行），也可以直接写命令，在这里我们组合起来就是：</p> 
+  <pre><code class="language-bash">java -jar /opt/halo/halo-latest.jar --spring.datasource.username=${DB_USER} --spring.datasource.password=${DB_PASSWORD}
+</code></pre> 
+  <p>又因为我们在上面指定了 <code>DB_USER</code> 和 <code>DB_PASSWORD</code> 这两个环境变量，所以实际执行的命令就是</p> 
+  <pre><code class="language-bash">java -jar /opt/halo/halo-latest.jar --spring.datasource.username=admin --spring.datasource.password=admin
+</code></pre> 
+  <p>所以这样启动之后，数据库用户名和密码就被应用获取到，然后创建DataSource了。如果大家还不理解为啥是 <code>spring.datasource.username</code> 和 <code>spring.datasource.password</code> 这两个参数的话，看看 Spring Boot 的配置文件就知道了。</p> 
+  <pre><code class="language-yaml">spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    # H2database 配置
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:file:~/halo/halo
+    username: admin
+    password: 123456
+</code></pre> 
+  <h2>创建容器指定环境变量</h2> 
+  <p>上面我们讲解到在 Dockerfile 里面指定环境变量，其实我们在使用 Docker 镜像创建容器的时候也是可以手动指定环境变量的值的，不然从 Docker Hub 拉取下来的镜像怎么修改配置丫。</p> 
+  <p>在创建容器的时候，是有个参数的，那就是 <code>-e</code> ，这个e应该就代表 <code>ENV</code> 吧，在 <code>-e</code> 后面就可以指定环境变量名和值啦，具体写法：<code>-e 环境变量名=值</code> 我们只需要在创建容器的时候加上这个参数就行啦，完整命令如下（假设创建 Halo 的应用容器）：</p> 
+  <pre><code class="language-bash">docker run -d --name halo -p 8090:8090 -v ~/halo:/root/halo -e DB_USER=root -e DB_PASSWORD=67890 ruibaby/halo
+</code></pre> 
+  <p>这样执行之后，用户名就变成了 <code>root</code> ，密码就变成了 <code>67890</code>。这样就可以愉快的使用 H2数据库控制台啦。</p> 
+  <h2>Docker Compose 指定环境变量</h2> 
+  <p>Halo 也提供了 <code>Docker Compose</code> 的创建文件，如今我们支持了手动传参修改数据库用户名和密码后，在 <code>Docker Compose</code> 文件里我们也是可以自己配置的，如下：</p> 
+  <pre><code class="language-docker">  halo:
+    restart: always
+    image: ruibaby/halo
+    container_name: halo
+    ports:
+      - 8090:8090
+    environment:
+      - VIRTUAL_PORT=8090
+      - VIRTUAL_HOST=localhost  # 监听的地址（务必修改）
+      - LETSENCRYPT_HOST=localhost # 证书的域名 （务必修改）
+      - LETSENCRYPT_EMAIL=i@example.com # 证书所有者的邮箱，快过期时会提醒（务必修改）
+      - DB_USER=admin # h2数据库用户名，自定义（务必修改）
+      - DB_PASSWORD=123456 # h2数据库密码，自定义（务必修改）
+    volumes:
+      - ~/halo:/root/halo
+</code></pre> 
+  <p>其中在 <code>environment</code> 节点就是所有需要的环境变量，按需修改即可，修改完成之后，执行 docker-compose up -d 就可以完美部署好应用了。</p> 
+  <h2>小疑问</h2> 
+  <p>有人知道如果在 Docker Hub 上的镜像有更新，我们需要更新自己已创建的容器咋整呢？就是说根据新的 Docker 镜像更新容器内的内容以平滑升级应用。这个问题已经困惑我好久了，搜了很多相关资料都没解惑，不可能手动销毁容器然后用新镜像创建容器吧？如果有大佬知道如果整，欢迎在下面留言。</p> 
+ </body>
+</html>
+                </div>
+            </div>
+
+<nav class="post-pagination">
+        <a class="newer-posts" href="/archives/2018-summary">
+        上一篇<br>2018 年个人总结
+    </a>
+    <span class="page-number"></span>
+    <a class="older-posts" href="/archives/docker-compose-run-jpress">
+        下一篇<br>Docker Compose 部署JPress教程
+    </a>
+</nav>
+
+    <div class="post-comment-wrapper">
+      	<script>
+        var settings = {
+        	autoLoad: false
+        }  
+        </script>
+        <halo-comment id="20" type="post" :settings="settings"/>
+    </div>
+        </div>
+    </div>
+<div class="single-column-footer">
+    Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+    &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+</div></div>
+
+</div>
+<script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"
+        integrity="sha256-EGs9T1xMHdvM1geM8jPpoo8EZ1V1VRsmcJz8OByENLA=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"
+        integrity="sha256-CI4Gq5E0io1Pv0xM3qPM+NUIOhbIBvC3GiN1Y4KhXpw=" crossorigin="anonymous"></script>
+<script src="/halo-theme-Journal/source/js/journal.js"></script>
+
+<!-- Import prettify js  -->
+        <script src="/halo-theme-Journal/source/js/prettify.min.js"></script>
+        <script>
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+            })
+        </script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="http://localhost:8090/halo-comment.min.js?version=1.1.2"></script>
+</body>
+</html>

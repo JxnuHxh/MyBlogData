@@ -1,0 +1,10 @@
+id: SumiMakito_Journal
+name: Journal
+author:
+  name: SumiMakito
+  website: https://keep.moe
+description: '隻言片語・於此匯聚 – Moments piled up.'
+logo: https://avatars3.githubusercontent.com/u/5277268?s=460&v=4
+website: https://github.com/SumiMakito/hexo-theme-journal
+repo: https://github.com/halo-dev/halo-theme-journal
+version: 2.0.3

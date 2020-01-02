@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Ryan Wang's Blog</title>
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Ryan Wang">
+    <meta name="description" content="Ryan Wang 的博客。">
+    <meta name="keywords" content="ryan0up,halo博客,halo,java,ruibaby,ryanwang">
+    <link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml">
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="renderer" content="webkit">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="/halo-theme-Journal/source/css/journal.min.css">
+        <meta name="robots" content="none">
+    <meta name="generator" content="Halo "/>
+    <script data-ad-client="ca-pub-5271828906478846" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        <link rel="shortcut icon" type="images/x-icon" href="https://ryanc.cc/upload/2018/4/favicon.png">
+    <script src="/halo-theme-Journal/source/js/loadCSS.js"></script>
+
+    <!-- Import prettify css  -->
+
+    <script>
+        loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Material+Icons");
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110780416-1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-110780416-1');
+</script>
+
+    <noscript>
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora|Montserrat|Anonymous+Pro:400|Material+Icons"/>
+    </noscript>
+</head>
+<body>
+<div id="top"></div>
+<div id="app"><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+                            <a class="a-block drawer-menu-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block drawer-menu-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block drawer-menu-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block drawer-menu-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block drawer-menu-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+            <a class="a-block drawer-menu-item" href="/atom.xml">
+                RSS
+            </a>
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="">
+            Ryan Wang's Blog
+        </a>
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">Ryan Wang's Blog</div>
+        <div class="single-column-header-subtitle">Life is fantastic.</div>
+    </a>
+</div><div ref="sideContainer" class="side-container">
+    <a class="a-block nav-head active" href="">
+        <div class="nav-title">
+            Ryan Wang's Blog
+        </div>
+        <div class="nav-subtitle">
+            Life is fantastic.
+        </div>
+    </a>
+
+    <div class="nav-link-list">
+
+                <a class="a-block nav-link-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block nav-link-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block nav-link-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block nav-link-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block nav-link-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+        <a class="a-block no-tint nav-link-item" href="/atom.xml">
+            RSS
+        </a>
+    </div>
+
+    <div class="nav-footer">
+        Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+        &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+    </div>
+</div><div ref="extraContainer" class="extra-container">
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+
+                <div class="pagination-indicator">
+                    <span style="text-align: center">
+                        3<br><div style="display: inline-block; transform: rotate(-28deg)">-</div><br>4
+                    </span>
+                </div>
+
+                    <a class="pagination-action" href="/page/2">
+                    <i class="material-icons pagination-action-icon">
+                        chevron_left
+                    </i>
+                </a>
+
+                <a class="pagination-action" href="/page/4">
+                    <i class="material-icons pagination-action-icon">
+                        chevron_right
+                    </i>
+                </a>
+    </div>
+</div>
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-no-background">
+        <a href="/archives/hutool-java-tools-lib" class="a-block">
+            <div class="post-item-wrapper">
+                <div class="post-item post-item-no-divider">
+                    <div class="post-item-info-wrapper">
+                        <div class="post-item-title">
+                            Hutool-贼好用的Java工具类库
+                        </div>
+                        <div class="post-item-summary">
+                            Hutool，一个Java的工具集合，是我前几天在码云上闲的时候发现的。发现其功能贼强大，于是乎就测试了一下其中的部分工具，一下子就被这个工具给吸引住了。简介Hutool是Hu+tool的自造词，前者致敬我的“前任公司”，后者为工具之意，谐音“糊涂”，寓意追求“万事都作糊涂观，无所谓失，无所谓得”的...
+                        </div>
+                        <div class="post-item-meta">
+                            2018-06-20
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="/archives/how-to-use-h2-database" class="a-block">
+            <div class="post-item-wrapper">
+                <div class="post-item post-item-no-divider">
+                    <div class="post-item-info-wrapper">
+                        <div class="post-item-title">
+                            H2 Database使用教程
+                        </div>
+                        <div class="post-item-summary">
+                            Halo是默认使用H2Database的，虽然也支持MySQL，但是个人认为博客系统没必要用MySQL，毕竟只是一个单纯的博客而已。H2不仅不需要单独安装，而且配置极其简单，下面介绍一下Halo配合H2使用的基本操作。配置在安装Halo之前是需要简单配置一下H2的，在resources/applic...
+                        </div>
+                        <div class="post-item-meta">
+                            2018-05-17
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="/archives/halo-archive" class="a-block">
+            <div class="post-item-wrapper">
+                <div class="post-item post-item-no-divider">
+                    <div class="post-item-info-wrapper">
+                        <div class="post-item-title">
+                            Halo-文章归档的实现
+                        </div>
+                        <div class="post-item-summary">
+                            在一个正常的博客系统中，归档页面也是必不可少的，需要将文章以年份或者月份归档起来，让文章依次展示出来。下面将说明Halo是怎么实现文章归档的。实现思路使用一个类来专门存储归档数据，这个类包括的属性有年份，月份，年份与月份对应的文章数量，年份与月份对应的文章。这样一列出来之后，那么问题就好解决多了，只...
+                        </div>
+                        <div class="post-item-meta">
+                            2018-05-12
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="/archives/halo-star-100" class="a-block">
+            <div class="post-item-wrapper">
+                <div class="post-item post-item-no-divider">
+                    <div class="post-item-info-wrapper">
+                        <div class="post-item-title">
+                            Halo-Star过百
+                        </div>
+                        <div class="post-item-summary">
+                            9月22日目前已经800star了，感谢各位支持。今天Halo在github上的star数过100了，感谢大家的支持，只要我还在写代码，Halo就会一直更新维护下去的。...
+                        </div>
+                        <div class="post-item-meta">
+                            2018-05-01
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="/archives/halo-workout-themes" class="a-block">
+            <div class="post-item-wrapper">
+                <div class="post-item post-item-no-divider">
+                    <div class="post-item-info-wrapper">
+                        <div class="post-item-title">
+                            Halo-博客主题系统的实现
+                        </div>
+                        <div class="post-item-summary">
+                            作为一个博客系统，更换主题的功能几乎是必不可少的。该功能的实现参考了tale开源项目，非常感谢！具体实现项目结构...
+                        </div>
+                        <div class="post-item-meta">
+                            2018-04-28
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="/archives/halo-workout-options" class="a-block">
+            <div class="post-item-wrapper">
+                <div class="post-item post-item-no-divider">
+                    <div class="post-item-info-wrapper">
+                        <div class="post-item-title">
+                            Halo-博客设置存储的实现
+                        </div>
+                        <div class="post-item-summary">
+                            在开发Halo的时候，有很多设置需要保存在数据库里，比如站点标题，关键字等等。那么这时候问题就来了，怎么样设计表结构呢？设置选项是比较多的，不可能把每个设置选项都当成数据表字段吧？后来决定使用key-value键值对的形式来保存数据。实现思路数据表设计CREATETABLEhalo_options(...
+                        </div>
+                        <div class="post-item-meta">
+                            2018-04-28
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="/archives/halo-is-coming" class="a-block">
+            <div class="post-item-wrapper">
+                <div class="post-item post-item-no-divider">
+                    <div class="post-item-info-wrapper">
+                        <div class="post-item-title">
+                            Halo is coming。
+                        </div>
+                        <div class="post-item-summary">
+                            这是一款使用Java开发的博客系统，取名为Halo。界面预览默认主题Material主题（感谢Viosey）Anatole主题（感谢Caicai）后台登录后台管理主题管理评论设置模板编辑最后该博客系统应该在最近就会开始使用了（谁知道呢？）。...
+                        </div>
+                        <div class="post-item-meta">
+                            2018-03-09
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="/archives/springboot-study-jpa" class="a-block">
+            <div class="post-item-wrapper">
+                <div class="post-item post-item-no-divider">
+                    <div class="post-item-info-wrapper">
+                        <div class="post-item-title">
+                            Spring Boot学习笔记（三）之JPA
+                        </div>
+                        <div class="post-item-summary">
+                            前面学习了一个简单的SpringBoot框架的搭建，以及配置文件的基础部分，今天来记录一下最近所学操作数据库的一个工具JPA，这个JPA可以让你基本不需要写SQL语句就可以执行增删改查的操作。当然了，如果涉及到比较复杂的操作的话，也可以使用原生的SQL语句。引入依赖首先要使用JPA的话，肯定是需要引...
+                        </div>
+                        <div class="post-item-meta">
+                            2017-12-23
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="/archives/springboot-study-2" class="a-block">
+            <div class="post-item-wrapper">
+                <div class="post-item post-item-no-divider">
+                    <div class="post-item-info-wrapper">
+                        <div class="post-item-title">
+                            Spring Boot 学习笔记（二）
+                        </div>
+                        <div class="post-item-summary">
+                            上一篇笔记简单的讲了一下SpringBoot项目的创建，以及如何启动。这次笔记主要记录一下application.properties配置文件的简单配置。SpringBoot对于SpringMVC最大的改变就是将很多xml配置文件给干掉了，主要通过application.properties和注解来...
+                        </div>
+                        <div class="post-item-meta">
+                            2017-12-03
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="/archives/springboot-study-1" class="a-block">
+            <div class="post-item-wrapper">
+                <div class="post-item post-item-no-divider">
+                    <div class="post-item-info-wrapper">
+                        <div class="post-item-title">
+                            Spring Boot 学习笔记（一）
+                        </div>
+                        <div class="post-item-summary">
+                            配置开发环境配置SpringBoot的开发环境有很多，最简单的莫过于使用Maven构建。也可以直接上https://start.spring.io选择好所需要的配置，然后下载项目压缩包解压之后导入IDE就可以开始了。而且IDEA自带有SpringInitializr，可以很方便的配置好开发环境。ID...
+                        </div>
+                        <div class="post-item-meta">
+                            2017-11-05
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <div class="pagination index-page">
+                    <a class="pagination-action" href="/page/2" style="opacity: 1">
+                <i class="material-icons pagination-action-icon">
+                    chevron_left
+                </i>
+                </a>
+                <div class="pagination-indicator">
+                    <span>3/4</span>
+                </div>
+                <a class="pagination-action" href="/page/4" style="opacity: 1">
+                    <i class="material-icons pagination-action-icon">
+                        chevron_right
+                    </i>
+                </a>
+        </div>
+    </div>
+<div class="single-column-footer">
+    Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+    &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+</div></div>
+
+</div>
+<script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"
+        integrity="sha256-EGs9T1xMHdvM1geM8jPpoo8EZ1V1VRsmcJz8OByENLA=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"
+        integrity="sha256-CI4Gq5E0io1Pv0xM3qPM+NUIOhbIBvC3GiN1Y4KhXpw=" crossorigin="anonymous"></script>
+<script src="/halo-theme-Journal/source/js/journal.js"></script>
+
+<!-- Import prettify js  -->
+</body>
+</html>

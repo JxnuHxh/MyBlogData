@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Halo-博客设置存储的实现 - Ryan Wang's Blog</title>
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Ryan Wang">
+    <meta name="description" content="在开发Halo的时候，有很多设置需要保存在数据库里，比如站点标题，关键字等等。那么这时候问题就来了，怎么样设计表结构呢？设置选项是比较多的，不可能把每个设置选项都当成数据表字段吧？后来决定使用key-value键值对的形式来保存数据。实现思路数据表设计CREATETABLEhalo_options(">
+    <meta name="keywords" content="Halo-博客设置存储的实现,ryan0up,halo博客,halo,java,ruibaby,ryanwang,">
+    <link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml">
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="renderer" content="webkit">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="/halo-theme-Journal/source/css/journal.min.css">
+        <meta name="robots" content="none">
+    <meta name="generator" content="Halo "/>
+    <script data-ad-client="ca-pub-5271828906478846" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        <link rel="shortcut icon" type="images/x-icon" href="https://ryanc.cc/upload/2018/4/favicon.png">
+    <script src="/halo-theme-Journal/source/js/loadCSS.js"></script>
+
+    <!-- Import prettify css  -->
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify.min.css">
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify/github-v2.min.css">
+
+    <script>
+        loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Material+Icons");
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110780416-1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-110780416-1');
+</script>
+
+    <noscript>
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora|Montserrat|Anonymous+Pro:400|Material+Icons"/>
+    </noscript>
+</head>
+<body>
+<div id="top"></div>
+<div id="app"><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+                            <a class="a-block drawer-menu-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block drawer-menu-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block drawer-menu-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block drawer-menu-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block drawer-menu-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+            <a class="a-block drawer-menu-item" href="/atom.xml">
+                RSS
+            </a>
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="">
+            Ryan Wang's Blog
+        </a>
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">Ryan Wang's Blog</div>
+        <div class="single-column-header-subtitle">Life is fantastic.</div>
+    </a>
+</div><div ref="sideContainer" class="side-container">
+    <a class="a-block nav-head " href="">
+        <div class="nav-title">
+            Ryan Wang's Blog
+        </div>
+        <div class="nav-subtitle">
+            Life is fantastic.
+        </div>
+    </a>
+
+    <div class="nav-link-list">
+
+                <a class="a-block nav-link-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block nav-link-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block nav-link-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block nav-link-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block nav-link-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+        <a class="a-block no-tint nav-link-item" href="/atom.xml">
+            RSS
+        </a>
+    </div>
+
+    <div class="nav-footer">
+        Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+        &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+    </div>
+</div><div ref="extraContainer" class="extra-container">
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+
+    </div>
+</div>
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            <div class="post-head-wrapper-text-only">
+                <div class="post-title">
+                    Halo-博客设置存储的实现
+                    <div class="post-meta">
+                        <time datetime="2018-4-28 10:27:54" itemprop="datePublished">
+                            2018-04-28 10:27
+                        </time>&nbsp;
+                            <i class="material-icons" style="">folder</i>
+                                <a href='/categories/study-notes'>学习笔记</a>
+
+                            <i class="material-icons" style="">label</i>
+                                <a href='/tags/halo'>Halo</a>, 
+                                <a href='/tags/java'>Java</a>, 
+                                <a href='/tags/springboot'>SpringBoot</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-body-wrapper">
+                <div class="post-body" v-pre>
+                    <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>在开发Halo的时候，有很多设置需要保存在数据库里，比如站点标题，关键字等等。那么这时候问题就来了，怎么样设计表结构呢？设置选项是比较多的，不可能把每个设置选项都当成数据表字段吧？后来决定使用key-value键值对的形式来保存数据。</p> 
+  </blockquote> 
+  <h2>实现思路</h2> 
+  <h3>数据表设计</h3> 
+  <pre><code class="language-sql">CREATE TABLE halo_options
+(
+  option_name  VARCHAR(255) NOT NULL PRIMARY KEY,	-- key
+  option_value LONGTEXT							-- value
+);
+</code></pre> 
+  <h3>思路简述</h3> 
+  <p>整体思路是这样子的：在数据表中只设置两个字段，<code>options_name</code>用来保存设置选项名称，如<code>site_title(网站标题)</code>，<code>options_value</code>用来保存设置选项对应的值，如<code>Ryan0up'S Blog</code>。那么怎么来查询设置选项呢？分两种，第一种是根据key（设置选项名称）来查询所对应的值。第二种是查询所有设置选项，这里就要用到Map来保存所有的设置选项以及对应的值了。</p> 
+  <h2>实现代码</h2> 
+  <p>Options（实体类）：</p> 
+  <pre><code class="language-java">@Data
+@Entity
+@Table(name = "halo_options")
+public class Options implements Serializable {
+
+    /**
+     * 设置项名称
+     */
+    @Id
+    private String optionName;
+
+    /**
+     * 设置项的值
+     */
+    @Lob
+    private String optionValue;
+}
+</code></pre> 
+  <p>OptionsServiceImpl（Service实现类）：</p> 
+  <pre><code class="language-java">@Service
+public class OptionsServiceImpl implements OptionsService {
+
+    @Autowired
+    private OptionsRepository optionsRepository;
+
+    private static final String OPTIONS_KEY = "'options_key'";
+
+    private static final String OPTIONS_CACHE_NAME = "options_cache";
+
+    /**
+     * 批量保存设置
+     *
+     * @param options options
+     */
+    @CacheEvict(value = OPTIONS_CACHE_NAME,key = OPTIONS_KEY)
+    @Override
+    public void saveOptions(Map&lt;String,String&gt; options){
+        if(null != options &amp;&amp; !options.isEmpty()){
+            options.forEach((k,v) -&gt; saveOption(k,v));
+        }
+    }
+
+    /**
+     * 保存单个设置选项
+     *
+     * @param key key
+     * @param value value
+     */
+    @CacheEvict(value = OPTIONS_CACHE_NAME,key = OPTIONS_KEY)
+    @Override
+    public void saveOption(String key,String value){
+        Options options = null;
+        if("".equals(value)){
+            options = new Options();
+            options.setOptionName(key);
+            this.removeOption(options);
+        }else {
+            if (HaloUtil.isNotNull(key)) {
+                //如果查询到有该设置选项则做更新操作，反之保存新的设置选项
+                if (null == optionsRepository.findOptionsByOptionName(key)) {
+                    options = new Options();
+                    options.setOptionName(key);
+                    options.setOptionValue(value);
+                    optionsRepository.save(options);
+                } else {
+                    options = optionsRepository.findOptionsByOptionName(key);
+                    options.setOptionValue(value);
+                    optionsRepository.save(options);
+                }
+            }
+        }
+    }
+
+    /**
+     * 移除设置项
+     *
+     * @param options options
+     */
+    @CacheEvict(value = OPTIONS_CACHE_NAME,key = OPTIONS_KEY)
+    @Override
+    public void removeOption(Options options) {
+        optionsRepository.delete(options);
+    }
+
+    /**
+     * 获取设置选项
+     *
+     * @return map
+     */
+    @Cacheable(value = OPTIONS_CACHE_NAME,key = OPTIONS_KEY)
+    @Override
+    public Map&lt;String, String&gt; findAllOptions() {
+        Map&lt;String,String&gt; options = new HashMap&lt;String,String&gt;();
+        List&lt;Options&gt; optionsList = optionsRepository.findAll();
+        if(null != optionsList){
+            optionsList.forEach(option -&gt; options.put(option.getOptionName(),option.getOptionValue()));
+        }
+        return options;
+    }
+
+    /**
+     * 根据key查询单个设置选项
+     *
+     * @param key key
+     * @return String
+     */
+    @Cacheable(value = OPTIONS_CACHE_NAME,key = "#key+'options'")
+    @Override
+    public String findOneOption(String key) {
+        Options options = optionsRepository.findOptionsByOptionName(key);
+        if(null!=options){
+            return options.getOptionValue();
+        }
+        return null;
+    }
+}
+</code></pre> 
+  <p>OptionsController（控制器）：</p> 
+  <pre><code class="language-java">@Controller
+@RequestMapping("/admin/option")
+public class OptionController {
+
+    @Autowired
+    private OptionsService optionsService;
+
+    /**
+     * 请求跳转到option页面并完成渲染
+     *
+     * @return freemarker
+     */
+    @GetMapping
+    public String options(Model model){
+        model.addAttribute("options", optionsService.findAllOptions());
+        return "admin/admin_option";
+    }
+
+    /**
+     * 保存设置选项
+     *
+     * @param options options
+     */
+    @PostMapping(value = "/save")
+    @ResponseBody
+    public String saveOptions(@RequestParam Map&lt;String,String&gt; options){
+        try {
+            optionsService.saveOptions(options);
+            HaloConst.OPTIONS.clear();
+            HaloConst.OPTIONS = optionsService.findAllOptions();
+            log.info("所保存的设置选项列表："+options);
+            return RespStatus.SUCCESS;
+        }catch (Exception e){
+            log.error("未知错误：",e.getMessage());
+            return RespStatus.ERROR;
+        }
+    }
+}
+</code></pre> 
+  <p>页面上获取设置选项的值：</p> 
+  <p>由于是使用Map来保存的数据，所以在页面（freemarker模板，其他模板引擎类似）上直接使用<code>${options.设置选项的名称}</code>就可以了，如<code>${options.blog_title}</code>。</p> 
+  <h2>总结</h2> 
+  <p>由于之前没有做过类似的功能，所以最开始做的时候简直毫无头绪，通过在<a href="https://www.v2ex.com/">v2ex</a>和<a href="https://segmentfault.com/">SegmentFault</a>上提问才有了思路。非常感谢v2ex和SegmentFault上的大佬解答。</p> 
+ </body>
+</html>
+                </div>
+            </div>
+
+<nav class="post-pagination">
+        <a class="newer-posts" href="/archives/halo-workout-themes">
+        上一篇<br>Halo-博客主题系统的实现
+    </a>
+    <span class="page-number"></span>
+    <a class="older-posts" href="/archives/halo-is-coming">
+        下一篇<br>Halo is coming。
+    </a>
+</nav>
+
+    <div class="post-comment-wrapper">
+      	<script>
+        var settings = {
+        	autoLoad: false
+        }  
+        </script>
+        <halo-comment id="22" type="post" :settings="settings"/>
+    </div>
+        </div>
+    </div>
+<div class="single-column-footer">
+    Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+    &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+</div></div>
+
+</div>
+<script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"
+        integrity="sha256-EGs9T1xMHdvM1geM8jPpoo8EZ1V1VRsmcJz8OByENLA=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"
+        integrity="sha256-CI4Gq5E0io1Pv0xM3qPM+NUIOhbIBvC3GiN1Y4KhXpw=" crossorigin="anonymous"></script>
+<script src="/halo-theme-Journal/source/js/journal.js"></script>
+
+<!-- Import prettify js  -->
+        <script src="/halo-theme-Journal/source/js/prettify.min.js"></script>
+        <script>
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+            })
+        </script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="http://localhost:8090/halo-comment.min.js?version=1.1.2"></script>
+</body>
+</html>

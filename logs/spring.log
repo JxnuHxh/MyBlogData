@@ -1,0 +1,126 @@
+2020-01-03 00:02:43.001 ERROR 20936 --- [XNIO-1 task-10] r.h.a.controller.core.CommonController   : Error path: [/error], status: [404 NOT_FOUND]
+2020-01-03 00:14:09.764  WARN 20936 --- [XNIO-1 task-5] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.lang.Integer'; nested exception is java.lang.NumberFormatException: For input string: "JxnuHxh"]
+2020-01-03 00:14:09.765 ERROR 20936 --- [XNIO-1 task-5] r.h.a.controller.core.CommonController   : Error path: [/error], status: [400 BAD_REQUEST]
+2020-01-03 00:14:09.843  WARN 20936 --- [XNIO-1 task-10] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.lang.Integer'; nested exception is java.lang.NumberFormatException: For input string: "JxnuHxh"]
+2020-01-03 00:14:09.844 ERROR 20936 --- [XNIO-1 task-10] r.h.a.controller.core.CommonController   : Error path: [/error], status: [400 BAD_REQUEST]
+2020-01-03 00:16:44.611  INFO 20936 --- [XNIO-1 task-6] r.h.app.handler.file.LocalFileHandler    : Uploading to directory: [/root/.halo/upload/2020/1/QQ图片20200103001600-5b4a04642261438195808196ffc7ef8b.jpg]
+2020-01-03 00:21:19.125  INFO 20936 --- [Thread-4] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2020-01-03 00:21:19.125  INFO 20936 --- [Thread-4] o.s.s.c.ThreadPoolTaskScheduler          : Shutting down ExecutorService 'taskScheduler'
+2020-01-03 00:21:19.201  INFO 20936 --- [Thread-4] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2020-01-03 00:21:19.203  INFO 20936 --- [Thread-4] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2020-01-03 00:21:19.211  INFO 20936 --- [Thread-4] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2020-01-03 00:21:19.215  INFO 20936 --- [Thread-4] io.undertow.servlet                      : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2020-01-03 00:25:54.421  INFO 21230 --- [main] run.halo.app.Application                 : Starting Application v1.1.1 on iZbp110u5v2hhsrexylo4cZ with PID 21230 (/root/halo-latest.jar started by root in /)
+2020-01-03 00:25:54.425  INFO 21230 --- [main] run.halo.app.Application                 : No active profile set, falling back to default profiles: default
+2020-01-03 00:25:57.918  INFO 21230 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2020-01-03 00:25:58.334  INFO 21230 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 406ms. Found 21 repository interfaces.
+2020-01-03 00:26:00.420  INFO 21230 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$c1128138] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-03 00:26:01.908  WARN 21230 --- [main] io.undertow.websockets.jsr               : UT026010: Buffer pool was not set on WebSocketDeploymentInfo, the default pool will be used
+2020-01-03 00:26:02.007  INFO 21230 --- [main] io.undertow.servlet                      : Initializing Spring embedded WebApplicationContext
+2020-01-03 00:26:02.007  INFO 21230 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 7333 ms
+2020-01-03 00:26:03.165  INFO 21230 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2020-01-03 00:26:03.645  INFO 21230 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2020-01-03 00:26:03.912  INFO 21230 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2020-01-03 00:26:04.158  INFO 21230 --- [main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.10.Final}
+2020-01-03 00:26:04.160  INFO 21230 --- [main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2020-01-03 00:26:04.571  INFO 21230 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2020-01-03 00:26:05.446  INFO 21230 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2020-01-03 00:26:08.630  INFO 21230 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2020-01-03 00:26:13.116  INFO 21230 --- [main] o.h.h.i.QueryTranslatorFactoryInitiator  : HHH000397: Using ASTQueryTranslatorFactory
+2020-01-03 00:26:18.945  INFO 21230 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2020-01-03 00:26:19.296  INFO 21230 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)]
+2020-01-03 00:26:20.742  INFO 21230 --- [main] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'taskScheduler'
+2020-01-03 00:26:20.952  INFO 21230 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2020-01-03 00:26:21.007  INFO 21230 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 2 custom documentation plugin(s)
+2020-01-03 00:26:21.008  INFO 21230 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Skipping initializing disabled plugin bean swagger v2.0
+2020-01-03 00:26:21.008  INFO 21230 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Skipping initializing disabled plugin bean swagger v2.0
+2020-01-03 00:26:21.107  INFO 21230 --- [main] org.xnio                                 : XNIO version 3.3.8.Final
+2020-01-03 00:26:21.192  INFO 21230 --- [main] org.xnio.nio                             : XNIO NIO Implementation Version 3.3.8.Final
+2020-01-03 00:26:21.393  INFO 21230 --- [main] o.s.b.w.e.u.UndertowServletWebServer     : Undertow started on port(s) 80 (http) with context path ''
+2020-01-03 00:26:21.395  INFO 21230 --- [main] run.halo.app.Application                 : Started Application in 29.004 seconds (JVM running for 30.34)
+2020-01-03 00:26:21.619  INFO 21230 --- [main] run.halo.app.listener.StartedListener    : Halo started at         http://47.96.164.213
+2020-01-03 00:26:21.620  INFO 21230 --- [main] run.halo.app.listener.StartedListener    : Halo admin started at   http://47.96.164.213/admin
+2020-01-03 00:26:21.705  INFO 21230 --- [main] run.halo.app.listener.StartedListener    : Skipped copying theme folder due to existence of theme folder
+2020-01-03 00:26:56.975  INFO 21230 --- [XNIO-1 task-1] io.undertow.servlet                      : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-01-03 00:26:56.976  INFO 21230 --- [XNIO-1 task-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-01-03 00:26:57.029  INFO 21230 --- [XNIO-1 task-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 53 ms
+2020-01-03 00:27:46.165  INFO 21230 --- [Thread-4] o.s.s.c.ThreadPoolTaskScheduler          : Shutting down ExecutorService 'taskScheduler'
+2020-01-03 00:27:46.190  INFO 21230 --- [Thread-4] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2020-01-03 00:27:46.230  INFO 21230 --- [Thread-4] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2020-01-03 00:27:46.235  INFO 21230 --- [Thread-4] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2020-01-03 00:27:46.238  INFO 21230 --- [Thread-4] io.undertow.servlet                      : Destroying Spring FrameworkServlet 'dispatcherServlet'
+2020-01-03 00:27:49.415  INFO 21315 --- [main] run.halo.app.Application                 : Starting Application v1.1.1 on iZbp110u5v2hhsrexylo4cZ with PID 21315 (/root/halo-latest.jar started by root in /)
+2020-01-03 00:27:49.418  INFO 21315 --- [main] run.halo.app.Application                 : No active profile set, falling back to default profiles: default
+2020-01-03 00:27:52.868  INFO 21315 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2020-01-03 00:27:53.244  INFO 21315 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 366ms. Found 21 repository interfaces.
+2020-01-03 00:27:55.277  INFO 21315 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$a053479f] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-03 00:27:56.773  WARN 21315 --- [main] io.undertow.websockets.jsr               : UT026010: Buffer pool was not set on WebSocketDeploymentInfo, the default pool will be used
+2020-01-03 00:27:56.846  INFO 21315 --- [main] io.undertow.servlet                      : Initializing Spring embedded WebApplicationContext
+2020-01-03 00:27:56.847  INFO 21315 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 7198 ms
+2020-01-03 00:27:57.586  INFO 21315 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2020-01-03 00:27:58.239  INFO 21315 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2020-01-03 00:27:58.593  INFO 21315 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2020-01-03 00:27:58.781  INFO 21315 --- [main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.10.Final}
+2020-01-03 00:27:58.784  INFO 21315 --- [main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2020-01-03 00:27:59.225  INFO 21315 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2020-01-03 00:28:00.101  INFO 21315 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2020-01-03 00:28:03.522  INFO 21315 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2020-01-03 00:28:08.029  INFO 21315 --- [main] o.h.h.i.QueryTranslatorFactoryInitiator  : HHH000397: Using ASTQueryTranslatorFactory
+2020-01-03 00:28:14.347  INFO 21315 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2020-01-03 00:28:14.660  INFO 21315 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)]
+2020-01-03 00:28:16.174  INFO 21315 --- [main] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'taskScheduler'
+2020-01-03 00:28:16.410  INFO 21315 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2020-01-03 00:28:16.475  INFO 21315 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 2 custom documentation plugin(s)
+2020-01-03 00:28:16.475  INFO 21315 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Skipping initializing disabled plugin bean swagger v2.0
+2020-01-03 00:28:16.475  INFO 21315 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Skipping initializing disabled plugin bean swagger v2.0
+2020-01-03 00:28:16.561  INFO 21315 --- [main] org.xnio                                 : XNIO version 3.3.8.Final
+2020-01-03 00:28:16.601  INFO 21315 --- [main] org.xnio.nio                             : XNIO NIO Implementation Version 3.3.8.Final
+2020-01-03 00:28:16.801  INFO 21315 --- [main] o.s.b.w.e.u.UndertowServletWebServer     : Undertow started on port(s) 80 (http) with context path ''
+2020-01-03 00:28:16.803  INFO 21315 --- [main] run.halo.app.Application                 : Started Application in 29.321 seconds (JVM running for 30.534)
+2020-01-03 00:28:17.050  INFO 21315 --- [main] run.halo.app.listener.StartedListener    : Halo started at         http://47.96.164.213
+2020-01-03 00:28:17.051  INFO 21315 --- [main] run.halo.app.listener.StartedListener    : Halo admin started at   http://47.96.164.213/admin
+2020-01-03 00:28:17.140  INFO 21315 --- [main] run.halo.app.listener.StartedListener    : Skipped copying theme folder due to existence of theme folder
+2020-01-03 00:31:09.595  INFO 21315 --- [Thread-4] o.s.s.c.ThreadPoolTaskScheduler          : Shutting down ExecutorService 'taskScheduler'
+2020-01-03 00:31:09.657  INFO 21315 --- [Thread-4] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2020-01-03 00:31:09.663  INFO 21315 --- [Thread-4] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2020-01-03 00:31:09.694  INFO 21315 --- [Thread-4] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2020-01-03 00:31:12.769  INFO 21419 --- [main] run.halo.app.Application                 : Starting Application v1.1.1 on iZbp110u5v2hhsrexylo4cZ with PID 21419 (/root/halo-latest.jar started by root in /)
+2020-01-03 00:31:12.772  INFO 21419 --- [main] run.halo.app.Application                 : No active profile set, falling back to default profiles: default
+2020-01-03 00:31:16.394  INFO 21419 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2020-01-03 00:31:16.854  INFO 21419 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 417ms. Found 21 repository interfaces.
+2020-01-03 00:31:19.115  INFO 21419 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$72b3ef26] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-01-03 00:31:20.775  WARN 21419 --- [main] io.undertow.websockets.jsr               : UT026010: Buffer pool was not set on WebSocketDeploymentInfo, the default pool will be used
+2020-01-03 00:31:20.885  INFO 21419 --- [main] io.undertow.servlet                      : Initializing Spring embedded WebApplicationContext
+2020-01-03 00:31:20.886  INFO 21419 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 7869 ms
+2020-01-03 00:31:21.688  INFO 21419 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2020-01-03 00:31:22.490  INFO 21419 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2020-01-03 00:31:22.792  INFO 21419 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+	name: default
+	...]
+2020-01-03 00:31:23.036  INFO 21419 --- [main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.10.Final}
+2020-01-03 00:31:23.039  INFO 21419 --- [main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2020-01-03 00:31:23.687  INFO 21419 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2020-01-03 00:31:24.650  INFO 21419 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2020-01-03 00:31:28.355  INFO 21419 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2020-01-03 00:31:33.155  INFO 21419 --- [main] o.h.h.i.QueryTranslatorFactoryInitiator  : HHH000397: Using ASTQueryTranslatorFactory
+2020-01-03 00:31:39.438  INFO 21419 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoint(s) beneath base path '/actuator'
+2020-01-03 00:31:39.789  INFO 21419 --- [main] pertySourcedRequestMappingHandlerMapping : Mapped URL path [/v2/api-docs] onto method [public org.springframework.http.ResponseEntity<springfox.documentation.spring.web.json.Json> springfox.documentation.swagger2.web.Swagger2Controller.getDocumentation(java.lang.String,javax.servlet.http.HttpServletRequest)]
+2020-01-03 00:31:41.274  INFO 21419 --- [main] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'taskScheduler'
+2020-01-03 00:31:41.450  INFO 21419 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2020-01-03 00:31:41.516  INFO 21419 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Found 2 custom documentation plugin(s)
+2020-01-03 00:31:41.516  INFO 21419 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Skipping initializing disabled plugin bean swagger v2.0
+2020-01-03 00:31:41.516  INFO 21419 --- [main] d.s.w.p.DocumentationPluginsBootstrapper : Skipping initializing disabled plugin bean swagger v2.0
+2020-01-03 00:31:41.618  INFO 21419 --- [main] org.xnio                                 : XNIO version 3.3.8.Final
+2020-01-03 00:31:41.670  INFO 21419 --- [main] org.xnio.nio                             : XNIO NIO Implementation Version 3.3.8.Final
+2020-01-03 00:31:41.859  INFO 21419 --- [main] o.s.b.w.e.u.UndertowServletWebServer     : Undertow started on port(s) 80 (http) with context path ''
+2020-01-03 00:31:41.861  INFO 21419 --- [main] run.halo.app.Application                 : Started Application in 30.929 seconds (JVM running for 32.127)
+2020-01-03 00:31:42.108  INFO 21419 --- [main] run.halo.app.listener.StartedListener    : Halo started at         http://47.96.164.213
+2020-01-03 00:31:42.109  INFO 21419 --- [main] run.halo.app.listener.StartedListener    : Halo admin started at   http://47.96.164.213/admin
+2020-01-03 00:31:42.238  INFO 21419 --- [main] run.halo.app.listener.StartedListener    : Skipped copying theme folder due to existence of theme folder
+2020-01-03 00:33:58.360  INFO 21419 --- [XNIO-1 task-1] io.undertow.servlet                      : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-01-03 00:33:58.360  INFO 21419 --- [XNIO-1 task-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-01-03 00:33:58.401  INFO 21419 --- [XNIO-1 task-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 41 ms

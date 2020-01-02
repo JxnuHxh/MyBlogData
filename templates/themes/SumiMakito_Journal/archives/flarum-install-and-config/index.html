@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Flarum 的安装与配置 - Ryan Wang's Blog</title>
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Ryan Wang">
+    <meta name="description" content="Flarum是一款非常棒的开源论坛程序，Halo的论坛就是用Flarum搭建的。之前有人问过我Flarum如何搭建，所以下面讲一下Flarum的搭建过程（btw，官方的搭建教程实在草率）。前提域名需要提前解析。注意服务器是否需要备案，如果没备案，会被x掉。有一定的Linux基础。环境说明LinuxS">
+    <meta name="keywords" content="Flarum 的安装与配置,ryan0up,halo博客,halo,java,ruibaby,ryanwang,">
+    <link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml">
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="renderer" content="webkit">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="/halo-theme-Journal/source/css/journal.min.css">
+        <meta name="robots" content="none">
+    <meta name="generator" content="Halo "/>
+    <script data-ad-client="ca-pub-5271828906478846" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        <link rel="shortcut icon" type="images/x-icon" href="https://ryanc.cc/upload/2018/4/favicon.png">
+    <script src="/halo-theme-Journal/source/js/loadCSS.js"></script>
+
+    <!-- Import prettify css  -->
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify.min.css">
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify/github-v2.min.css">
+
+    <script>
+        loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Material+Icons");
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110780416-1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-110780416-1');
+</script>
+
+    <noscript>
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora|Montserrat|Anonymous+Pro:400|Material+Icons"/>
+    </noscript>
+</head>
+<body>
+<div id="top"></div>
+<div id="app"><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+                            <a class="a-block drawer-menu-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block drawer-menu-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block drawer-menu-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block drawer-menu-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block drawer-menu-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+            <a class="a-block drawer-menu-item" href="/atom.xml">
+                RSS
+            </a>
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="">
+            Ryan Wang's Blog
+        </a>
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">Ryan Wang's Blog</div>
+        <div class="single-column-header-subtitle">Life is fantastic.</div>
+    </a>
+</div><div ref="sideContainer" class="side-container">
+    <a class="a-block nav-head " href="">
+        <div class="nav-title">
+            Ryan Wang's Blog
+        </div>
+        <div class="nav-subtitle">
+            Life is fantastic.
+        </div>
+    </a>
+
+    <div class="nav-link-list">
+
+                <a class="a-block nav-link-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block nav-link-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block nav-link-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block nav-link-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block nav-link-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+        <a class="a-block no-tint nav-link-item" href="/atom.xml">
+            RSS
+        </a>
+    </div>
+
+    <div class="nav-footer">
+        Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+        &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+    </div>
+</div><div ref="extraContainer" class="extra-container">
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+
+    </div>
+</div>
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            <div class="post-head-wrapper" style="background-image: url('https://cdn.ryanc.cc/img/blog/thumbnails/840dd34da4a1cca58006f04dd981580e.png')"
+                 >
+                <div class="post-title">
+                    Flarum 的安装与配置
+                    <div class="post-meta">
+                        <time datetime="2019-11-18 20:30:22" itemprop="datePublished">
+                            2019-11-18 20:30
+                        </time>&nbsp;
+                            <i class="material-icons" style="">folder</i>
+                                <a href='/categories/study-notes'>学习笔记</a>
+
+                            <i class="material-icons" style="">label</i>
+                                <a href='/tags/flarum'>Flarum</a>, 
+                                <a href='/tags/nginx'>Nginx</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-body-wrapper">
+                <div class="post-body" v-pre>
+                    <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p><a href="https://flarum.org">Flarum</a> 是一款非常棒的开源论坛程序，<a href="https://bbs.halo.run">Halo 的论坛</a> 就是用 Flarum 搭建的。之前有人问过我 Flarum 如何搭建，所以下面讲一下 Flarum 的搭建过程（btw，官方的搭建教程实在草率）。</p> 
+  </blockquote> 
+  <h2 id="前提">前提</h2> 
+  <ul> 
+   <li>域名需要提前解析。</li> 
+   <li>注意服务器是否需要备案，如果没备案，会被 x 掉。</li> 
+   <li>有一定的 Linux 基础。</li> 
+  </ul> 
+  <h2 id="环境说明">环境说明</h2> 
+  <ul> 
+   <li>Linux Server（本文是用的 CentOS 7.6）</li> 
+   <li>Apache 或者 Nginx（本文是用的 Nginx）</li> 
+   <li>PHP 7.1+</li> 
+   <li>PHP 拓展： curl, dom, gd, json, mbstring, openssl, pdo_mysql, tokenizer, zip, fileinfo</li> 
+   <li>MySQL 5.6+ 或者 MariaDB 10.0.5+</li> 
+  </ul> 
+  <h2 id="部署环境安装">部署环境安装</h2> 
+  <h3 id="更新服务器软件包">更新服务器软件包</h3> 
+  <pre><code class="language-bash">yum update -y
+</code></pre> 
+  <h3 id="安装-nginxphpmysql">安装 Nginx/PHP/MySQL</h3> 
+  <blockquote> 
+   <p>这里我们使用 <a href="https://oneinstack.com">OneinStack</a> 一键安装，人生苦短，懒得自己编译了（绝不是因为我不会🌚）。当然，如果有时间，自己编译安装更好。</p> 
+  </blockquote> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/38771f8f695f99bd0539db42af0f2e69.png" alt="OneInStack"></p> 
+  <p>如上图，选择好需要的软件以及版本后，复制安装命令到服务器执行就行了，安装过程可能会有点慢，耐心等待就行了。</p> 
+  <blockquote> 
+   <p>需要注意的是，PHP 扩展中的 <code>fileinfo</code> 一定要勾选，Flarum 官方文档居然没有写需要这个扩展。(没错，这里我被坑了，嘤嘤嘤嘤~)</p> 
+  </blockquote> 
+  <p>安装完成应该会打印出这些东西： <img src="https://cdn.ryanc.cc/img/blog/thumbnails/6902ec905fc810f533910402cbd43662.png" alt="Oneinstack-success"></p> 
+  <h3 id="安装-composer">安装 Composer</h3> 
+  <pre><code class="language-bash">php -r "copy('https://install.phpcomposer.com/installer', 'composer-setup.php');"
+
+php composer-setup.php
+
+php -r "unlink('composer-setup.php');"
+
+mv composer.phar /usr/local/bin/composer
+</code></pre> 
+  <p>由于 <code>Composer</code> 的服务器在国外，可能导致下载 Flarum 已经依赖包会很慢，所以我们需要更换一下源地址。至于 <code>Composer</code> 是啥，其实就是 PHP 的一个包管理，类似 Java 的 <code>Maven</code> 和 <code>Gradle</code> 工具。</p> 
+  <pre><code class="language-bash">composer config -g repo.packagist composer https://packagist.phpcomposer.com
+</code></pre> 
+  <h2 id="安装-flarum">安装 Flarum</h2> 
+  <p>进入到 oneinstack 目录，执行 vhost.sh 脚本新建一个网站 <img src="https://cdn.ryanc.cc/img/blog/thumbnails/c608cda88c610ae302e895bf723e3515.png" alt="OneInStack-vhost"></p> 
+  <p>然后会提示 SSL 证书选项，网站目录之类的东西，按照自己的需求选择即可。</p> 
+  <p>创建完成后应该是这样子。</p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/56c950fe8a52e135b217e75026d48de8.png" alt="OneInStack-new-site"></p> 
+  <p>然后进入网站目录执行：</p> 
+  <pre><code class="language-bash">composer create-project flarum/flarum . --stability=beta
+</code></pre> 
+  <p>然后等待下载 Flarum 以及对应的依赖即可，安装完成应该是这个样子的：</p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/34286be66336e95f86ff2f59349cfa70.png" alt="Flarum-install-success"></p> 
+  <h2 id="配置运行">配置运行</h2> 
+  <p>上面其实就已经安装好了 Flarum，但是还需要进一步配置才能正确运行。</p> 
+  <h3 id="创建数据库">创建数据库</h3> 
+  <p>登陆 MySQL：</p> 
+  <pre><code class="language-bash">mysql -u root -p密码
+</code></pre> 
+  <p>创建数据库：</p> 
+  <pre><code class="language-bash">create database 数据库名 character set utf8mb4 collate utf8mb4_bin;
+</code></pre> 
+  <blockquote> 
+   <p>这里的字符集一定要是 <code>utf8mb4</code>，至于为什么是 <code>utf8mb4</code>，参考：<a href="https://www.jianshu.com/p/6967ce16a202">https://www.jianshu.com/p/6967ce16a202</a>。</p> 
+  </blockquote> 
+  <h3 id="修改-nginx-配置">修改 Nginx 配置</h3> 
+  <p>进入 Nginx 配置文件目录：</p> 
+  <pre><code>cd /usr/local/nginx/conf/vhost
+</code></pre> 
+  <p>修改网站的配置文件：</p> 
+  <pre><code>vim xxx.conf
+</code></pre> 
+  <p>需要修改的地方：</p> 
+  <ol> 
+   <li>root：需要在路径后面加上 <code>public</code>，比如我的原本是 <code>root /data/wwwroot/bbs.ryanwang.me;</code>，需要修改为 <code>root /data/wwwroot/bbs.ryanwang.me/public;</code>。</li> 
+   <li>引入 Flarum 提供的配置，在 server 大括号中任意位置加上 <code>include /data/wwwroot/xxx/.nginx.conf;</code>，<code>xxx</code> 为网站目录名。比如我的是 <code>include /data/wwwroot/bbs.ryanwang.me/.nginx.conf;</code></li> 
+  </ol> 
+  <p>最后的配置示例：</p> 
+  <pre><code class="language-nginx">server {
+  listen 80;
+  listen 443 ssl http2;
+  ssl_certificate /usr/local/nginx/conf/ssl/bbs.ryanwang.me.crt;
+  ssl_certificate_key /usr/local/nginx/conf/ssl/bbs.ryanwang.me.key;
+  ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+  ssl_ciphers TLS13-AES-256-GCM-SHA384:TLS13-CHACHA20-POLY1305-SHA256:TLS13-AES-128-GCM-SHA256:TLS13-AES-128-CCM-8-SHA256:TLS13-AES-128-CCM-SHA256:EECDH+CHACHA20:EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5;
+  ssl_prefer_server_ciphers on;
+  ssl_session_timeout 10m;
+  ssl_session_cache builtin:1000 shared:SSL:10m;
+  ssl_buffer_size 1400;
+  add_header Strict-Transport-Security max-age=15768000;
+  ssl_stapling on;
+  ssl_stapling_verify on;
+  server_name bbs.ryanwang.me;
+  access_log /data/wwwlogs/bbs.ryanwang.me_nginx.log combined;
+  index index.html index.htm index.php;
+  root /data/wwwroot/bbs.ryanwang.me/public;
+  if ($ssl_protocol = "") { return 301 https://$host$request_uri; }
+
+  include /usr/local/nginx/conf/rewrite/other.conf;
+  #error_page 404 /404.html;
+  #error_page 502 /502.html;
+
+  location ~ [^/]\.php(/|$) {
+    #fastcgi_pass remote_php_ip:9000;
+    fastcgi_pass unix:/dev/shm/php-cgi.sock;
+    fastcgi_index index.php;
+    include fastcgi.conf;
+  }
+
+  location ~ .*\.(gif|jpg|jpeg|png|bmp|swf|flv|mp4|ico)$ {
+    expires 30d;
+    access_log off;
+  }
+  location ~ .*\.(js|css)?$ {
+    expires 7d;
+    access_log off;
+  }
+  location ~ /(\.user\.ini|\.ht|\.git|\.svn|\.project|LICENSE|README\.md) {
+    deny all;
+  }
+  include /data/wwwroot/bbs.ryanwang.me/.nginx.conf;
+}
+
+</code></pre> 
+  <p>最后我们需要检查 Nginx 配置是否有误并重载 Nginx 配置：</p> 
+  <pre><code>nginx -t
+
+nginx: the configuration file /usr/local/nginx/conf/nginx.conf syntax is ok
+nginx: configuration file /usr/local/nginx/conf/nginx.conf test is successful
+</code></pre> 
+  <pre><code>nginx -s reload
+</code></pre> 
+  <h3 id="flarum-安装引导">Flarum 安装引导</h3> 
+  <p>如果出现下面的情况：</p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/7243e69819dd45fe52789c07ad88351f.png" alt="Flarum-install-page-1"></p> 
+  <p>是因为没有对网站目录写入的权限，我们加一下权限即可：</p> 
+  <pre><code class="language-bash"># xxx 为网站目录名称
+chmod -R 777 /data/wwwroot/xxx
+</code></pre> 
+  <p>然后刷新页面就可以看到安装表单了。</p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/6aa3c74ae3c3e54f7579b9ad34884dd8.png" alt="Flarum-install-page-2"></p> 
+  <p>然后填写数据库信息以及管理员信息，点击安装即可。</p> 
+  <p>安装部署部分到此结束。</p> 
+  <h2 id="常用插件安装">常用插件安装</h2> 
+  <blockquote> 
+   <p>安装完成后会发现不支持中文，所以我们需要安装中文语言包。还有一些常用的插件。</p> 
+  </blockquote> 
+  <p>进入网站目录：</p> 
+  <pre><code class="language-bash"># xxx 为网站目录名称
+cd /data/wwwroot/xxx
+</code></pre> 
+  <pre><code class="language-bash"># 简体中文语言包
+composer require csineneo/lang-simplified-chinese
+
+# 繁体中文语言包
+composer require csineneo/lang-traditional-chinese
+
+# 编辑器 Emoji 表情选择框
+composer require clarkwinkelmann/flarum-ext-emojionearea
+
+# Sitemap 生成器
+composer require flagrow/sitemap
+
+# Fancybox 插件
+composer require squeevee/flarum-ext-fancybox 
+</code></pre> 
+  <p>安装完成后去后台启用即可（后台地址：网址/admin）。</p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/168c9ee1aecd24300d8bdeb92755770b.png" alt="Flarum-extension"></p> 
+ </body>
+</html>
+                </div>
+            </div>
+
+<nav class="post-pagination">
+        <a class="newer-posts" href="/archives/blog-migration-to-raspberry-pi">
+        上一篇<br>博客迁移到 Raspberry Pi
+    </a>
+    <span class="page-number"></span>
+    <a class="older-posts" href="/archives/deploy-gridea-with-caddy">
+        下一篇<br>使用 Caddy 自动部署 Gridea 博客
+    </a>
+</nav>
+
+    <div class="post-comment-wrapper">
+      	<script>
+        var settings = {
+        	autoLoad: false
+        }  
+        </script>
+        <halo-comment id="259" type="post" :settings="settings"/>
+    </div>
+        </div>
+    </div>
+<div class="single-column-footer">
+    Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+    &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+</div></div>
+
+</div>
+<script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"
+        integrity="sha256-EGs9T1xMHdvM1geM8jPpoo8EZ1V1VRsmcJz8OByENLA=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"
+        integrity="sha256-CI4Gq5E0io1Pv0xM3qPM+NUIOhbIBvC3GiN1Y4KhXpw=" crossorigin="anonymous"></script>
+<script src="/halo-theme-Journal/source/js/journal.js"></script>
+
+<!-- Import prettify js  -->
+        <script src="/halo-theme-Journal/source/js/prettify.min.js"></script>
+        <script>
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+            })
+        </script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="http://localhost:8090/halo-comment.min.js?version=1.1.2"></script>
+</body>
+</html>

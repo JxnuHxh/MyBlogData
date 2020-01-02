@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>玩玩 IFTTT - Ryan Wang's Blog</title>
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Ryan Wang">
+    <meta name="description" content="很早就听说过IFTTT这个神器了，但是迟迟没有上手。这次趁有空闲时间，简单把玩了一下，发现确实可以带来一些便利。什么是IFTTTIFTTT，是一个新生的网络服务平台，通过其他不同平台的条件来决定是否执行下一条命令。即对网络服务通过其他网络服务作出反应。IFTTT得名为其口号“ifthisthenth">
+    <meta name="keywords" content="玩玩 IFTTT,ryan0up,halo博客,halo,java,ruibaby,ryanwang,">
+    <link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml">
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="renderer" content="webkit">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="/halo-theme-Journal/source/css/journal.min.css">
+        <meta name="robots" content="none">
+    <meta name="generator" content="Halo "/>
+    <script data-ad-client="ca-pub-5271828906478846" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        <link rel="shortcut icon" type="images/x-icon" href="https://ryanc.cc/upload/2018/4/favicon.png">
+    <script src="/halo-theme-Journal/source/js/loadCSS.js"></script>
+
+    <!-- Import prettify css  -->
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify.min.css">
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify/github-v2.min.css">
+
+    <script>
+        loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Material+Icons");
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110780416-1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-110780416-1');
+</script>
+
+    <noscript>
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora|Montserrat|Anonymous+Pro:400|Material+Icons"/>
+    </noscript>
+</head>
+<body>
+<div id="top"></div>
+<div id="app"><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+                            <a class="a-block drawer-menu-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block drawer-menu-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block drawer-menu-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block drawer-menu-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block drawer-menu-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+            <a class="a-block drawer-menu-item" href="/atom.xml">
+                RSS
+            </a>
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="">
+            Ryan Wang's Blog
+        </a>
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">Ryan Wang's Blog</div>
+        <div class="single-column-header-subtitle">Life is fantastic.</div>
+    </a>
+</div><div ref="sideContainer" class="side-container">
+    <a class="a-block nav-head " href="">
+        <div class="nav-title">
+            Ryan Wang's Blog
+        </div>
+        <div class="nav-subtitle">
+            Life is fantastic.
+        </div>
+    </a>
+
+    <div class="nav-link-list">
+
+                <a class="a-block nav-link-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block nav-link-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block nav-link-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block nav-link-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block nav-link-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+        <a class="a-block no-tint nav-link-item" href="/atom.xml">
+            RSS
+        </a>
+    </div>
+
+    <div class="nav-footer">
+        Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+        &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+    </div>
+</div><div ref="extraContainer" class="extra-container">
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+
+    </div>
+</div>
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            <div class="post-head-wrapper" style="background-image: url('https://cdn.ryanc.cc/img/blog/thumbnails/a5b80422324687712c89c0a547b69741.jpg')"
+                 >
+                <div class="post-title">
+                    玩玩 IFTTT
+                    <div class="post-meta">
+                        <time datetime="2019-10-12 16:56:18" itemprop="datePublished">
+                            2019-10-12 16:56
+                        </time>&nbsp;
+                            <i class="material-icons" style="">folder</i>
+                                <a href='/categories/others'>其他</a>
+
+                            <i class="material-icons" style="">label</i>
+                                <a href='/tags/ifttt'>IFTTT </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-body-wrapper">
+                <div class="post-body" v-pre>
+                    <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>很早就听说过 IFTTT 这个神器了，但是迟迟没有上手。这次趁有空闲时间，简单把玩了一下，发现确实可以带来一些便利。</p> 
+  </blockquote> 
+  <h2 id="什么是-ifttt">什么是 IFTTT</h2> 
+  <p><a href="https://ifttt.com">IFTTT</a>，是一个新生的网络服务平台，通过其他不同平台的条件来决定是否执行下一条命令。即对网络服务通过其他网络服务作出反应。IFTTT 得名为其口号“if this then that”。</p> 
+  <p>IFTTT的官方念法类似英语单词“gift”的“ift”，即不要发“g”的音。(摘自维基百科)</p> 
+  <h2 id="实现原理">实现原理</h2> 
+  <p>IFTTT 基于任务的条件触发，类似编程语言，即：“若 XXX 进行 YYY 行为，执行 ZZZ。”。每一个可以触发或者作为任务的网站叫做一个 Channel，触发的条件叫做 Triggers，之后执行的任务叫做 Actions，综合上面的一套流程叫做 Task。(摘自维基百科)</p> 
+  <h2 id="几个小案例">几个小案例</h2> 
+  <blockquote> 
+   <p>下面几个我使用的小案例，包括自动分享博文到微博或 Twitter 等社交平台，还有推送 <a href="https://halo.run">Halo</a> 新版本到 Telegram 或者 Twitter 等等。（注册 IFTTT之类的就不多说了，网址是：<a href="https://ifttt.com">https://ifttt.com</a>）</p> 
+  </blockquote> 
+  <h3 id="1-自动分享新博文到各种社交平台">1. 自动分享新博文到各种社交平台。</h3> 
+  <blockquote> 
+   <p>其原理是获取博客的 RSS 地址定时更新，如果有新的博文，就会触发推送到各个社交平台的事件。</p> 
+  </blockquote> 
+  <p>点击右上角头像，选择 <code>Create</code>。就会出现新建一组流程的界面，如下图： <img src="https://cdn.ryanc.cc/img/blog/thumbnails/0f2fc90d672238ef5130606203565a10.png" alt="image.png"></p> 
+  <p>点击 <code>This</code>，会出现很多 <code>service</code>。 <img src="https://cdn.ryanc.cc/img/blog/thumbnails/110faa7dd55535a2f4c59d4c83ff6fd5.png" alt="image.png"></p> 
+  <p>各个 <code>service</code> 当中会有一些可供选择的事件。这里我们找到 <code>RSS Feed</code>。 <img src="https://cdn.ryanc.cc/img/blog/thumbnails/0589a8402fe7f18f85bc4f17224ad1c3.png" alt="image.png"></p> 
+  <p>然后点击这个大大的 RSS 图标，会出现一些我们可以选择的事件，如下图。</p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/f5d89f2842a51c665e2a506a5f9b8ff6.png" alt="image.png"></p> 
+  <p>可以看到，这里有两个事件可供我们选择，第一个是，一有新的更新就会执行下一个操作，也就是执行 <code>That</code> 中的事件。第二个是，当新的更新匹配到自定的关键字才会触发下一个操作。这里我们选择第一个即可。</p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/0761b6f1d276a5bd89af5e217d0a392d.png" alt="image.png"></p> 
+  <p>这里我们需要输入我们博客的 RSS 地址，如：<a href="https://ryanc.cc/atom.xml">https://ryanc.cc/atom.xml</a>。然后点击创建 <code>Create trigger（触发器）</code> 即可。</p> 
+  <p>然后就会回到下面这个界面，可以看到 This 前面有个 RSS 的图标，这就说明触发器以及创建好了，下面就需要选择触发之后的事件了。 <img src="https://cdn.ryanc.cc/img/blog/thumbnails/9d806a69b777de498222791b80e6d788.png" alt="image.png"></p> 
+  <p>下面以 Twitter 为例，也就是当博文有更新时，自动推送到自己的 Twitter 账户，发表新的动态。第一次使用 Twitter 这个 <code>service</code> 的时候，需要登录你的 Twitter 账户。 <img src="https://cdn.ryanc.cc/img/blog/thumbnails/75e29aff9c6a5322a517fc741c045321.png" alt="image.png"></p> 
+  <p>选择 Twitter 之后，可以看到四个事件。这里我们选择第一个（发一条新的推）即可。 <img src="https://cdn.ryanc.cc/img/blog/thumbnails/94193007b20827c5799c35be4609b25d.png" alt="image.png"></p> 
+  <p>之后点击 <code>Create action</code> 即可。 <img src="https://cdn.ryanc.cc/img/blog/thumbnails/bade613e644ea5539708dac98d1d8570.png" alt="image.png"></p> 
+  <p>到此这个流程就创建完毕了，接下来就可以用同样的方式创建推送到其他社交平台的流程了。比如微博，Facebook，Ins 之类的。当然，微信朋友圈，QQ 空间之类的就别想了。</p> 
+  <h3 id="2-自动推送-github-项目的新版本信息到各种社交平台">2. 自动推送 Github 项目的新版本信息到各种社交平台</h3> 
+  <blockquote> 
+   <p>突然发现这个和上面那个案例是一毛一样的...那就不详细赘述了。</p> 
+  </blockquote> 
+  <p>这里可能会问，博客有 RSS 功能，那么 Github 怎么办？其实 Github 针对各个项目也提供了 RSS 地址的。比如 Halo：<a href="https://github.com/halo-dev/halo/releases.atom">https://github.com/halo-dev/halo/releases.atom</a>。</p> 
+  <p>如果你想关注其他项目的版本动态，只需要改一下地址即可，例如：</p> 
+  <ul> 
+   <li>Vue.js(<a href="https://github.com/vuejs/vue/releases.atom">https://github.com/halo-dev/halo/releases.atom</a>)</li> 
+   <li>SpringBoot(<a href="https://github.com/spring-projects/spring-boot/releases.atom">https://github.com/spring-projects/spring-boot/releases.atom</a>)</li> 
+  </ul> 
+  <p>我使用这个主要是方便推送 Halo 的更新信息，可以自动推送到 Twitter，以及 Halo 的 <a href="https://t.me/halo_dev">Telegram Channel</a>。</p> 
+  <h2 id="最后">最后</h2> 
+  <p>玩一圈下来发现，在国内能玩儿的其实就那么几个，当然如果你在用很多国外的应用，这个服务还是挺方便的。当然，IFTTT 可以做的远不止此，还有诸如 <code>Evernote</code>，<code>Github</code>，<code>Google Drive</code>，<code>YouTube</code>，<code>WordPress</code> 等的 <code>service</code>，还有很多玩法需要去探索啦。</p> 
+ </body>
+</html>
+                </div>
+            </div>
+
+<nav class="post-pagination">
+        <a class="newer-posts" href="/archives/deploy-gridea-with-caddy">
+        上一篇<br>使用 Caddy 自动部署 Gridea 博客
+    </a>
+    <span class="page-number"></span>
+    <a class="older-posts" href="/archives/china-mobile-you-are-so-bad">
+        下一篇<br>中国移动，你太坏了。
+    </a>
+</nav>
+
+    <div class="post-comment-wrapper">
+      	<script>
+        var settings = {
+        	autoLoad: false
+        }  
+        </script>
+        <halo-comment id="252" type="post" :settings="settings"/>
+    </div>
+        </div>
+    </div>
+<div class="single-column-footer">
+    Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+    &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+</div></div>
+
+</div>
+<script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"
+        integrity="sha256-EGs9T1xMHdvM1geM8jPpoo8EZ1V1VRsmcJz8OByENLA=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"
+        integrity="sha256-CI4Gq5E0io1Pv0xM3qPM+NUIOhbIBvC3GiN1Y4KhXpw=" crossorigin="anonymous"></script>
+<script src="/halo-theme-Journal/source/js/journal.js"></script>
+
+<!-- Import prettify js  -->
+        <script src="/halo-theme-Journal/source/js/prettify.min.js"></script>
+        <script>
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+            })
+        </script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="http://localhost:8090/halo-comment.min.js?version=1.1.2"></script>
+</body>
+</html>

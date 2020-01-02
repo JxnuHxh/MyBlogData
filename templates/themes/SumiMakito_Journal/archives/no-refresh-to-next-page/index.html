@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>无刷新加载下一页方案解析 - Ryan Wang's Blog</title>
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Ryan Wang">
+    <meta name="description" content="前段时间移植了一个Ghost的主题的时候（就是我现在用的这个），发现这个下拉加载下一页特别有意思，只用了短短几行代码，且后端没有重写请求方法，就轻而易举的实现了，于是乎就简单分析了一下。以供有需要的人参考一下。之前是这样做的我之前做这种无刷新加载下一页都是用的字符串拼接，把html代码和新的数据拼接">
+    <meta name="keywords" content="无刷新加载下一页方案解析,ryan0up,halo博客,halo,java,ruibaby,ryanwang,">
+    <link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml">
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="renderer" content="webkit">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="/halo-theme-Journal/source/css/journal.min.css">
+        <meta name="robots" content="none">
+    <meta name="generator" content="Halo "/>
+    <script data-ad-client="ca-pub-5271828906478846" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        <link rel="shortcut icon" type="images/x-icon" href="https://ryanc.cc/upload/2018/4/favicon.png">
+    <script src="/halo-theme-Journal/source/js/loadCSS.js"></script>
+
+    <!-- Import prettify css  -->
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify.min.css">
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify/github-v2.min.css">
+
+    <script>
+        loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Material+Icons");
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110780416-1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-110780416-1');
+</script>
+
+    <noscript>
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora|Montserrat|Anonymous+Pro:400|Material+Icons"/>
+    </noscript>
+</head>
+<body>
+<div id="top"></div>
+<div id="app"><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+                            <a class="a-block drawer-menu-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block drawer-menu-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block drawer-menu-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block drawer-menu-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block drawer-menu-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+            <a class="a-block drawer-menu-item" href="/atom.xml">
+                RSS
+            </a>
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="">
+            Ryan Wang's Blog
+        </a>
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">Ryan Wang's Blog</div>
+        <div class="single-column-header-subtitle">Life is fantastic.</div>
+    </a>
+</div><div ref="sideContainer" class="side-container">
+    <a class="a-block nav-head " href="">
+        <div class="nav-title">
+            Ryan Wang's Blog
+        </div>
+        <div class="nav-subtitle">
+            Life is fantastic.
+        </div>
+    </a>
+
+    <div class="nav-link-list">
+
+                <a class="a-block nav-link-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block nav-link-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block nav-link-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block nav-link-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block nav-link-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+        <a class="a-block no-tint nav-link-item" href="/atom.xml">
+            RSS
+        </a>
+    </div>
+
+    <div class="nav-footer">
+        Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+        &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+    </div>
+</div><div ref="extraContainer" class="extra-container">
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+
+    </div>
+</div>
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            <div class="post-head-wrapper-text-only">
+                <div class="post-title">
+                    无刷新加载下一页方案解析
+                    <div class="post-meta">
+                        <time datetime="2018-12-6 11:35:00" itemprop="datePublished">
+                            2018-12-06 11:35
+                        </time>&nbsp;
+                            <i class="material-icons" style="">folder</i>
+                                <a href='/categories/study-notes'>学习笔记</a>
+
+                            <i class="material-icons" style="">label</i>
+                                <a href='/tags/halo'>Halo</a>, 
+                                <a href='/tags/javascript'>JavaScript</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-body-wrapper">
+                <div class="post-body" v-pre>
+                    <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>前段时间移植了一个Ghost的主题的时候（就是我现在用的这个），发现这个下拉加载下一页特别有意思，只用了短短几行代码，且后端没有重写请求方法，就轻而易举的实现了，于是乎就简单分析了一下。以供有需要的人参考一下。</p> 
+  </blockquote> 
+  <h1 id="之前是这样做的">之前是这样做的</h1> 
+  <p>我之前做这种无刷新加载下一页都是用的字符串拼接，把html代码和新的数据拼接起来然后append进去。这种方法虽然可以实现功能，但是有很多缺点，比如如果修改了页面的样式，那么很可能就要重新写拼接的字符串，而且整个代码看起来非常不好看（我有代码洁癖）。就像下面代码一样，宛如一坨shit...</p> 
+  <pre><code class="language-javascript">$.each(data,function (n,value) {
+	$('.post-list').append('' +
+			'&lt;div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 post-list-item" data-aos="fade-up"&gt;\n' +
+			'&lt;div class="post-item-main"&gt;\n' +
+			'&lt;a href="/archives/'+value.postUrl+'"&gt;\n' +
+			'&lt;div class="post-item-thumbnail lazy" style="background-image: url(/halo/source/img/pic12.jpg)"&gt;&lt;/div&gt;\n' +
+			'&lt;/a&gt;\n' +
+			'&lt;div class="post-item-info"&gt;\n' +
+			'&lt;div class="post-info-title"&gt;\n' +
+			'&lt;a href="/archives/'+value.postUrl+'"&gt;&lt;span&gt;'+value.postTitle+'&lt;/span&gt;&lt;/a&gt;&lt;br&gt;\n' +
+			'&lt;/div&gt;\n' +
+			'&lt;div&gt;\n' +
+			'&lt;span class="post-info-desc"&gt;\n' +
+			''+value.postSummary+'...' +
+			'&lt;/span&gt;\n' +
+			'&lt;/div&gt;\n' +
+			'&lt;div class="post-info-other" style="text-align: right"&gt;\n' +
+			'&lt;a href="#"&gt;MORE&gt;&lt;/a&gt;\n' +
+			'&lt;/div&gt;\n' +
+			'&lt;/div&gt;\n' +
+			'&lt;/div&gt;\n' +
+			'&lt;/div&gt;'
+	);
+});
+</code></pre> 
+  <h1 id="新学到的方法">新学到的方法</h1> 
+  <p>废话少说，先上代码，地址<a href="https://github.com/TryGhost/Casper/blob/master/assets/js/infinitescroll.js">https://github.com/TryGhost/Casper/blob/master/assets/js/infinitescroll.js</a>。</p> 
+  <pre><code class="language-javascript">/* global maxPages */
+var maxPages = parseInt(totalPages);
+
+// Code snippet inspired by https://github.com/douglasrodrigues5/ghost-blog-infinite-scroll
+$(function ($) {
+    var currentPage = 1;
+    var pathname = window.location.pathname;
+    var $document = $(document);
+    var $result = $('.post-feed');
+    var buffer = 300;
+
+    var ticking = false;
+    var isLoading = false;
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $document.height();
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $document.height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(infiniteScroll);
+        }
+        ticking = true;
+    }
+
+    function sanitizePathname(path) {
+        var paginationRegex = /(?:page\/)(\d)(?:\/)$/i;
+
+        // remove hash params from path
+        path = path.replace(/#(.*)$/g, '').replace('////g', '/');
+
+        // remove pagination from the path and replace the current pages
+        // with the actual requested page. E. g. `/page/3/` indicates that
+        // the user actually requested page 3, so we should request page 4
+        // next, unless it's the last page already.
+        if (path.match(paginationRegex)) {
+            currentPage = parseInt(path.match(paginationRegex)[1]);
+
+            path = path.replace(paginationRegex, '');
+        }
+
+        return path;
+    }
+
+    function infiniteScroll() {
+        // sanitize the pathname from possible pagination or hash params
+        pathname = sanitizePathname(pathname);
+
+        // return if already loading
+        if (isLoading) {
+            return;
+        }
+
+        // return if not scroll to the bottom
+        if (lastScrollY + lastWindowHeight &lt;= lastDocumentHeight - buffer) {
+            ticking = false;
+            return;
+        }
+
+        /**
+        * maxPages is defined in default.hbs and is the value
+        * of the amount of pagination pages.
+        * If we reached the last page or are past it,
+        * we return and disable the listeners.
+        */
+        if (currentPage &gt;= maxPages) {
+            window.removeEventListener('scroll', onScroll, {passive: true});
+            window.removeEventListener('resize', onResize);
+            return;
+        }
+
+        isLoading = true;
+
+        // next page
+        currentPage += 1;
+
+        // Load more
+        var nextPage = pathname + 'page/' + currentPage + '/';
+
+        $.get(nextPage, function (content) {
+            var parse = document.createRange().createContextualFragment(content);
+            var posts = parse.querySelectorAll('.post');
+            if (posts.length) {
+                [].forEach.call(posts, function (post) {
+                    $result[0].appendChild(post);
+                });
+            }
+        }).fail(function (xhr) {
+            // 404 indicates we've run out of pages
+            if (xhr.status === 404) {
+                window.removeEventListener('scroll', onScroll, {passive: true});
+                window.removeEventListener('resize', onResize);
+            }
+        }).always(function () {
+            lastDocumentHeight = $document.height();
+            isLoading = false;
+            ticking = false;
+        });
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize);
+
+    infiniteScroll();
+});
+</code></pre> 
+  <p>我们知道的是，很多CMS系统，博客系统（Wordpress，typecho，Hexo等）的下一页路径几乎都是<code>/page/页码</code>，所以上面的方法几乎可以通用，就算不是，改改也是可以的。好了，下面详细来解析一下上面的代码吧。</p> 
+  <h2 id="获取总页数">获取总页数</h2> 
+  <p>在最上面有一行代码<code>var maxPages = parseInt(totalPages);</code> 是用于定义总页数的，不知道？那么想办法后端返回一个吧，这个有什么用呢？看下面：</p> 
+  <pre><code class="language-javascript">if (currentPage &gt;= maxPages) {
+	window.removeEventListener('scroll', onScroll, {passive: true});
+	window.removeEventListener('resize', onResize);
+	return;
+}
+</code></pre> 
+  <p>就是说当当前页面大于等于总页数的的时候就停止执行下面的代码，而下面的代码则是加载下一页的，所以说需要有这个判断，当获取到最后一页的时候就停止获取。</p> 
+  <h2 id="加载下一页">加载下一页</h2> 
+  <p>可以看到，方法的最上面定义了一个变量<code>var currentPage = 1;</code>，这个变量代表着第一页的页码，当页面滑动到最底部的时候就会调用<code>infiniteScroll</code>方法，并且给<code>currentPage</code>加上一，然后就请求下一页的数据。此时的请求路径也就是<code>/page/2</code>。</p> 
+  <h2 id="解析请求的路径">解析请求的路径</h2> 
+  <p>我们看到这一段：</p> 
+  <pre><code class="language-javascript">$.get(nextPage, function (content) {
+	var parse = document.createRange().createContextualFragment(content);
+	var posts = parse.querySelectorAll('.post');
+	if (posts.length) {
+		[].forEach.call(posts, function (post) {
+			$result[0].appendChild(post);
+		});
+	}
+})
+</code></pre> 
+  <p>使用get方式请求下一页的数据，需要注意的是，虽然是使用ajax请求的，但是是请求的下一页整个页面的内容，所以请求获得的数据便是整个页面的html代码。所以这里使用到了<code>querySelectorAll</code>这个方法，截取全部以<code>post</code>类的html代码，并存入<code>posts</code>变量中，然后在遍历<code>posts</code>，得到单个文章列表项，最后再追加到页面中，整个过程一气呵成。</p> 
+  <h2 id="总结">总结</h2> 
+  <p>整个获取下一页数据的基本流程为：</p> 
+  <ol> 
+   <li>判断页面是否滑动到底部，如已滑动到底部，则调用加载页面的方法，并把<code>currentPage</code>在原基础上加1，并需要判断当前页码是否大于总页数，如大于，则不调用加载页面的方法。</li> 
+   <li>使用ajax请求下一页的数据。</li> 
+   <li>解析请求下一页所获得的数据，并截取所有以<code>post</code>类的html代码。注意：并非所有单个文章列表项的class都为post，请按实际情况来。</li> 
+   <li>追加到当前页面的文章列表中。</li> 
+  </ol> 
+ </body>
+</html>
+                </div>
+            </div>
+
+<nav class="post-pagination">
+        <a class="newer-posts" href="/archives/docker-compose-run-halo">
+        上一篇<br>Docker Compose 部署Halo教程
+    </a>
+    <span class="page-number"></span>
+    <a class="older-posts" href="/archives/halo-docker">
+        下一篇<br>Halo博客系统-Docker版
+    </a>
+</nav>
+
+    <div class="post-comment-wrapper">
+      	<script>
+        var settings = {
+        	autoLoad: false
+        }  
+        </script>
+        <halo-comment id="25" type="post" :settings="settings"/>
+    </div>
+        </div>
+    </div>
+<div class="single-column-footer">
+    Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+    &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+</div></div>
+
+</div>
+<script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"
+        integrity="sha256-EGs9T1xMHdvM1geM8jPpoo8EZ1V1VRsmcJz8OByENLA=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"
+        integrity="sha256-CI4Gq5E0io1Pv0xM3qPM+NUIOhbIBvC3GiN1Y4KhXpw=" crossorigin="anonymous"></script>
+<script src="/halo-theme-Journal/source/js/journal.js"></script>
+
+<!-- Import prettify js  -->
+        <script src="/halo-theme-Journal/source/js/prettify.min.js"></script>
+        <script>
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+            })
+        </script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="http://localhost:8090/halo-comment.min.js?version=1.1.2"></script>
+</body>
+</html>

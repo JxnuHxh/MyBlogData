@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Halo-文章归档的实现 - Ryan Wang's Blog</title>
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Ryan Wang">
+    <meta name="description" content="在一个正常的博客系统中，归档页面也是必不可少的，需要将文章以年份或者月份归档起来，让文章依次展示出来。下面将说明Halo是怎么实现文章归档的。实现思路使用一个类来专门存储归档数据，这个类包括的属性有年份，月份，年份与月份对应的文章数量，年份与月份对应的文章。这样一列出来之后，那么问题就好解决多了，只">
+    <meta name="keywords" content="Halo-文章归档的实现,ryan0up,halo博客,halo,java,ruibaby,ryanwang,">
+    <link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml">
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="renderer" content="webkit">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="/halo-theme-Journal/source/css/journal.min.css">
+        <meta name="robots" content="none">
+    <meta name="generator" content="Halo "/>
+    <script data-ad-client="ca-pub-5271828906478846" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        <link rel="shortcut icon" type="images/x-icon" href="https://ryanc.cc/upload/2018/4/favicon.png">
+    <script src="/halo-theme-Journal/source/js/loadCSS.js"></script>
+
+    <!-- Import prettify css  -->
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify.min.css">
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify/github-v2.min.css">
+
+    <script>
+        loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Material+Icons");
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110780416-1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-110780416-1');
+</script>
+
+    <noscript>
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora|Montserrat|Anonymous+Pro:400|Material+Icons"/>
+    </noscript>
+</head>
+<body>
+<div id="top"></div>
+<div id="app"><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+                            <a class="a-block drawer-menu-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block drawer-menu-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block drawer-menu-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block drawer-menu-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block drawer-menu-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+            <a class="a-block drawer-menu-item" href="/atom.xml">
+                RSS
+            </a>
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="">
+            Ryan Wang's Blog
+        </a>
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">Ryan Wang's Blog</div>
+        <div class="single-column-header-subtitle">Life is fantastic.</div>
+    </a>
+</div><div ref="sideContainer" class="side-container">
+    <a class="a-block nav-head " href="">
+        <div class="nav-title">
+            Ryan Wang's Blog
+        </div>
+        <div class="nav-subtitle">
+            Life is fantastic.
+        </div>
+    </a>
+
+    <div class="nav-link-list">
+
+                <a class="a-block nav-link-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block nav-link-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block nav-link-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block nav-link-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block nav-link-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+        <a class="a-block no-tint nav-link-item" href="/atom.xml">
+            RSS
+        </a>
+    </div>
+
+    <div class="nav-footer">
+        Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+        &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+    </div>
+</div><div ref="extraContainer" class="extra-container">
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+
+    </div>
+</div>
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            <div class="post-head-wrapper-text-only">
+                <div class="post-title">
+                    Halo-文章归档的实现
+                    <div class="post-meta">
+                        <time datetime="2018-5-12 15:22:11" itemprop="datePublished">
+                            2018-05-12 15:22
+                        </time>&nbsp;
+                            <i class="material-icons" style="">folder</i>
+                                <a href='/categories/study-notes'>学习笔记</a>
+
+                            <i class="material-icons" style="">label</i>
+                                <a href='/tags/halo'>Halo</a>, 
+                                <a href='/tags/java'>Java</a>, 
+                                <a href='/tags/springboot'>SpringBoot</a>, 
+                                <a href='/tags/sql'>sql</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-body-wrapper">
+                <div class="post-body" v-pre>
+                    <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>在一个正常的博客系统中，归档页面也是必不可少的，需要将文章以年份或者月份归档起来，让文章依次展示出来。下面将说明Halo是怎么实现文章归档的。</p> 
+  </blockquote> 
+  <h2>实现思路</h2> 
+  <p>使用一个类来专门存储归档数据，这个类包括的属性有<code>年份</code>，<code>月份</code>，<code>年份与月份对应的文章数量</code>，<code>年份与月份对应的文章</code>。这样一列出来之后，那么问题就好解决多了，只需要写一个SQL语句查询就好了，然后再到Service层拼装好给视图层调用。</p> 
+  <h3>Archive实体类</h3> 
+  <pre><code class="language-java">@Data
+public class Archive {
+
+    /**
+     * 年份
+     */
+    private String year;
+
+    /**
+     * 月份
+     */
+    private String month;
+
+    /**
+     * 对应的文章数
+     */
+    private String count;
+
+    /**
+     * 对应的文章
+     */
+    private List&lt;Post&gt; posts;
+}
+</code></pre> 
+  <h3>SQL语句</h3> 
+  <pre><code class="language-sql">select year(post_date) as year,month(post_date) as month,count(*) as count from halo_post where post_status=0 and post_type='post' group by year(post_date),month(post_date) order by year desc,month desc
+</code></pre> 
+  <blockquote> 
+   <p>注意：上面的post_status字段为文章状态，因为只需要查询已经发布的文章，所以条件为0，post_type为文章类型，因为Halo里面的文章是分为博文和页面的，所以条件让他为post。</p> 
+  </blockquote> 
+  <h2>实现代码</h2> 
+  <p>因为Halo使用的持久层是Spring-Data-Jpa，所以我们需要在Repository里面把查询的语句写好。</p> 
+  <p>PostRepository：</p> 
+  <pre><code class="language-java">public interface PostRepository extends JpaRepository&lt;Post,Long&gt;{
+
+
+    /**
+     * 查询文章归档信息 根据年份和月份
+     *
+     * @return List&lt;Object[]&gt;&lt;/&gt;
+     */
+    @Query(value = "select year(post_date) as year,month(post_date) as month,count(*) as count from halo_post where post_status=0 and post_type='post' group by year(post_date),month(post_date) order by year desc,month desc",nativeQuery = true)
+    List&lt;Object[]&gt; findPostGroupByYearAndMonth();
+    
+    
+    /**
+     * 根据年份和月份查询文章
+     *
+     * @param year year
+     * @param month month
+     * @return List&lt;Post&gt;&lt;/&gt;
+     */
+    @Query(value = "select *,year(post_date) as year,month(post_date) as month from halo_post where post_status=0 and post_type='post' and year(post_date)=:year and month(post_date)=:month order by post_date desc",nativeQuery = true)
+    List&lt;Post&gt; findPostByYearAndMonth(@Param("year") String year,@Param("month") String month);
+}
+</code></pre> 
+  <blockquote> 
+   <p>这里需要注意的是，上面的<code>findPostGroupByYearAndMonth</code>方法是用来根据年份月份归档的，也就是说查询出来有哪些年份和月份，所查询出来的字段有<code>year</code>,<code>month</code>,<code>count</code>，那么这样的话，Archive里面的<code>year</code>，<code>month</code>，<code>count</code>就有数据了，那么posts咋整？所以还需要一个方法来根据年份和月份查询文章，那就是下面的findPostByYearAndMonth方法。</p> 
+  </blockquote> 
+  <p>PostService：</p> 
+  <pre><code class="language-java">@Service
+public class PostServiceImpl implements PostService {
+
+    @Autowired
+    private PostRepository postRepository;
+
+    /**
+     * 查询归档信息 根据年份和月份
+     *
+     * @return List
+     */
+    @Override
+    public List&lt;Archive&gt; findPostGroupByYearAndMonth() {
+        //把归档数据查询出来，不包含文章数据
+        List&lt;Object[]&gt; objects = postRepository.findPostGroupByYearAndMonth();
+        //Archive的集合
+        List&lt;Archive&gt; archives = new ArrayList&lt;&gt;();
+        Archive archive = null;
+        //遍历objects集合，分别根据年份月份查询出对应的文章，保存在archive实体，最后在循环结束时将archive添加到archives集合。
+        for (Object[] obj : objects) {
+            archive = new Archive();
+            archive.setYear(obj[0].toString());
+            archive.setMonth(obj[1].toString());
+            archive.setCount(obj[2].toString());
+            archive.setPosts(this.findPostByYearAndMonth(obj[0].toString(), obj[1].toString()));
+            archives.add(archive);
+        }
+        return archives;
+    }
+
+    /**
+     * 根据年份和月份查询文章
+     *
+     * @param year  year
+     * @param month month
+     * @return list
+     */
+    @Override
+    public List&lt;Post&gt; findPostByYearAndMonth(String year, String month) {
+        return postRepository.findPostByYearAndMonth(year, month);
+    }
+}
+</code></pre> 
+  <blockquote> 
+   <p>上面业务层的方法就已经把整个归档数据拼装好了，现在只需要在视图控制器里面调用就可以了。</p> 
+  </blockquote> 
+  <p>archives.ftl：</p> 
+  <blockquote> 
+   <p>最后就是需要在页面上显示了，页面接收到视图控制器发来的数据之后，将archives集合循环出来就行了。</p> 
+  </blockquote> 
+  <pre><code class="language-html">&lt;#list archivesLess as archives&gt;
+    &lt;div class="listing-title"&gt;${archive.year}&lt;/div&gt;
+    &lt;ul class="listing"&gt;
+        &lt;#list archive.posts?sort_by("postDate")?reverse as post&gt;
+            &lt;div class="listing-item"&gt;
+                &lt;div class="listing-post"&gt;
+                    &lt;a href="/archives/${post.postUrl}" &gt;${post.postTitle}&lt;/a&gt;
+                    &lt;div class="post-time"&gt;
+                        &lt;span class="date"&gt;${post.postDate?string("yyyy-MM-dd")}&lt;/span&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/#list&gt;
+    &lt;/ul&gt;
+&lt;/#list&gt;
+</code></pre> 
+  <h2>结尾</h2> 
+  <p>这只是一种实现思路，事实证明这是可行的，并且在各个主题上都是可以完美显示的，我之前也有看到过有人用JDK8的steam来做，不过对steam不是很了解，如果你们有更好的实现方法的话，欢迎提出来。</p> 
+ </body>
+</html>
+                </div>
+            </div>
+
+<nav class="post-pagination">
+        <a class="newer-posts" href="/archives/how-to-use-h2-database">
+        上一篇<br>H2 Database使用教程
+    </a>
+    <span class="page-number"></span>
+    <a class="older-posts" href="/archives/halo-star-100">
+        下一篇<br>Halo-Star过百
+    </a>
+</nav>
+
+    <div class="post-comment-wrapper">
+      	<script>
+        var settings = {
+        	autoLoad: false
+        }  
+        </script>
+        <halo-comment id="38" type="post" :settings="settings"/>
+    </div>
+        </div>
+    </div>
+<div class="single-column-footer">
+    Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+    &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+</div></div>
+
+</div>
+<script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"
+        integrity="sha256-EGs9T1xMHdvM1geM8jPpoo8EZ1V1VRsmcJz8OByENLA=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"
+        integrity="sha256-CI4Gq5E0io1Pv0xM3qPM+NUIOhbIBvC3GiN1Y4KhXpw=" crossorigin="anonymous"></script>
+<script src="/halo-theme-Journal/source/js/journal.js"></script>
+
+<!-- Import prettify js  -->
+        <script src="/halo-theme-Journal/source/js/prettify.min.js"></script>
+        <script>
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+            })
+        </script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="http://localhost:8090/halo-comment.min.js?version=1.1.2"></script>
+</body>
+</html>

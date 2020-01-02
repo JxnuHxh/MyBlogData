@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>正确提问方式 - Ryan Wang's Blog</title>
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Ryan Wang">
+    <meta name="description" content="本文转载自正确提问方式-友人C,如需转载请注明该作者链接.发这篇文章的原因，因为每天会接收到各种问题。我希望用最少的时间，在一个和谐的气氛回答完这些问题，达到双方共赢。已经有提问的智慧这么优秀全面的文章，但我还想再写一篇。因为这篇文章实在是太长了，一个普通用户很难有耐心看完。所以我站在我的角度写一些">
+    <meta name="keywords" content="正确提问方式,ryan0up,halo博客,halo,java,ruibaby,ryanwang,">
+    <link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml">
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="renderer" content="webkit">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="/halo-theme-Journal/source/css/journal.min.css">
+        <meta name="robots" content="none">
+    <meta name="generator" content="Halo "/>
+    <script data-ad-client="ca-pub-5271828906478846" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        <link rel="shortcut icon" type="images/x-icon" href="https://ryanc.cc/upload/2018/4/favicon.png">
+    <script src="/halo-theme-Journal/source/js/loadCSS.js"></script>
+
+    <!-- Import prettify css  -->
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify.min.css">
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify/github-v2.min.css">
+
+    <script>
+        loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Material+Icons");
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110780416-1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-110780416-1');
+</script>
+
+    <noscript>
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora|Montserrat|Anonymous+Pro:400|Material+Icons"/>
+    </noscript>
+</head>
+<body>
+<div id="top"></div>
+<div id="app"><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+                            <a class="a-block drawer-menu-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block drawer-menu-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block drawer-menu-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block drawer-menu-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block drawer-menu-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+            <a class="a-block drawer-menu-item" href="/atom.xml">
+                RSS
+            </a>
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="">
+            Ryan Wang's Blog
+        </a>
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">Ryan Wang's Blog</div>
+        <div class="single-column-header-subtitle">Life is fantastic.</div>
+    </a>
+</div><div ref="sideContainer" class="side-container">
+    <a class="a-block nav-head " href="">
+        <div class="nav-title">
+            Ryan Wang's Blog
+        </div>
+        <div class="nav-subtitle">
+            Life is fantastic.
+        </div>
+    </a>
+
+    <div class="nav-link-list">
+
+                <a class="a-block nav-link-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block nav-link-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block nav-link-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block nav-link-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block nav-link-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+        <a class="a-block no-tint nav-link-item" href="/atom.xml">
+            RSS
+        </a>
+    </div>
+
+    <div class="nav-footer">
+        Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+        &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+    </div>
+</div><div ref="extraContainer" class="extra-container">
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+
+    </div>
+</div>
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            <div class="post-head-wrapper" style="background-image: url('https://ryanc.cc/upload/2018/6/斯图加特市附近的霍亨索伦城堡，德国__©_Jürgen_Eisele_500px__1920x108020180624000450355.jpg')"
+                 >
+                <div class="post-title">
+                    正确提问方式
+                    <div class="post-meta">
+                        <time datetime="2019-4-16 10:17:50" itemprop="datePublished">
+                            2019-04-16 10:17
+                        </time>&nbsp;
+                            <i class="material-icons" style="">folder</i>
+                                <a href='/categories/notes'>日志</a>
+
+                            <i class="material-icons" style="">label</i>
+                                <a href='/tags/express'>表达</a>, 
+                                <a href='/tags/life'>生活</a>, 
+                                <a href='/tags/feeling'>感悟</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-body-wrapper">
+                <div class="post-body" v-pre>
+                    <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>本文转载自<a href="https://www.ihewro.com/archives/931/">正确提问方式 - 友人C</a>,如需转载请注明该作者链接.</p> 
+  </blockquote> 
+  <p>发这篇文章的原因，因为每天会接收到各种问题。</p> 
+  <p>我希望用<strong>最少的时间，在一个和谐的气氛回答完这些问题</strong>，达到双方共赢。</p> 
+  <p>已经有<a href="https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/master/README-zh_CN.md">提问的智慧</a>这么优秀全面的文章，但我还想再写一篇。因为这篇文章实在是太长了，一个普通用户很难有耐心看完。所以我站在我的角度写一些我的摘抄。</p> 
+  <h2>核心：首先不要质疑开发者</h2> 
+  <p>我讲一个我高中的故事。我高中有一个同桌，他是理科学霸。所以我经常问他问题。经常，他先给我讲一遍，我自己琢磨，然后马上反过来反击“<strong>你这讲的不对啊！</strong>”，然后一顿操作，最后发现还是我理解的不对。</p> 
+  <p><strong>每当我反击的时候，我的同桌都是不高兴的</strong>。但是我们关系不错，有一次他半开玩笑笑着说<strong>不要质疑我好不好！</strong>。</p> 
+  <p>我当时还很轻蔑说<strong>质疑你怎么了，你又不是没有错过</strong>。当时的我没有理解，<strong>当你潜意识是对方错误的时候，其实这个氛围就已经不是询问问题应有的态度了</strong>。</p> 
+  <p><strong>而且，作为对方已经思考很久的内容/作品，你开头就是一句不对，有想过对方的愤怒吗？有想过对方考虑很多方面花费的时间吗？你一句你错了，对方第一想法一定是“你sha ba，会不会用”</strong>。</p> 
+  <blockquote> 
+   <p>举个例子：</p> 
+  </blockquote> 
+  <ul> 
+   <li>A：xxx这个地方不对啊，是不是你写错了</li> 
+   <li>B：没有</li> 
+   <li>这一定是你写错了</li> 
+   <li>B：（你不会会用啊，你是不是不会看文档，你识字吗！！）没有。。。</li> 
+  </ul> 
+  <h2>其次：考虑对方是否有义务或者有多少义务为你服务</h2> 
+  <p><strong>开源作品</strong>，对方开源的原因是希望获得对作品的肯定以及更多人参与开源，<strong>而不是被无穷无尽无价值的问题（骚扰）搞乱生活</strong>。</p> 
+  <p><strong>付费内容</strong>，请先看清对方的服务的范围。不是付费后就希望对方全手包帮。开启付费的原因是希望通过自己的时间获取对应的酬报，而不是被无穷无尽无价值的问题（骚扰）搞乱生活。</p> 
+  <h2>最后：考虑你问问题的方式，拒绝没有信息的提问</h2> 
+  <h3>不要发一些没有信息的单方面的请求帮助信息</h3> 
+  <p>比如：</p> 
+  <ul> 
+   <li>1</li> 
+   <li>在（甚至连问号都没有）</li> 
+   <li>在吗？</li> 
+  </ul> 
+  <p>站在提问者角度，是想获取对方及时的回复反馈，但提问者需要谨记的是<strong>对方不是你的男朋友，不是你的女朋友，只是一个想用最少时间内尽快回答你的问题的人</strong>。</p> 
+  <p>所以提问者<strong>请务必减少毫无意义的信息，减少请求对方发信息的轮次，最好让对方在一个回合中结束问题对话</strong>。</p> 
+  <p>因为网络生活和真实生活很不同，在于对方不了解你。如果对你之前有所了解还好一些，否则真的一点好感都没有。礼貌对方只是对方的礼仪和素质，疯狂挑衅谁都受不了了。</p> 
+  <h3>礼貌与尊重永远是相互的</h3> 
+  <p><strong>即使因为你的付费，对方有义务为你提供一定范围的服务，但礼貌和尊重永远是相互的，而不是仅仅因为付费而变得无所顾忌</strong>。</p> 
+  <p>开发者和淘宝店主有一定区别。即使是淘宝店主，也不欢迎不礼貌的咨询，即使你希望购买，但对方由于你的态度也未必想卖给你。</p> 
+  <p><strong>可以用表情包，但请不要用挑衅、质疑表情包</strong>。</p> 
+  <p>和第一条一样。</p> 
+  <p><strong>适当</strong>的可爱的表情包可以活跃气氛，也可以增加好感。但也不要发一连串与问题无关的问题，增加对方的回复轮次。</p> 
+  <h3>不仅仅是必要，充足的信息更好</h3> 
+  <p>在对方未回复前，就详细说明清楚问题的内容。</p> 
+  <p><strong>说明清楚（提供必要信息）</strong> 对于绝大部分人是很难做到的事情。所以你可以按照格式提供<strong>你所知道的充足信息</strong>。</p> 
+  <ul> 
+   <li>问题<strong>内容</strong>、与之相关的<strong>网址、截图、私密</strong>信息（如果有必要的账号密码等）</li> 
+   <li>出现该问题之前做了<strong>哪些操作</strong>，以及出了问题后你做了<strong>哪些尝试</strong></li> 
+   <li>你认为<strong>可能</strong>（绝不是断言，质疑）的问题</li> 
+  </ul> 
+  <h2>正确的提问方式举例</h2> 
+  <ul> 
+   <li>提问：你好，这个地方出现了这个问题，具体截图看下下面这条消息。这个地方我是开启了CDN某个设置后出现的问题。我后面关掉这个设置还是不行，可能是程序某个问题，也有可能是哪里我没有设置好。[截图]</li> 
+   <li>回答：你试着关掉程序的某个设置开关后再试试</li> 
+   <li>提问：我关掉了该设置开关还是不行。这是我的网址，以及服务器账号密码</li> 
+   <li>回答：（通常简单的问题，一轮回复就可以解决，复杂的话开发者通过线上调试解决问题）</li> 
+  </ul> 
+  <h2>致歉</h2> 
+  <p>对于认真提问的问题，我一般都认真回复。</p> 
+  <p>但是仍有一些认真提问的问题，由于我自己也还很弱，自己不会所以没能给出帮助，甚至忘记回复（因为第一眼看过去我不过，潜意识就不太想回复），在这里说一声抱歉。</p> 
+  <p>有一些不是很了解正确提问方式的人，我可能没有足够耐心回复，在这里也说一声抱歉。</p> 
+  <p><strong>以上内容也是对我的一个自我提醒，毕竟好好提问，好好说话是一辈子学习的技能</strong>。</p> 
+  <blockquote> 
+   <p>本文转载自<a href="https://www.ihewro.com/archives/931/">正确提问方式 - 友人C</a>,如需转载请注明该作者链接.</p> 
+  </blockquote> 
+ </body>
+</html>
+                </div>
+            </div>
+
+<nav class="post-pagination">
+        <a class="newer-posts" href="/archives/halo-v1-is-coming">
+        上一篇<br>Halo v1.0 is coming
+    </a>
+    <span class="page-number"></span>
+    <a class="older-posts" href="/archives/spring-data-jpa-and-or">
+        下一篇<br>Spring Data JPA 之 And 与 Or 的坑
+    </a>
+</nav>
+
+    <div class="post-comment-wrapper">
+      	<script>
+        var settings = {
+        	autoLoad: false
+        }  
+        </script>
+        <halo-comment id="30" type="post" :settings="settings"/>
+    </div>
+        </div>
+    </div>
+<div class="single-column-footer">
+    Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+    &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+</div></div>
+
+</div>
+<script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"
+        integrity="sha256-EGs9T1xMHdvM1geM8jPpoo8EZ1V1VRsmcJz8OByENLA=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"
+        integrity="sha256-CI4Gq5E0io1Pv0xM3qPM+NUIOhbIBvC3GiN1Y4KhXpw=" crossorigin="anonymous"></script>
+<script src="/halo-theme-Journal/source/js/journal.js"></script>
+
+<!-- Import prettify js  -->
+        <script src="/halo-theme-Journal/source/js/prettify.min.js"></script>
+        <script>
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+            })
+        </script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="http://localhost:8090/halo-comment.min.js?version=1.1.2"></script>
+</body>
+</html>

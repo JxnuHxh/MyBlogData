@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Ryan Wang's Blog</title>
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Ryan Wang">
+    <meta name="description" content="Ryan Wang 的博客。">
+    <meta name="keywords" content="ryan0up,halo博客,halo,java,ruibaby,ryanwang">
+    <link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml">
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="renderer" content="webkit">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="/halo-theme-Journal/source/css/journal.min.css">
+        <meta name="robots" content="none">
+    <meta name="generator" content="Halo "/>
+    <script data-ad-client="ca-pub-5271828906478846" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        <link rel="shortcut icon" type="images/x-icon" href="https://ryanc.cc/upload/2018/4/favicon.png">
+    <script src="/halo-theme-Journal/source/js/loadCSS.js"></script>
+
+    <!-- Import prettify css  -->
+
+    <script>
+        loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Material+Icons");
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110780416-1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-110780416-1');
+</script>
+
+    <noscript>
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora|Montserrat|Anonymous+Pro:400|Material+Icons"/>
+    </noscript>
+</head>
+<body>
+<div id="top"></div>
+<div id="app"><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+                            <a class="a-block drawer-menu-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block drawer-menu-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block drawer-menu-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block drawer-menu-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block drawer-menu-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+            <a class="a-block drawer-menu-item" href="/atom.xml">
+                RSS
+            </a>
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="">
+            Ryan Wang's Blog
+        </a>
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">Ryan Wang's Blog</div>
+        <div class="single-column-header-subtitle">Life is fantastic.</div>
+    </a>
+</div><div ref="sideContainer" class="side-container">
+    <a class="a-block nav-head active" href="">
+        <div class="nav-title">
+            Ryan Wang's Blog
+        </div>
+        <div class="nav-subtitle">
+            Life is fantastic.
+        </div>
+    </a>
+
+    <div class="nav-link-list">
+
+                <a class="a-block nav-link-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block nav-link-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block nav-link-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block nav-link-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block nav-link-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+        <a class="a-block no-tint nav-link-item" href="/atom.xml">
+            RSS
+        </a>
+    </div>
+
+    <div class="nav-footer">
+        Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+        &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+    </div>
+</div><div ref="extraContainer" class="extra-container">
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+
+                <div class="pagination-indicator">
+                    <span style="text-align: center">
+                        1<br><div style="display: inline-block; transform: rotate(-28deg)">-</div><br>4
+                    </span>
+                </div>
+
+
+                <a class="pagination-action" href="/page/2">
+                    <i class="material-icons pagination-action-icon">
+                        chevron_right
+                    </i>
+                </a>
+    </div>
+</div>
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-no-background">
+        <a href="/archives/blog-migration-to-raspberry-pi" class="a-block">
+            <div class="post-item-wrapper">
+                <div class="post-item post-item-no-divider">
+                    <div class="post-item-info-wrapper">
+                        <div class="post-item-title">
+                            博客迁移到 Raspberry Pi
+                        </div>
+                        <div class="post-item-summary">
+                            本着爱折腾之心，今天将博客搬到了吃灰已久的 Raspberry Pi 3B+。好吧，其实也是之前一个热心的网友送了我一年某平台的内网穿透，一直没用，所以秉承着中华人民拒绝浪费的美好传统，折腾开始了......
+                        </div>
+                        <div class="post-item-meta">
+                            2019-12-23
+                        </div>
+                    </div>
+                    <div class="post-item-image-wrapper">
+                        <div class="post-item-image" style="background-image: url('https://cdn.ryanc.cc/img/blog/thumbnails/9e22bcea8ac55cd0c8a82d2c49b083c8.png')"></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="/archives/flarum-install-and-config" class="a-block">
+            <div class="post-item-wrapper">
+                <div class="post-item post-item-no-divider">
+                    <div class="post-item-info-wrapper">
+                        <div class="post-item-title">
+                            Flarum 的安装与配置
+                        </div>
+                        <div class="post-item-summary">
+                            Flarum是一款非常棒的开源论坛程序，Halo的论坛就是用Flarum搭建的。之前有人问过我Flarum如何搭建，所以下面讲一下Flarum的搭建过程（btw，官方的搭建教程实在草率）。前提域名需要提前解析。注意服务器是否需要备案，如果没备案，会被x掉。有一定的Linux基础。环境说明LinuxS...
+                        </div>
+                        <div class="post-item-meta">
+                            2019-11-18
+                        </div>
+                    </div>
+                    <div class="post-item-image-wrapper">
+                        <div class="post-item-image" style="background-image: url('https://cdn.ryanc.cc/img/blog/thumbnails/840dd34da4a1cca58006f04dd981580e.png')"></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="/archives/deploy-gridea-with-caddy" class="a-block">
+            <div class="post-item-wrapper">
+                <div class="post-item post-item-no-divider">
+                    <div class="post-item-info-wrapper">
+                        <div class="post-item-title">
+                            使用 Caddy 自动部署 Gridea 博客
+                        </div>
+                        <div class="post-item-summary">
+                            Gridea是一个静态博客客户端，也可以称之为博客生成器，和Hexo之类的静态博客生成器很类似，唯一不同的是，Gridea提供了一个非常好的可视化界面，非常容易就可以完成一个博客的搭建，而且配置都是可视化的，所以对小白来说非常友好。但是目前Gridea仅支持部署到Github和Coding，由于众所...
+                        </div>
+                        <div class="post-item-meta">
+                            2019-10-13
+                        </div>
+                    </div>
+                    <div class="post-item-image-wrapper">
+                        <div class="post-item-image" style="background-image: url('https://cdn.ryanc.cc/img/blog/thumbnails/04a1742a5983c5fd09a0905bba39358c.png')"></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="/archives/try-ifttt" class="a-block">
+            <div class="post-item-wrapper">
+                <div class="post-item post-item-no-divider">
+                    <div class="post-item-info-wrapper">
+                        <div class="post-item-title">
+                            玩玩 IFTTT
+                        </div>
+                        <div class="post-item-summary">
+                            很早就听说过IFTTT这个神器了，但是迟迟没有上手。这次趁有空闲时间，简单把玩了一下，发现确实可以带来一些便利。什么是IFTTTIFTTT，是一个新生的网络服务平台，通过其他不同平台的条件来决定是否执行下一条命令。即对网络服务通过其他网络服务作出反应。IFTTT得名为其口号“ifthisthenth...
+                        </div>
+                        <div class="post-item-meta">
+                            2019-10-12
+                        </div>
+                    </div>
+                    <div class="post-item-image-wrapper">
+                        <div class="post-item-image" style="background-image: url('https://cdn.ryanc.cc/img/blog/thumbnails/a5b80422324687712c89c0a547b69741.jpg')"></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="/archives/china-mobile-you-are-so-bad" class="a-block">
+            <div class="post-item-wrapper">
+                <div class="post-item post-item-no-divider">
+                    <div class="post-item-info-wrapper">
+                        <div class="post-item-title">
+                            中国移动，你太坏了。
+                        </div>
+                        <div class="post-item-summary">
+                            起因本人于今年五月份左右办理了中国移动的电话卡，至于为啥要办移动的卡呢？是因为我一直都想逃离中国联通这个坑。你能想象去商店里买东西付款的时候木有信号吗？所以，我就办了张移动卡以作为备用，然后慢慢从联通切过去。毕竟我联通卡用了好长一段时间了，什么都绑定的这张卡。要先换绑，然后在换卡，这是常识。经过使用...
+                        </div>
+                        <div class="post-item-meta">
+                            2019-09-25
+                        </div>
+                    </div>
+                    <div class="post-item-image-wrapper">
+                        <div class="post-item-image" style="background-image: url('https://ryanc.cc/upload/2018/5/14ca70758f60db5120180517004924168.jpg')"></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="/archives/record-how-to-save-my-blog" class="a-block">
+            <div class="post-item-wrapper">
+                <div class="post-item post-item-no-divider">
+                    <div class="post-item-info-wrapper">
+                        <div class="post-item-title">
+                            记一次拯救我的博客
+                        </div>
+                        <div class="post-item-summary">
+                            事情的缘由是我服务器到期了，又没来得及续费，导致无法上服务器备份数据（使用的腾讯云老版本的学生机，每月一块钱的那种，这个月刚好到期，所以不想再用原价续费了，而且1g内存可能满足不了以后的需求，所以索性重新买了一台...）数据咋办？既然不想续费了，所以是无法上服务器备份数据的，正当我想去咬牙续费的时候...
+                        </div>
+                        <div class="post-item-meta">
+                            2019-09-21
+                        </div>
+                    </div>
+                    <div class="post-item-image-wrapper">
+                        <div class="post-item-image" style="background-image: url('https://cdn.ryanc.cc/img/blog/thumbnails/2af74b43c3dc5b2015ac495c6b0a0bdf.jpg')"></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="/archives/halo-v1-is-coming" class="a-block">
+            <div class="post-item-wrapper">
+                <div class="post-item post-item-no-divider">
+                    <div class="post-item-info-wrapper">
+                        <div class="post-item-title">
+                            Halo v1.0 is coming
+                        </div>
+                        <div class="post-item-summary">
+                            非常感谢大家对Halo的支持，经过接近两个月的重构，Halov1.0就快要发布了，非常感谢@JohnNiang做出的贡献。希望大家会喜欢新版的Halov1.0。组织地址：https://github.com/halo-dev废话少说，先看东西...
+                        </div>
+                        <div class="post-item-meta">
+                            2019-05-09
+                        </div>
+                    </div>
+                    <div class="post-item-image-wrapper">
+                        <div class="post-item-image" style="background-image: url('https://ryanc.cc/upload/2018/10/35902018062315333072720181116125248892.jpg')"></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="/archives/1555381003047" class="a-block">
+            <div class="post-item-wrapper">
+                <div class="post-item post-item-no-divider">
+                    <div class="post-item-info-wrapper">
+                        <div class="post-item-title">
+                            正确提问方式
+                        </div>
+                        <div class="post-item-summary">
+                            本文转载自正确提问方式-友人C,如需转载请注明该作者链接.发这篇文章的原因，因为每天会接收到各种问题。我希望用最少的时间，在一个和谐的气氛回答完这些问题，达到双方共赢。已经有提问的智慧这么优秀全面的文章，但我还想再写一篇。因为这篇文章实在是太长了，一个普通用户很难有耐心看完。所以我站在我的角度写一些...
+                        </div>
+                        <div class="post-item-meta">
+                            2019-04-16
+                        </div>
+                    </div>
+                    <div class="post-item-image-wrapper">
+                        <div class="post-item-image" style="background-image: url('https://ryanc.cc/upload/2018/6/斯图加特市附近的霍亨索伦城堡，德国__©_Jürgen_Eisele_500px__1920x108020180624000450355.jpg')"></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="/archives/spring-data-jpa-and-or" class="a-block">
+            <div class="post-item-wrapper">
+                <div class="post-item post-item-no-divider">
+                    <div class="post-item-info-wrapper">
+                        <div class="post-item-title">
+                            Spring Data JPA 之 And 与 Or 的坑
+                        </div>
+                        <div class="post-item-summary">
+                            最近写Halo的搜索功能的时候，发现一个JPA的坑，网上查了很多资料才解决，遂水文记录一下。缘由Halo的搜索功能需要根据关键字来索引文章的标题以及内容，于是乎，按照JPA的命名规定，我在Repository下写了这个方法：Page&lt;Post&gt;findByPostTitleLikeOrP...
+                        </div>
+                        <div class="post-item-meta">
+                            2019-01-12
+                        </div>
+                    </div>
+                    <div class="post-item-image-wrapper">
+                        <div class="post-item-image" style="background-image: url('https://cdn.ryanc.cc/img/blog/thumbnails/affeedbcaff194af92b3008f8fc571ed.jpg')"></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="/archives/2018-summary" class="a-block">
+            <div class="post-item-wrapper">
+                <div class="post-item post-item-no-divider">
+                    <div class="post-item-info-wrapper">
+                        <div class="post-item-title">
+                            2018 年个人总结
+                        </div>
+                        <div class="post-item-summary">
+                            关于工作今年一共有两份工作，第一份是我刚毕业，啥都不懂，进了一家很小的外包公司，干了半年啥都没学到，当时面试的时候老板还信誓旦旦的说外包比普通公司要学到的更多，个人能力也提升的更快，可当我进去干了一段时间才知道，公司现有的技术可能还没我所掌握的技术多，于是乎，到了8月份就辞职了，辞职的时候老板还极力...
+                        </div>
+                        <div class="post-item-meta">
+                            2019-01-01
+                        </div>
+                    </div>
+                    <div class="post-item-image-wrapper">
+                        <div class="post-item-image" style="background-image: url('https://cdn.ryanc.cc/img/blog/thumbnails/6e8b14becd4699a1e02421670e25ec74.png')"></div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <div class="pagination index-page">
+                <a class="pagination-action" style="opacity: 0">
+                <i class="material-icons pagination-action-icon">
+                    chevron_left
+                </i>
+                </a>
+                <div class="pagination-indicator">
+                    <span>1/4</span>
+                </div>
+                <a class="pagination-action" href="/page/2" style="opacity: 1">
+                    <i class="material-icons pagination-action-icon">
+                        chevron_right
+                    </i>
+                </a>
+        </div>
+    </div>
+<div class="single-column-footer">
+    Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+    &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+</div></div>
+
+</div>
+<script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"
+        integrity="sha256-EGs9T1xMHdvM1geM8jPpoo8EZ1V1VRsmcJz8OByENLA=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"
+        integrity="sha256-CI4Gq5E0io1Pv0xM3qPM+NUIOhbIBvC3GiN1Y4KhXpw=" crossorigin="anonymous"></script>
+<script src="/halo-theme-Journal/source/js/journal.js"></script>
+
+<!-- Import prettify js  -->
+</body>
+</html>

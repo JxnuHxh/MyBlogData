@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Halo-部署教程 - Ryan Wang's Blog</title>
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Ryan Wang">
+    <meta name="description" content="11月22号更新安装视频教程环境要求JDK1.8以上。Maven3.x。数据库MySQL5.5以上MariaDB或者直接使用H2Database，免安装。Git再次声明，不需要单独安装Tomcat之类的web容器。需要注意的是：如果使用一键安装脚本（后面会讲到），那么你只需要安装数据库即可（如果使用">
+    <meta name="keywords" content="Halo-部署教程,ryan0up,halo博客,halo,java,ruibaby,ryanwang,">
+    <link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml">
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="renderer" content="webkit">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="/halo-theme-Journal/source/css/journal.min.css">
+        <meta name="robots" content="none">
+    <meta name="generator" content="Halo "/>
+    <script data-ad-client="ca-pub-5271828906478846" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        <link rel="shortcut icon" type="images/x-icon" href="https://ryanc.cc/upload/2018/4/favicon.png">
+    <script src="/halo-theme-Journal/source/js/loadCSS.js"></script>
+
+    <!-- Import prettify css  -->
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify.min.css">
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify/github-v2.min.css">
+
+    <script>
+        loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Material+Icons");
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110780416-1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-110780416-1');
+</script>
+
+    <noscript>
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora|Montserrat|Anonymous+Pro:400|Material+Icons"/>
+    </noscript>
+</head>
+<body>
+<div id="top"></div>
+<div id="app"><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+                            <a class="a-block drawer-menu-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block drawer-menu-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block drawer-menu-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block drawer-menu-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block drawer-menu-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+            <a class="a-block drawer-menu-item" href="/atom.xml">
+                RSS
+            </a>
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="">
+            Ryan Wang's Blog
+        </a>
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">Ryan Wang's Blog</div>
+        <div class="single-column-header-subtitle">Life is fantastic.</div>
+    </a>
+</div><div ref="sideContainer" class="side-container">
+    <a class="a-block nav-head " href="">
+        <div class="nav-title">
+            Ryan Wang's Blog
+        </div>
+        <div class="nav-subtitle">
+            Life is fantastic.
+        </div>
+    </a>
+
+    <div class="nav-link-list">
+
+                <a class="a-block nav-link-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block nav-link-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block nav-link-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block nav-link-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block nav-link-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+        <a class="a-block no-tint nav-link-item" href="/atom.xml">
+            RSS
+        </a>
+    </div>
+
+    <div class="nav-footer">
+        Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+        &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+    </div>
+</div><div ref="extraContainer" class="extra-container">
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+
+    </div>
+</div>
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            <div class="post-head-wrapper-text-only">
+                <div class="post-title">
+                    Halo-部署教程
+                    <div class="post-meta">
+                        <time datetime="2018-7-23 14:10:00" itemprop="datePublished">
+                            2018-07-23 14:10
+                        </time>&nbsp;
+                            <i class="material-icons" style="">folder</i>
+                                <a href='/categories/study-notes'>学习笔记</a>
+
+                            <i class="material-icons" style="">label</i>
+                                <a href='/tags/halo'>Halo</a>, 
+                                <a href='/tags/java'>Java</a>, 
+                                <a href='/tags/springboot'>SpringBoot</a>, 
+                                <a href='/tags/maven'>maven</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-body-wrapper">
+                <div class="post-body" v-pre>
+                    <html>
+ <head></head>
+ <body>
+  <h2 id="2019年6月1日更新">2019年6月1日更新</h2> 
+  <p>这个教程已经不适用于新版，具体安装教程请参考：<a href="https://halo.run">https://halo.run</a></p> 
+  <h2 id="11月22号更新">11月22号更新</h2> 
+  <blockquote> 
+   <p>安装视频教程</p> 
+  </blockquote> 
+  <iframe src="//player.bilibili.com/player.html?aid=35788047&amp;cid=62793757&amp;page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="100%" height="600px"> </iframe> 
+  <h2 id="环境要求">环境要求</h2> 
+  <ul> 
+   <li>JDK1.8以上。</li> 
+   <li>Maven3.x。</li> 
+   <li>数据库 
+    <ul> 
+     <li>MySQL5.5以上</li> 
+     <li>MariaDB</li> 
+     <li>或者直接使用H2Database，免安装。</li> 
+    </ul> </li> 
+   <li>Git</li> 
+   <li>再次声明，不需要单独安装 <code>Tomcat</code> 之类的 web 容器。</li> 
+  </ul> 
+  <blockquote> 
+   <p>需要注意的是：如果使用一键安装脚本（后面会讲到），那么你只需要安装数据库即可（如果使用MySQL或者MariaDB的话）。如果不使用MySQL或者MariaDB，那么你什么都不需要安装，直接执行脚本即可。</p> 
+  </blockquote> 
+  <h2 id="二进制安装不推荐">二进制安装（不推荐）</h2> 
+  <blockquote> 
+   <p>这种方式安装非常简单且快速（但是并不方便升级），你只需要下载安装包上传到服务器上解压运行即可，需要注意的是，运行之前别忘了参考下面的配置修改application.yaml文件。</p> 
+  </blockquote> 
+  <h3 id="配置文件详解">配置文件详解</h3> 
+  <pre><code class="language-yaml">server:
+  port: 8080
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    # H2database 配置
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:file:~/halo/halo
+    username: admin
+    password: 123456
+
+    # MySql配置
+    #driver-class-name: com.mysql.jdbc.Driver
+    #url: jdbc:mysql://127.0.0.1:3306/halodb?characterEncoding=utf8&amp;useSSL=false
+    #username: root
+    #password: 123456
+
+  h2:
+    console:
+      settings:
+        web-allow-others: true
+      path: /h2-console
+      enabled: true
+</code></pre> 
+  <p>注意：默认使用的是H2Database，如需MySQL，将H2Database相关的配置注释或者删掉，再把MySql的相关配置取消注释即可。</p> 
+  <p>详解：</p> 
+  <ul> 
+   <li> <p><code>server.port</code>: 运行程序的端口，默认8080。当然你要修改成6666也行，然后你访问的地址就是<code>localhost:6666</code>（使用halo-cli部署可以提示输入并修改）</p> </li> 
+   <li> <p><code>spring.datasource.type</code>: 数据源类型，不需要修改。</p> </li> 
+   <li> <p><code>spring.datasource.driver-class-name</code>: 数据库驱动程序，不需要修改。</p> </li> 
+   <li> <p><code>spring.datasource.url</code>: 数据库物理文件路径，建议不要修改。默认是*~/halo/halo*。</p> </li> 
+   <li> <p><code>spring.datasource.username</code>: 数据库用户名，一定要修改，这是可以自定义的（使用halo-cli部署可以提示输入并修改）。</p> </li> 
+   <li> <p><code>spring.datasource.password</code>: 数据库密码，一定要修改，这也是可以自定义的（使用halo-cli部署可以提示输入并修改）。</p> </li> 
+   <li> <p><code>spring.h2.console.settings.web-allow-others</code>: 是否启用h2数据库可视化后台。</p> </li> 
+   <li> <p><code>spring.h2.console.path</code>: h2数据库可视化后台路径，可以自定义。</p> </li> 
+   <li> <p><code>spring.h2.console.enabled:</code>: 是否启动H2控制台。</p> </li> 
+  </ul> 
+  <blockquote> 
+   <p>如果对h2数据库不熟悉，可以上网搜一下相关信息，非常好的一个嵌入式数据库。</p> 
+  </blockquote> 
+  <h3 id="如何运行halo">如何运行Halo</h3> 
+  <ol> 
+   <li>上传安装包到服务器。</li> 
+   <li>解压安装包。</li> 
+   <li>修改配置文件（数据库配置）。</li> 
+   <li>执行<code>sh halo.sh start</code>。</li> 
+  </ol> 
+  <h3 id="如何升级">如何升级</h3> 
+  <ol> 
+   <li>上传新的安装包到服务器。</li> 
+   <li>解压覆盖之前的文件。</li> 
+   <li>执行<code>sh halo.sh restart</code>。</li> 
+  </ol> 
+  <h3 id="其他命令">其他命令</h3> 
+  <ul> 
+   <li>启动Halo : <code>sh halo.sh start</code></li> 
+   <li>停止Halo : <code>sh halo.sh stop</code></li> 
+   <li>重启Halo : <code>sh halo.sh restart</code></li> 
+   <li>查看状态 : <code>sh halo.sh status</code></li> 
+  </ul> 
+  <h3 id="发布版本">发布版本</h3> 
+  <table> 
+   <thead> 
+    <tr>
+     <th>版本号</th>
+     <th>发布日期</th>
+     <th>下载</th>
+    </tr> 
+   </thead> 
+   <tbody> 
+    <tr>
+     <td>0.0.7</td>
+     <td>2018/08/31</td>
+     <td><a href="http://static.ryanc.cc/halo/releases/halo-0.0.7.zip">ZIP</a></td>
+    </tr> 
+    <tr>
+     <td>0.0.9</td>
+     <td>2018/10/14</td>
+     <td><a href="http://static.ryanc.cc/halo/releases/halo-0.0.9.zip">ZIP</a></td>
+    </tr> 
+   </tbody> 
+  </table> 
+  <h2 id="源码安装">源码安装</h2> 
+  <h3 id="一键安装脚本方式一">一键安装脚本（方式一）</h3> 
+  <h4 id="注意事项">注意事项</h4> 
+  <ul> 
+   <li>如果脚本出现错误，请使用<strong>dos2unix</strong>转换一下。</li> 
+   <li>安装过程中会提示输入一些信息，如运行端口，数据库配置等信息，请知晓。</li> 
+   <li>下载依赖过程中可能会比较久，通常在10-15分钟。</li> 
+  </ul> 
+  <h4 id="执行自动安装脚本">执行自动安装脚本</h4> 
+  <pre><code class="language-bash">yum install -y wget &amp;&amp; wget -O halo-cli.sh https://git.io/fxHqp &amp;&amp; bash halo-cli.sh -i
+</code></pre> 
+  <h4 id="如何运行">如何运行</h4> 
+  <p>耐心等待安装完成之后，执行<code>systemctl start halo</code>或<code>service halo start</code>。</p> 
+  <h4 id="如何更新">如何更新</h4> 
+  <pre><code class="language-bash">bash halo-cli.sh -u
+systemctl restart halo 或者 service halo restart
+</code></pre> 
+  <h4 id="如何加入开机自启">如何加入开机自启</h4> 
+  <pre><code class="language-bash">systemctl enable halo
+</code></pre> 
+  <h3 id="自动打包脚本方式二">自动打包脚本（方式二）</h3> 
+  <blockquote> 
+   <p>这种安装方式适用于所有Linux发行版，其中，<strong>deploy.sh</strong>在项目根目录。</p> 
+  </blockquote> 
+  <h4 id="注意事项-1">注意事项</h4> 
+  <ul> 
+   <li>服务器为Linux。</li> 
+   <li>JDK1.8以上（需要自己配置）。</li> 
+   <li>Maven3.x（需要自己配置）。</li> 
+   <li>Git。</li> 
+  </ul> 
+  <h4 id="拉取源码">拉取源码</h4> 
+  <pre><code class="language-bash">git clone https://github.com/ruibaby/halo
+#或者
+git clone https://gitee.com/babyrui/halo
+</code></pre> 
+  <h4 id="如何运行-1">如何运行</h4> 
+  <ol> 
+   <li>进入到源码根目录。</li> 
+   <li>修改配置文件，<code>src/main/resources/application.yaml</code>，请参考上面的配置文件详解。</li> 
+   <li>执行<code>sh deploy.sh</code>。</li> 
+  </ol> 
+  <h4 id="如何更新-1">如何更新</h4> 
+  <ol> 
+   <li>进入到源码根目录。</li> 
+   <li>执行<code>git pull</code>。</li> 
+   <li>执行<code>sh deploy.sh</code>。</li> 
+  </ol> 
+  <h2 id="docker部署">Docker部署</h2> 
+  <pre><code class="language-bash"># 拉取镜像
+docker pull ruibaby/halo
+# 运行
+docker run -d --name halo -p 8090:8090 -v ~/halo:/root/halo ruibaby/halo
+</code></pre> 
+  <h2 id="docker-compose-部署">Docker Compose 部署</h2> 
+  <p>参考：<a href="https://ryanc.cc/archives/docker-compose-run-halo">Docker Compose 部署Halo教程</a></p> 
+ </body>
+</html>
+                </div>
+            </div>
+
+<nav class="post-pagination">
+        <a class="newer-posts" href="/archives/lai-shen-zhen-yi-yue-hou-you-gan">
+        上一篇<br>来深圳一月后有感
+    </a>
+    <span class="page-number"></span>
+    <a class="older-posts" href="/archives/halo-add-menu">
+        下一篇<br>Halo-菜单栏添加菜单教程
+    </a>
+</nav>
+
+    <div class="post-comment-wrapper">
+      	<script>
+        var settings = {
+        	autoLoad: false
+        }  
+        </script>
+        <halo-comment id="21" type="post" :settings="settings"/>
+    </div>
+        </div>
+    </div>
+<div class="single-column-footer">
+    Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+    &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+</div></div>
+
+</div>
+<script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"
+        integrity="sha256-EGs9T1xMHdvM1geM8jPpoo8EZ1V1VRsmcJz8OByENLA=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"
+        integrity="sha256-CI4Gq5E0io1Pv0xM3qPM+NUIOhbIBvC3GiN1Y4KhXpw=" crossorigin="anonymous"></script>
+<script src="/halo-theme-Journal/source/js/journal.js"></script>
+
+<!-- Import prettify js  -->
+        <script src="/halo-theme-Journal/source/js/prettify.min.js"></script>
+        <script>
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+            })
+        </script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="http://localhost:8090/halo-comment.min.js?version=1.1.2"></script>
+</body>
+</html>

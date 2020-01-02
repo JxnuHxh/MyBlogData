@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>来深圳一月后有感 - Ryan Wang's Blog</title>
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Ryan Wang">
+    <meta name="description" content="来深圳也有一个多月了，也慢慢习惯这边的生活了，遂撰文记录一下这难忘的一月。难忘的第一天还是第一次一个人出远门，父母担心我的安全，所以坚持让我坐飞机过来，不让我坐火车（还没有做过火车）。于是乎买了凌晨5点的特价飞机票，由于第一次坐飞机怕没经验导致误机，所以我两点多就到了机场（一夜没睡），早早的把登机牌">
+    <meta name="keywords" content="来深圳一月后有感,ryan0up,halo博客,halo,java,ruibaby,ryanwang,">
+    <link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml">
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="renderer" content="webkit">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="/halo-theme-Journal/source/css/journal.min.css">
+        <meta name="robots" content="none">
+    <meta name="generator" content="Halo "/>
+    <script data-ad-client="ca-pub-5271828906478846" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        <link rel="shortcut icon" type="images/x-icon" href="https://ryanc.cc/upload/2018/4/favicon.png">
+    <script src="/halo-theme-Journal/source/js/loadCSS.js"></script>
+
+    <!-- Import prettify css  -->
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify.min.css">
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify/github-v2.min.css">
+
+    <script>
+        loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Material+Icons");
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110780416-1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-110780416-1');
+</script>
+
+    <noscript>
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora|Montserrat|Anonymous+Pro:400|Material+Icons"/>
+    </noscript>
+</head>
+<body>
+<div id="top"></div>
+<div id="app"><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+                            <a class="a-block drawer-menu-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block drawer-menu-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block drawer-menu-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block drawer-menu-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block drawer-menu-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+            <a class="a-block drawer-menu-item" href="/atom.xml">
+                RSS
+            </a>
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="">
+            Ryan Wang's Blog
+        </a>
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">Ryan Wang's Blog</div>
+        <div class="single-column-header-subtitle">Life is fantastic.</div>
+    </a>
+</div><div ref="sideContainer" class="side-container">
+    <a class="a-block nav-head " href="">
+        <div class="nav-title">
+            Ryan Wang's Blog
+        </div>
+        <div class="nav-subtitle">
+            Life is fantastic.
+        </div>
+    </a>
+
+    <div class="nav-link-list">
+
+                <a class="a-block nav-link-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block nav-link-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block nav-link-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block nav-link-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block nav-link-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+        <a class="a-block no-tint nav-link-item" href="/atom.xml">
+            RSS
+        </a>
+    </div>
+
+    <div class="nav-footer">
+        Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+        &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+    </div>
+</div><div ref="extraContainer" class="extra-container">
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+
+    </div>
+</div>
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            <div class="post-head-wrapper-text-only">
+                <div class="post-title">
+                    来深圳一月后有感
+                    <div class="post-meta">
+                        <time datetime="2018-9-24 13:03:44" itemprop="datePublished">
+                            2018-09-24 13:03
+                        </time>&nbsp;
+                            <i class="material-icons" style="">folder</i>
+                                <a href='/categories/notes'>日志</a>
+
+                            <i class="material-icons" style="">label</i>
+                                <a href='/tags/life'>生活</a>, 
+                                <a href='/tags/feeling'>感悟</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-body-wrapper">
+                <div class="post-body" v-pre>
+                    <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>来深圳也有一个多月了，也慢慢习惯这边的生活了，遂撰文记录一下这难忘的一月。</p> 
+  </blockquote> 
+  <h1 id="难忘的第一天">难忘的第一天</h1> 
+  <p>还是第一次一个人出远门，父母担心我的安全，所以坚持让我坐飞机过来，不让我坐火车（还没有做过火车）。于是乎买了凌晨5点的特价飞机票，由于第一次坐飞机怕没经验导致误机，所以我两点多就到了机场（一夜没睡），早早的把登机牌取了。然后就是漫长的等待，好在我两个基友陪我来的，不然还真挺无聊。飞机场给我的第一感觉就是太大了，着实让我开了一把眼界，原来去登机还要坐车去的... 而且还坐了10几分钟。好在虽然是第一次坐飞机，但是也没有出现什么岔子，从取登机牌到过安检，再到登机一气呵成。睡了俩小时就安全的到达了宝安T3机场。</p> 
+  <p>然后比较蛋疼的事情就发生了... 就在要到达目的地的时候（坐的地铁，离宝安T3还是有点远的），我爹来了个电话，说我包在别人那里，我就纳闷了，我就带了一个背包和一个箱子，但他们都在我这啊... 于是乎我就检查了一下我的箱子... 没错！这就是我的，然后又打开背包看了一下... 靠！背包拿错了，我电脑还在里面啊... 电脑丢了无所谓，但是我的东西还在里面啊！（非常戏剧化的是，我的包包和他的包包是一毛一样的，而且都放在同一个位置，登机牌和身份证都是放在最外层的那个小包包里，我下飞机的时候还无意识的专门翻了一下这个小包包，发现身份证和登机牌都在，就确认是我的了...），然后我爸把他电话给我，然后就联系到了他，只好返回去做交易。好在这哥们儿人特别好，在那里等了我很久，最后交换背包道谢之后，就做再次坐地铁到达目的地了。</p> 
+  <p>然后又比较蛋疼的事发生了，由于种种原因我还不能进屋（暂住女朋友家），于是乎就找了个网吧上网，一直从早上上到了下午5点多（一直没有睡觉啊），然后才真正到达目的地...</p> 
+  <h1 id="找工作">找工作</h1> 
+  <p>对于找工作我是一直都不着急的（佛系，随缘就好），于是乎我就边玩边投简历，结果几乎没有邀面试的... 第一周就收到了一个外包公司的面试邀请，当他说他们是外包公司的时候，我就直接拒绝了。所以后面只要有面试电话，我就直接问是不是外包，是的话就不去了，浪费时间。终于在第二周接近周末的时候，有人直接拉我进他们公司了，在此对他表示感谢。</p> 
+  <h1 id="食">食</h1> 
+  <p>在这方面我就有点不习惯了，我最受不了的就是在食物里面加甜味了... 而且我觉得广东这边可能对辣味有什么误解。总之目前为止我还没吃到有啥合我口味的，我本来就不是太挑食的一个人。算了，能吃就行，而且晚上也是在家做饭。怀恋重庆的小面。by the way 我发现这边的大多数饭店的桌子上都是没有纸巾的，这也是一个不习惯的地方。</p> 
+  <h1 id="住">住</h1> 
+  <p>暂时是住在女朋友这里的，另外还有几个人一起合租，相处过程中，暂时没有发现有什么不合的。而且这房子家电也都很齐全，冰箱，洗衣机都有，算是很方便了。唯一不太习惯的就是，我没有我自己的桌子。之前在重庆的时候，我认为啥都不重要，有个桌子能放下我电脑就行（当然还得有舒服的椅子），然后就能开开心心的写bug了。but，我现在只能把电脑放在客厅的沙发上，端个小凳子坐...（哎我的老腰）。等过两个月攒点工资就搬出去了。</p> 
+  <h1 id="行">行</h1> 
+  <p>不得不说，深圳的交通要比重庆好太多，至少到现在我都还没有堵过车。而且公交和地铁都可以用手机支付，可以说非常方便了。之前在重庆的时候还要排队买票或充值。感觉深圳的地铁也不是太挤（可能是我还没去其他地方转转），而且很大几率有座位，在重庆，上车有座位的几率简直微乎其微，不管是在哪儿都一样。</p> 
+  <h1 id="昨天">昨天</h1> 
+  <p>趁着中秋小长假，出去浪了一把，去的是最近的莲花山。没啥好玩的，而且还被最近的<strong>山竹</strong>摧残了一番，逛了一下午，啥都没玩到，倒是让我的老腰又疼了一把。不知道从啥时候开始，我只要站久了腰就会痛，去年就打算回老家看病的，结果一直耽搁到现在。然后返程的时候去微信的X雨医生咨询了一下，他说是由于我长期坐着的原因，叫我躺一周...（职业病现在就有了？我才20啊。），好在不是啥腰椎间盘突出啥的，不然就有点可怕了。</p> 
+  <h1 id="结尾">结尾</h1> 
+  <p>算了，不说了，躺尸去了。</p> 
+ </body>
+</html>
+                </div>
+            </div>
+
+<nav class="post-pagination">
+        <a class="newer-posts" href="/archives/springboot-package">
+        上一篇<br>Spring Boot另类的打包方式
+    </a>
+    <span class="page-number"></span>
+    <a class="older-posts" href="/archives/halo-run-with-git-maven">
+        下一篇<br>Halo-部署教程
+    </a>
+</nav>
+
+    <div class="post-comment-wrapper">
+      	<script>
+        var settings = {
+        	autoLoad: false
+        }  
+        </script>
+        <halo-comment id="27" type="post" :settings="settings"/>
+    </div>
+        </div>
+    </div>
+<div class="single-column-footer">
+    Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+    &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+</div></div>
+
+</div>
+<script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"
+        integrity="sha256-EGs9T1xMHdvM1geM8jPpoo8EZ1V1VRsmcJz8OByENLA=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"
+        integrity="sha256-CI4Gq5E0io1Pv0xM3qPM+NUIOhbIBvC3GiN1Y4KhXpw=" crossorigin="anonymous"></script>
+<script src="/halo-theme-Journal/source/js/journal.js"></script>
+
+<!-- Import prettify js  -->
+        <script src="/halo-theme-Journal/source/js/prettify.min.js"></script>
+        <script>
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+            })
+        </script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="http://localhost:8090/halo-comment.min.js?version=1.1.2"></script>
+</body>
+</html>

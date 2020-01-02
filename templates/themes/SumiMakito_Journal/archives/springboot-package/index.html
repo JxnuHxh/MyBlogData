@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Spring Boot另类的打包方式 - Ryan Wang's Blog</title>
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Ryan Wang">
+    <meta name="description" content="这一篇是我很久之前发在头条上的，今天转过来。SpringBoot在近来是非常受开发者欢迎的，简化了配置方式，不需要再配置繁琐的xml，内嵌web容器等等。相对于SSM，本人更喜欢使用SpringBoot开发Web项目。总所周知，SpringBoot提供了两种打包方式，即Jar和War。前者内置了we">
+    <meta name="keywords" content="Spring Boot另类的打包方式,ryan0up,halo博客,halo,java,ruibaby,ryanwang,">
+    <link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml">
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="renderer" content="webkit">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="/halo-theme-Journal/source/css/journal.min.css">
+        <meta name="robots" content="none">
+    <meta name="generator" content="Halo "/>
+    <script data-ad-client="ca-pub-5271828906478846" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        <link rel="shortcut icon" type="images/x-icon" href="https://ryanc.cc/upload/2018/4/favicon.png">
+    <script src="/halo-theme-Journal/source/js/loadCSS.js"></script>
+
+    <!-- Import prettify css  -->
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify.min.css">
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify/github-v2.min.css">
+
+    <script>
+        loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Material+Icons");
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110780416-1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-110780416-1');
+</script>
+
+    <noscript>
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora|Montserrat|Anonymous+Pro:400|Material+Icons"/>
+    </noscript>
+</head>
+<body>
+<div id="top"></div>
+<div id="app"><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+                            <a class="a-block drawer-menu-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block drawer-menu-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block drawer-menu-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block drawer-menu-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block drawer-menu-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+            <a class="a-block drawer-menu-item" href="/atom.xml">
+                RSS
+            </a>
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="">
+            Ryan Wang's Blog
+        </a>
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">Ryan Wang's Blog</div>
+        <div class="single-column-header-subtitle">Life is fantastic.</div>
+    </a>
+</div><div ref="sideContainer" class="side-container">
+    <a class="a-block nav-head " href="">
+        <div class="nav-title">
+            Ryan Wang's Blog
+        </div>
+        <div class="nav-subtitle">
+            Life is fantastic.
+        </div>
+    </a>
+
+    <div class="nav-link-list">
+
+                <a class="a-block nav-link-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block nav-link-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block nav-link-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block nav-link-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block nav-link-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+        <a class="a-block no-tint nav-link-item" href="/atom.xml">
+            RSS
+        </a>
+    </div>
+
+    <div class="nav-footer">
+        Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+        &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+    </div>
+</div><div ref="extraContainer" class="extra-container">
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+
+    </div>
+</div>
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            <div class="post-head-wrapper-text-only">
+                <div class="post-title">
+                    Spring Boot另类的打包方式
+                    <div class="post-meta">
+                        <time datetime="2018-9-25 18:37:36" itemprop="datePublished">
+                            2018-09-25 18:37
+                        </time>&nbsp;
+                            <i class="material-icons" style="">folder</i>
+                                <a href='/categories/study-notes'>学习笔记</a>
+
+                            <i class="material-icons" style="">label</i>
+                                <a href='/tags/java'>Java</a>, 
+                                <a href='/tags/springboot'>SpringBoot</a>, 
+                                <a href='/tags/maven'>maven</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-body-wrapper">
+                <div class="post-body" v-pre>
+                    <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>这一篇是我很久之前发在头条上的，今天转过来。</p> 
+  </blockquote> 
+  <blockquote> 
+   <p>Spring Boot在近来是非常受开发者欢迎的，简化了配置方式，不需要再配置繁琐的xml，内嵌web容器等等。相对于SSM，本人更喜欢使用Spring Boot开发Web项目。</p> 
+  </blockquote> 
+  <p>总所周知，Spring Boot提供了两种打包方式，即Jar和War。前者内置了web容器，使用一条命令就可以运行，后者需要单独安装Tomcat容器。对比下来，我更喜欢打包成Jar，不想单独安装一个Tomcat，费时费力...</p> 
+  <p>那么问题就来了，一个打包成Jar包之后，体积大的不忍直视。因为里面不仅包含了资源文件，还有很多依赖Jar包，导致体积一般都在40M以上。</p> 
+  <p>所以在这里教大家一种打包方式，这种方式会把依赖Jar包，resources目录，运行Jar包分开。所以，第一次部署需要把这三部分都上传上去，但是以后的更新迭代就只需要上传覆盖resources目录（如果有修改的话），运行Jar包就可以了。</p> 
+  <p>打包好的项目结构如下图： <img src="/upload/2018/8/image-153787163222120180925183414988.jpg" alt="file"></p> 
+  <p>好了，开始正题，这种打包方式运用到了Maven的一个打包插件maven-assembly-plugin，没了解过的同学可以去百度了解一下。</p> 
+  <h2>修改pom.xml</h2> 
+  <p>首先我们需要修改pom.xml里面默认的
+   <build></build>代码块，如下</p> 
+  <pre><code class="language-xml">&lt;build&gt;
+	&lt;finalName&gt;halo&lt;/finalName&gt;
+	&lt;resources&gt;
+		&lt;resource&gt;
+			&lt;directory&gt;src/main/java&lt;/directory&gt;
+			&lt;filtering&gt;false&lt;/filtering&gt;
+			&lt;excludes&gt;
+				&lt;exclude&gt;**/*.java&lt;/exclude&gt;
+			&lt;/excludes&gt;
+		&lt;/resource&gt;
+	&lt;/resources&gt;
+	&lt;plugins&gt;
+		&lt;!-- 跳过单元测试，不然打包的时候会因为加载不了application.yaml报错 --&gt;
+		&lt;plugin&gt;
+			&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+			&lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+			&lt;configuration&gt;
+				&lt;skip&gt;true&lt;/skip&gt;
+			&lt;/configuration&gt;
+		&lt;/plugin&gt;
+
+		&lt;plugin&gt;
+			&lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+			&lt;configuration&gt;
+				&lt;source&gt;1.8&lt;/source&gt;
+				&lt;target&gt;1.8&lt;/target&gt;
+				&lt;encoding&gt;UTF-8&lt;/encoding&gt;
+			&lt;/configuration&gt;
+		&lt;/plugin&gt;
+
+		&lt;plugin&gt;
+			&lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;
+			&lt;configuration&gt;
+				&lt;appendAssemblyId&gt;false&lt;/appendAssemblyId&gt;
+				&lt;descriptors&gt;
+					&lt;descriptor&gt;assembly.xml&lt;/descriptor&gt;
+				&lt;/descriptors&gt;
+				&lt;outputDirectory&gt;${project.build.directory}/dist/&lt;/outputDirectory&gt;
+			&lt;/configuration&gt;
+			&lt;executions&gt;
+				&lt;execution&gt;
+					&lt;id&gt;make-assembly&lt;/id&gt;
+					&lt;phase&gt;package&lt;/phase&gt;
+					&lt;goals&gt;
+						&lt;goal&gt;single&lt;/goal&gt;
+					&lt;/goals&gt;
+				&lt;/execution&gt;
+			&lt;/executions&gt;
+		&lt;/plugin&gt;
+
+		&lt;!-- 打包成jar文件，并指定lib文件夹以及resources资源文件夹 --&gt;
+		&lt;plugin&gt;
+			&lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+			&lt;artifactId&gt;maven-jar-plugin&lt;/artifactId&gt;
+			&lt;version&gt;3.1.0&lt;/version&gt;
+			&lt;configuration&gt;
+				&lt;archive&gt;
+					&lt;manifest&gt;
+						&lt;mainClass&gt;cc.ryanc.halo.Application&lt;/mainClass&gt;
+						&lt;classpathPrefix&gt;lib/&lt;/classpathPrefix&gt;
+						&lt;addClasspath&gt;true&lt;/addClasspath&gt;
+					&lt;/manifest&gt;
+					&lt;manifestEntries&gt;
+						&lt;Class-Path&gt;resources/&lt;/Class-Path&gt;
+					&lt;/manifestEntries&gt;
+				&lt;/archive&gt;
+			&lt;/configuration&gt;
+		&lt;/plugin&gt;
+	&lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre> 
+  <h2>创建assembly.xml</h2> 
+  <p>在项目根目录创建assembly.xml文件</p> 
+  <pre><code class="language-xml">&lt;assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd"&gt;
+
+    &lt;id&gt;distribution&lt;/id&gt;
+    &lt;formats&gt;
+        &lt;format&gt;dir&lt;/format&gt;
+    &lt;/formats&gt;
+
+    &lt;includeBaseDirectory&gt;false&lt;/includeBaseDirectory&gt;
+
+    &lt;fileSets&gt;
+        &lt;fileSet&gt;
+            &lt;directory&gt;src/main/resources/&lt;/directory&gt;
+            &lt;outputDirectory&gt;/resources&lt;/outputDirectory&gt;
+        &lt;/fileSet&gt;
+        &lt;fileSet&gt;
+            &lt;directory&gt;bin/&lt;/directory&gt;
+            &lt;outputDirectory&gt;/&lt;/outputDirectory&gt;
+        &lt;/fileSet&gt;
+    &lt;/fileSets&gt;
+
+    &lt;dependencySets&gt;
+        &lt;dependencySet&gt;
+            &lt;outputDirectory&gt;/lib&lt;/outputDirectory&gt;
+            &lt;scope&gt;runtime&lt;/scope&gt;
+            &lt;excludes&gt;
+                &lt;exclude&gt;${project.groupId}:${project.artifactId}&lt;/exclude&gt;
+            &lt;/excludes&gt;
+        &lt;/dependencySet&gt;
+        &lt;dependencySet&gt;
+            &lt;outputDirectory&gt;/&lt;/outputDirectory&gt;
+            &lt;includes&gt;
+                &lt;include&gt;${project.groupId}:${project.artifactId}&lt;/include&gt;
+            &lt;/includes&gt;
+        &lt;/dependencySet&gt;
+    &lt;/dependencySets&gt;
+&lt;/assembly&gt;
+</code></pre> 
+  <p>好了，接下来在控制台执行mvn clean package，等待打包完成之后，就可以在target/dist里面看到打包好的项目了，只需要执行根目录的Jar就行了(java -jar 包名)。如果需要部署在服务端，建议使用shell脚本运行项目，不然退出控制台之后，应用就会被kill掉。</p> 
+ </body>
+</html>
+                </div>
+            </div>
+
+<nav class="post-pagination">
+        <a class="newer-posts" href="/archives/halo-docker">
+        上一篇<br>Halo博客系统-Docker版
+    </a>
+    <span class="page-number"></span>
+    <a class="older-posts" href="/archives/lai-shen-zhen-yi-yue-hou-you-gan">
+        下一篇<br>来深圳一月后有感
+    </a>
+</nav>
+
+    <div class="post-comment-wrapper">
+      	<script>
+        var settings = {
+        	autoLoad: false
+        }  
+        </script>
+        <halo-comment id="42" type="post" :settings="settings"/>
+    </div>
+        </div>
+    </div>
+<div class="single-column-footer">
+    Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+    &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+</div></div>
+
+</div>
+<script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"
+        integrity="sha256-EGs9T1xMHdvM1geM8jPpoo8EZ1V1VRsmcJz8OByENLA=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"
+        integrity="sha256-CI4Gq5E0io1Pv0xM3qPM+NUIOhbIBvC3GiN1Y4KhXpw=" crossorigin="anonymous"></script>
+<script src="/halo-theme-Journal/source/js/journal.js"></script>
+
+<!-- Import prettify js  -->
+        <script src="/halo-theme-Journal/source/js/prettify.min.js"></script>
+        <script>
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+            })
+        </script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="http://localhost:8090/halo-comment.min.js?version=1.1.2"></script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Spring Boot 学习笔记（二） - Ryan Wang's Blog</title>
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Ryan Wang">
+    <meta name="description" content="上一篇笔记简单的讲了一下SpringBoot项目的创建，以及如何启动。这次笔记主要记录一下application.properties配置文件的简单配置。SpringBoot对于SpringMVC最大的改变就是将很多xml配置文件给干掉了，主要通过application.properties和注解来">
+    <meta name="keywords" content="Spring Boot 学习笔记（二）,ryan0up,halo博客,halo,java,ruibaby,ryanwang,">
+    <link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml">
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="renderer" content="webkit">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="/halo-theme-Journal/source/css/journal.min.css">
+        <meta name="robots" content="none">
+    <meta name="generator" content="Halo "/>
+    <script data-ad-client="ca-pub-5271828906478846" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        <link rel="shortcut icon" type="images/x-icon" href="https://ryanc.cc/upload/2018/4/favicon.png">
+    <script src="/halo-theme-Journal/source/js/loadCSS.js"></script>
+
+    <!-- Import prettify css  -->
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify.min.css">
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify/github-v2.min.css">
+
+    <script>
+        loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Material+Icons");
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110780416-1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-110780416-1');
+</script>
+
+    <noscript>
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora|Montserrat|Anonymous+Pro:400|Material+Icons"/>
+    </noscript>
+</head>
+<body>
+<div id="top"></div>
+<div id="app"><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+                            <a class="a-block drawer-menu-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block drawer-menu-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block drawer-menu-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block drawer-menu-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block drawer-menu-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+            <a class="a-block drawer-menu-item" href="/atom.xml">
+                RSS
+            </a>
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="">
+            Ryan Wang's Blog
+        </a>
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">Ryan Wang's Blog</div>
+        <div class="single-column-header-subtitle">Life is fantastic.</div>
+    </a>
+</div><div ref="sideContainer" class="side-container">
+    <a class="a-block nav-head " href="">
+        <div class="nav-title">
+            Ryan Wang's Blog
+        </div>
+        <div class="nav-subtitle">
+            Life is fantastic.
+        </div>
+    </a>
+
+    <div class="nav-link-list">
+
+                <a class="a-block nav-link-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block nav-link-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block nav-link-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block nav-link-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block nav-link-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+        <a class="a-block no-tint nav-link-item" href="/atom.xml">
+            RSS
+        </a>
+    </div>
+
+    <div class="nav-footer">
+        Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+        &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+    </div>
+</div><div ref="extraContainer" class="extra-container">
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+
+    </div>
+</div>
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            <div class="post-head-wrapper-text-only">
+                <div class="post-title">
+                    Spring Boot 学习笔记（二）
+                    <div class="post-meta">
+                        <time datetime="2017-12-3 10:30:48" itemprop="datePublished">
+                            2017-12-03 10:30
+                        </time>&nbsp;
+                            <i class="material-icons" style="">folder</i>
+                                <a href='/categories/study-notes'>学习笔记</a>
+
+                            <i class="material-icons" style="">label</i>
+                                <a href='/tags/java'>Java</a>, 
+                                <a href='/tags/springboot'>SpringBoot</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-body-wrapper">
+                <div class="post-body" v-pre>
+                    <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>上一篇笔记简单的讲了一下SpringBoot项目的创建，以及如何启动。这次笔记主要记录一下application.properties配置文件的简单配置。SpringBoot对于SpringMVC最大的改变就是将很多xml配置文件给干掉了，主要通过application.properties和注解来配置，可以使整个项目结构看起来更加简洁。注：这篇笔记使用application.properties。</p> 
+  </blockquote> 
+  <h2 id="配置文件简述">配置文件简述</h2> 
+  <h3 id="配置文件类型">配置文件类型</h3> 
+  <p>SpringBoot支持两种配置文件格式，一种是默认的application.properties，还有一种是更为简单方便的application.yaml（推荐）。yaml是一种以数据为中心的配置格式，在配置数据的时候具有面向对象的特征。通过下面的示例可以看出其中的区别：</p> 
+  <p>application.properties：</p> 
+  <pre><code class="language-properties">server.port=8090
+server.context-path=/demo
+</code></pre> 
+  <p>application.yaml：</p> 
+  <pre><code class="language-yaml"># 需要注意的是属性和参数之间必须有一个空格隔开，不能是一个tab，也不能没有空格
+server:
+&nbsp;&nbsp;port: 8090
+&nbsp;&nbsp;context-path: /demo
+</code></pre> 
+  <p>可以看到，yaml明显更简洁，而且结构感更强，其中server.port是设置的访问端口号，server.context-path是设置的访问路径（默认为/）。需要注意的是，目前IDEA在yaml配置文件中提供了自动提示。</p> 
+  <h3 id="命令行参数配置">命令行参数配置</h3> 
+  <p>上一篇笔记已经讲了，运行SpringBoot项目只需要执行<code>java -jar 包名.jar</code>就可以运行了，其实还可以这样干，<code>java -jar 包名.jar --server.port=9999</code>，这样就可以将默认端口改成9999。</p> 
+  <h3 id="自定义属性">自定义属性</h3> 
+  <p>application.properties可以自定义属性，并在Controller类中调用，如：</p> 
+  <p>application.properties</p> 
+  <pre><code class="language-properties">man.name=Jack
+man.age=18
+man.sex=male
+</code></pre> 
+  <p>新建一个Controller类</p> 
+  <pre><code class="language-java">@RestController
+public class DemoController {
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//通过@Value注解获取配置文件对应的参数并且赋值给变量
+&nbsp;&nbsp;&nbsp;&nbsp;@Value("${man.name}")
+&nbsp;&nbsp;&nbsp;&nbsp;private String name;
+
+&nbsp;&nbsp;&nbsp;&nbsp;@Value("${man.age}")
+&nbsp;&nbsp;&nbsp;&nbsp;private Integer age;
+
+&nbsp;&nbsp;&nbsp;&nbsp;@Value("${man.sex}")
+&nbsp;&nbsp;&nbsp;&nbsp;private String sex;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//设置访问路径
+&nbsp;&nbsp;&nbsp;&nbsp;@RequestMapping(value = "/")
+&nbsp;&nbsp;&nbsp;&nbsp;public String index(){
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return "姓名："+name+"，年龄："+age+"，性别："+sex;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+}
+</code></pre> 
+  <p>执行Application类，访问<code>localhost:8080</code>就可以看到<code>姓名：Jack，年龄：18，性别：male</code>。</p> 
+  <h3 id="profile配置">Profile配置</h3> 
+  <p>Profile是Spring用来针对不同环境对不同的配置提供支持的，全局Profile配置使用<code>application</code><span profile="">-</span>.properties(如application-prod.properties)。通过在application.properties中设置<code>spring.profiles.active=prod</code>来指定活动的Profile。</p> 
+  <p>如：</p> 
+  <p>我们新建两个配置文件application-prod.properties（生产环境），application-dev.properties（开发环境），用来模拟生产环境和开发环境配置不一样的情况。</p> 
+  <p>如端口配置：</p> 
+  <pre><code class="language-properties">//application-prod.properties
+server.port=80
+</code></pre> 
+  <pre><code class="language-properties">//application-dev.properties
+server.port=8080
+</code></pre> 
+  <p>然后在默认的application.properties中配置<code>spring.profiles.active=dev</code>，然后启动项目所访问的路径就是<code>localhost:8080</code>，同样设置为prod的话，访问路径就是<code>localhost:80</code>。</p> 
+  <blockquote> 
+   <p>上面的配置只是一些很简单的配置，学到后面的时候还会有更多的配置需要学，目前为止掌握这些就够了。现在还没有涉及到数据库的操作，到了数据库和JPA操作的时候，还会说到一些配置的。</p> 
+  </blockquote> 
+  <h2 id="有趣的banner自定义">有趣的banner自定义</h2> 
+  <p>大家应该在启动项目的时候注意到了控制台输出有Spring的图案，其实这个是可以自定义的。</p> 
+  <p>只需要在<code>src/main/resources</code>下新建一个banner.txt，然后写入你想显示的图案就行了。可以通过<a href="http://patorjk.com/software/taag">http://patorjk.com/software/taag</a>这个网站来生成字符。如写入Hello World，然后将生成的字符复制到banner.txt中就可以了。如下图：</p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/springboot-study-2/banner.png" alt=""></p> 
+  <p>值得注意的是，自定义banner还有一些属性可以设置：</p> 
+  <pre><code class="language-Yams">${AnsiColor.BRIGHT_RED}：用于设置设置控制台中输出内容的颜色(放在内容之前)
+${application.version}：获取MANIFEST.MF文件中的版本号
+${application.formatted-version}：获取格式化后的${application.version}版本信息
+${spring-boot.version}：获取Spring Boot的版本号
+${spring-boot.formatted-version}：获取格式化后的Spring Boot版本信息
+</code></pre> 
+  <p>例如：</p> 
+  <pre><code class="language-Yams">${AnsiColor.BLUE}
+&nbsp;&nbsp;___ ___ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.__ &nbsp;.__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.__ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.___
+&nbsp;/ &nbsp;&nbsp;| &nbsp;&nbsp;\ &nbsp;&nbsp;____ | &nbsp;| | &nbsp;| &nbsp;&nbsp;____ &nbsp;&nbsp;/ &nbsp;\ &nbsp;&nbsp;&nbsp;/ &nbsp;\___________| &nbsp;| &nbsp;&nbsp;&nbsp;__| _/
+/ &nbsp;&nbsp;&nbsp;~ &nbsp;&nbsp;&nbsp;\_/ __ \| &nbsp;| | &nbsp;| &nbsp;/ &nbsp;_ \ &nbsp;\ &nbsp;&nbsp;\/\/ &nbsp;&nbsp;/ &nbsp;_ \_ &nbsp;__ \ &nbsp;| &nbsp;&nbsp;/ __ |
+\ &nbsp;&nbsp;&nbsp;Y &nbsp;&nbsp;&nbsp;/\ &nbsp;___/| &nbsp;|_| &nbsp;|_( &nbsp;&lt;_&gt; ) &nbsp;\ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;( &nbsp;&lt;_&gt; ) &nbsp;| \/ &nbsp;|__/ /_/ |
+&nbsp;\___|_ &nbsp;/ &nbsp;\___ &nbsp;&gt;____/____/\____/ &nbsp;&nbsp;&nbsp;\__/\ &nbsp;/ \____/|__| &nbsp;|____/\____ |
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\/
+${AnsiColor.BRIGHT_YELLOW}
+${spring-boot.version}
+</code></pre> 
+  <p>启动：</p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/springboot-study-2/banner-properties.png" alt=""></p> 
+  <p>本次就记录到这里吧，后面这个笔记系列会一直更新下去的。</p> 
+ </body>
+</html>
+                </div>
+            </div>
+
+<nav class="post-pagination">
+        <a class="newer-posts" href="/archives/springboot-study-jpa">
+        上一篇<br>Spring Boot学习笔记（三）之JPA
+    </a>
+    <span class="page-number"></span>
+    <a class="older-posts" href="/archives/springboot-study-1">
+        下一篇<br>Spring Boot 学习笔记（一）
+    </a>
+</nav>
+
+    <div class="post-comment-wrapper">
+      	<script>
+        var settings = {
+        	autoLoad: false
+        }  
+        </script>
+        <halo-comment id="34" type="post" :settings="settings"/>
+    </div>
+        </div>
+    </div>
+<div class="single-column-footer">
+    Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+    &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+</div></div>
+
+</div>
+<script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"
+        integrity="sha256-EGs9T1xMHdvM1geM8jPpoo8EZ1V1VRsmcJz8OByENLA=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"
+        integrity="sha256-CI4Gq5E0io1Pv0xM3qPM+NUIOhbIBvC3GiN1Y4KhXpw=" crossorigin="anonymous"></script>
+<script src="/halo-theme-Journal/source/js/journal.js"></script>
+
+<!-- Import prettify js  -->
+        <script src="/halo-theme-Journal/source/js/prettify.min.js"></script>
+        <script>
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+            })
+        </script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="http://localhost:8090/halo-comment.min.js?version=1.1.2"></script>
+</body>
+</html>

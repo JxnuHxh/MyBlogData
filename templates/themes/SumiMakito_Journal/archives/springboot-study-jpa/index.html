@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Spring Boot学习笔记（三）之JPA - Ryan Wang's Blog</title>
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Ryan Wang">
+    <meta name="description" content="前面学习了一个简单的SpringBoot框架的搭建，以及配置文件的基础部分，今天来记录一下最近所学操作数据库的一个工具JPA，这个JPA可以让你基本不需要写SQL语句就可以执行增删改查的操作。当然了，如果涉及到比较复杂的操作的话，也可以使用原生的SQL语句。引入依赖首先要使用JPA的话，肯定是需要引">
+    <meta name="keywords" content="Spring Boot学习笔记（三）之JPA,ryan0up,halo博客,halo,java,ruibaby,ryanwang,">
+    <link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml">
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="renderer" content="webkit">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="/halo-theme-Journal/source/css/journal.min.css">
+        <meta name="robots" content="none">
+    <meta name="generator" content="Halo "/>
+    <script data-ad-client="ca-pub-5271828906478846" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        <link rel="shortcut icon" type="images/x-icon" href="https://ryanc.cc/upload/2018/4/favicon.png">
+    <script src="/halo-theme-Journal/source/js/loadCSS.js"></script>
+
+    <!-- Import prettify css  -->
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify.min.css">
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify/github-v2.min.css">
+
+    <script>
+        loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Material+Icons");
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110780416-1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-110780416-1');
+</script>
+
+    <noscript>
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora|Montserrat|Anonymous+Pro:400|Material+Icons"/>
+    </noscript>
+</head>
+<body>
+<div id="top"></div>
+<div id="app"><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+                            <a class="a-block drawer-menu-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block drawer-menu-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block drawer-menu-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block drawer-menu-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block drawer-menu-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+            <a class="a-block drawer-menu-item" href="/atom.xml">
+                RSS
+            </a>
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="">
+            Ryan Wang's Blog
+        </a>
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">Ryan Wang's Blog</div>
+        <div class="single-column-header-subtitle">Life is fantastic.</div>
+    </a>
+</div><div ref="sideContainer" class="side-container">
+    <a class="a-block nav-head " href="">
+        <div class="nav-title">
+            Ryan Wang's Blog
+        </div>
+        <div class="nav-subtitle">
+            Life is fantastic.
+        </div>
+    </a>
+
+    <div class="nav-link-list">
+
+                <a class="a-block nav-link-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block nav-link-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block nav-link-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block nav-link-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block nav-link-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+        <a class="a-block no-tint nav-link-item" href="/atom.xml">
+            RSS
+        </a>
+    </div>
+
+    <div class="nav-footer">
+        Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+        &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+    </div>
+</div><div ref="extraContainer" class="extra-container">
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+
+    </div>
+</div>
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            <div class="post-head-wrapper-text-only">
+                <div class="post-title">
+                    Spring Boot学习笔记（三）之JPA
+                    <div class="post-meta">
+                        <time datetime="2017-12-23 10:30:16" itemprop="datePublished">
+                            2017-12-23 10:30
+                        </time>&nbsp;
+                            <i class="material-icons" style="">folder</i>
+                                <a href='/categories/study-notes'>学习笔记</a>
+
+                            <i class="material-icons" style="">label</i>
+                                <a href='/tags/java'>Java</a>, 
+                                <a href='/tags/springboot'>SpringBoot</a>, 
+                                <a href='/tags/sql'>sql</a>, 
+                                <a href='/tags/maven'>maven</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-body-wrapper">
+                <div class="post-body" v-pre>
+                    <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>前面学习了一个简单的Spring Boot框架的搭建，以及配置文件的基础部分，今天来记录一下最近所学操作数据库的一个工具<code>JPA</code>，这个JPA可以让你基本不需要写SQL语句就可以执行增删改查的操作。当然了，如果涉及到比较复杂的操作的话，也可以使用原生的SQL语句。</p> 
+  </blockquote> 
+  <h2>引入依赖</h2> 
+  <p>首先要使用JPA的话，肯定是需要引入依赖的，既然要使用JPA操作数据库的话，数据库的驱动依赖也是必不可少的。对数据库的操作无非增删改查，为了方便演示，这里还需要引入一个模板引擎来渲染页面，模板引擎有很多种，这里选择freemarker。</p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/springboot-study-jpa/springboot-study-jpa-1.png" alt=""></p> 
+  <pre><code class="language-xml">&lt;!-- JPA依赖 --&gt;
+&lt;dependency&gt;
+&nbsp;&nbsp;&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+&nbsp;&nbsp;&lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;!-- freemarker依赖 --&gt;
+&lt;dependency&gt;
+&nbsp;&nbsp;&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+&nbsp;&nbsp;&lt;artifactId&gt;spring-boot-starter-freemarker&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+&nbsp;&nbsp;&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+&nbsp;&nbsp;&lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;!-- MySQL依赖 --&gt;
+&lt;dependency&gt;
+&nbsp;&nbsp;&lt;groupId&gt;mysql&lt;/groupId&gt;
+&nbsp;&nbsp;&lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+&nbsp;&nbsp;&lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+&nbsp;&nbsp;&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+&nbsp;&nbsp;&lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+&nbsp;&nbsp;&lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
+</code></pre> 
+  <h2>准备数据</h2> 
+  <ol> 
+   <li>这里我们是用的是MySQL，先建一个简单的数据表吧。</li> 
+  </ol> 
+  <pre><code class="language-sql">CREATE DATABASE jpadb;
+USE jpadb;
+CREATE TABLE superhero
+(
+&nbsp;&nbsp;id INT PRIMARY KEY AUTO_INCREMENT,
+&nbsp;&nbsp;name VARCHAR(20) NOT NULL ,
+&nbsp;&nbsp;sex CHAR(2) NOT NULL ,
+&nbsp;&nbsp;age int NOT NULL ,
+&nbsp;&nbsp;skill VARCHAR(50) NOT NULL
+)CHARSET utf8;
+</code></pre> 
+  <p>然后随便插入几条数据，备用。</p> 
+  <ol start="2"> 
+   <li>建立对应的实体类</li> 
+  </ol> 
+  <pre><code class="language-java">@Entity
+@Table(name = "superhero") //这里需要指定我们刚刚建好的数据表，因为JPA会自动帮助键表
+public class SuperHero {
+&nbsp;&nbsp;&nbsp;&nbsp;@Id
+&nbsp;&nbsp;&nbsp;&nbsp;@GeneratedValue //自增注解
+&nbsp;&nbsp;&nbsp;&nbsp;private Integer id;
+&nbsp;&nbsp;&nbsp;&nbsp;private String name;
+&nbsp;&nbsp;&nbsp;&nbsp;private String sex;
+&nbsp;&nbsp;&nbsp;&nbsp;private Integer age;
+&nbsp;&nbsp;&nbsp;&nbsp;private String skill;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//省略get和set方法
+}
+</code></pre> 
+  <h2>建立Repository接口</h2> 
+  <p>新建一个类<code>SuperHeroRepository</code>，使用JPA的关键就是这个Repository接口，使用它可以方便的对实体类进行访问。</p> 
+  <pre><code class="language-java">public interface SuperHeroRepository extends JpaRepository&lt;SuperHero,Integer&gt; {}
+</code></pre> 
+  <p>像上面这样就好了？对，目前是这样的！</p> 
+  <h2>Service层</h2> 
+  <p>哈哈，现在就可以使用Service对数据库进行操作啦！</p> 
+  <pre><code class="language-java">//Service注解，必须写！不然Controller使用Service的时候运行会报错。
+@Service
+public class SuperHeroService {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//@Autowired，自动注入，用过SSM的都知道，这里可以自动注入
+&nbsp;&nbsp;&nbsp;&nbsp;@Autowired
+&nbsp;&nbsp;&nbsp;&nbsp;private SuperHeroRepository superHeroRepository;
+
+&nbsp;&nbsp;&nbsp;&nbsp;/**
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* 查询所有超级英雄
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* @return List
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;public List&lt;SuperHero&gt; findAll(){
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return superHeroRepository.findAll();
+&nbsp;&nbsp;&nbsp;&nbsp;}
+}
+</code></pre> 
+  <p>现在就可以查询<code>superhero</code>表中所有的超级英雄，并且findAll方法返回的数据类型就是List，非常方便！</p> 
+  <h2>Controller处理并渲染页面</h2> 
+  <p>Service层写好之后，就可以使用Controller来处理并渲染页面了。这里要注入Service类同样可以使用自动注入。</p> 
+  <pre><code class="language-java">@Controller
+public class IndexController {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//自动注入
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Autowired
+&nbsp;&nbsp;&nbsp;&nbsp;private SuperHeroService superHeroService;
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//设置请求路径为/heros
+&nbsp;&nbsp;&nbsp;&nbsp;@GetMapping(value = "/heros")
+&nbsp;&nbsp;&nbsp;&nbsp;public String index(Model model){
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//调用service层的findAll方法查询所有数据
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;List&lt;SuperHero&gt; superHeroList = superHeroService.findAll();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//使用Model对象保存数据
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;model.addAttribute("superHeroList",superHeroList);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//返回freemarker模板的名称，所以需要在templates文件夹下建立index.ftl文件
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return "index";
+&nbsp;&nbsp;&nbsp;&nbsp;}
+}
+</code></pre> 
+  <pre><code class="language-html">&lt;!-- index.ftl --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang="zh"&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;head&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;meta charset="UTF-8"&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Title&lt;/title&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/head&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;body&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;table&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;tr&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;th&gt;编号&lt;/th&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;th&gt;名字&lt;/th&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;th&gt;性别&lt;/th&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;th&gt;年龄&lt;/th&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;th&gt;技能&lt;/th&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/tr&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;!-- 这是freemarker的循环语法，可以自行去了解 --&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;#list superHeroList as superHero&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;tr&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;${superHero.id}&lt;/td&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;${superHero.name}&lt;/td&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;${superHero.sex}&lt;/td&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;${superHero.age}&lt;/td&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;${superHero.skill}&lt;/td&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/tr&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/#list&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/table&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/body&gt;
+&lt;/html&gt;
+</code></pre> 
+  <p>好啦，现在所有代码就写完啦！但是似乎还忘了什么，对的，application.yaml还没配置。</p> 
+  <pre><code class="language-yaml"># 指定访问端口 默认是8080
+server:
+&nbsp;&nbsp;port: 8090
+
+spring:
+# 配置数据源，主要有classname，url，username，password
+&nbsp;&nbsp;datasource:
+&nbsp;&nbsp;&nbsp;&nbsp;driver-class-name: com.mysql.jdbc.Driver
+&nbsp;&nbsp;&nbsp;&nbsp;url: jdbc:mysql://localhost:3306/jpadb
+&nbsp;&nbsp;&nbsp;&nbsp;username: root
+&nbsp;&nbsp;&nbsp;&nbsp;password: &nbsp;123456
+# jpa配置
+&nbsp;&nbsp;jpa:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# 是否在控制台显示sql语句
+&nbsp;&nbsp;&nbsp;&nbsp;show-sql: true
+&nbsp;&nbsp;&nbsp;&nbsp;hibernate:
+&nbsp;&nbsp;&nbsp;&nbsp;# 这个就比较关键了，如果想让它自动建表的话，可以写create和update，但是create每次运行项目的时候，都会重建一次，update则不会，只会更新数据表接口，数据还在。
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ddl-auto: update
+</code></pre> 
+  <p>好了，一个简单的查询就做好了，访问<code>localhost:8090</code>就可以看到下面的表格啦！</p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/springboot-study-jpa/springboot-study-jpa-2.png" alt=""></p> 
+ </body>
+</html>
+                </div>
+            </div>
+
+<nav class="post-pagination">
+        <a class="newer-posts" href="/archives/halo-is-coming">
+        上一篇<br>Halo is coming。
+    </a>
+    <span class="page-number"></span>
+    <a class="older-posts" href="/archives/springboot-study-2">
+        下一篇<br>Spring Boot 学习笔记（二）
+    </a>
+</nav>
+
+    <div class="post-comment-wrapper">
+      	<script>
+        var settings = {
+        	autoLoad: false
+        }  
+        </script>
+        <halo-comment id="33" type="post" :settings="settings"/>
+    </div>
+        </div>
+    </div>
+<div class="single-column-footer">
+    Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+    &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+</div></div>
+
+</div>
+<script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"
+        integrity="sha256-EGs9T1xMHdvM1geM8jPpoo8EZ1V1VRsmcJz8OByENLA=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"
+        integrity="sha256-CI4Gq5E0io1Pv0xM3qPM+NUIOhbIBvC3GiN1Y4KhXpw=" crossorigin="anonymous"></script>
+<script src="/halo-theme-Journal/source/js/journal.js"></script>
+
+<!-- Import prettify js  -->
+        <script src="/halo-theme-Journal/source/js/prettify.min.js"></script>
+        <script>
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+            })
+        </script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="http://localhost:8090/halo-comment.min.js?version=1.1.2"></script>
+</body>
+</html>

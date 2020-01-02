@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Halo-博客主题系统的实现 - Ryan Wang's Blog</title>
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Ryan Wang">
+    <meta name="description" content="作为一个博客系统，更换主题的功能几乎是必不可少的。该功能的实现参考了tale开源项目，非常感谢！具体实现项目结构">
+    <meta name="keywords" content="Halo-博客主题系统的实现,ryan0up,halo博客,halo,java,ruibaby,ryanwang,">
+    <link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml">
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="renderer" content="webkit">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="/halo-theme-Journal/source/css/journal.min.css">
+        <meta name="robots" content="none">
+    <meta name="generator" content="Halo "/>
+    <script data-ad-client="ca-pub-5271828906478846" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        <link rel="shortcut icon" type="images/x-icon" href="https://ryanc.cc/upload/2018/4/favicon.png">
+    <script src="/halo-theme-Journal/source/js/loadCSS.js"></script>
+
+    <!-- Import prettify css  -->
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify.min.css">
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify/github-v2.min.css">
+
+    <script>
+        loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Material+Icons");
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110780416-1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-110780416-1');
+</script>
+
+    <noscript>
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora|Montserrat|Anonymous+Pro:400|Material+Icons"/>
+    </noscript>
+</head>
+<body>
+<div id="top"></div>
+<div id="app"><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+                            <a class="a-block drawer-menu-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block drawer-menu-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block drawer-menu-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block drawer-menu-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block drawer-menu-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+            <a class="a-block drawer-menu-item" href="/atom.xml">
+                RSS
+            </a>
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="">
+            Ryan Wang's Blog
+        </a>
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">Ryan Wang's Blog</div>
+        <div class="single-column-header-subtitle">Life is fantastic.</div>
+    </a>
+</div><div ref="sideContainer" class="side-container">
+    <a class="a-block nav-head " href="">
+        <div class="nav-title">
+            Ryan Wang's Blog
+        </div>
+        <div class="nav-subtitle">
+            Life is fantastic.
+        </div>
+    </a>
+
+    <div class="nav-link-list">
+
+                <a class="a-block nav-link-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block nav-link-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block nav-link-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block nav-link-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block nav-link-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+        <a class="a-block no-tint nav-link-item" href="/atom.xml">
+            RSS
+        </a>
+    </div>
+
+    <div class="nav-footer">
+        Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+        &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+    </div>
+</div><div ref="extraContainer" class="extra-container">
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+
+    </div>
+</div>
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            <div class="post-head-wrapper-text-only">
+                <div class="post-title">
+                    Halo-博客主题系统的实现
+                    <div class="post-meta">
+                        <time datetime="2018-4-28 14:29:00" itemprop="datePublished">
+                            2018-04-28 14:29
+                        </time>&nbsp;
+                            <i class="material-icons" style="">folder</i>
+                                <a href='/categories/study-notes'>学习笔记</a>
+
+                            <i class="material-icons" style="">label</i>
+                                <a href='/tags/halo'>Halo</a>, 
+                                <a href='/tags/java'>Java</a>, 
+                                <a href='/tags/springboot'>SpringBoot</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-body-wrapper">
+                <div class="post-body" v-pre>
+                    <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>作为一个博客系统，更换主题的功能几乎是必不可少的。该功能的实现参考了<a href="https://github.com/otale/tale">tale</a>开源项目，非常感谢！</p> 
+  </blockquote> 
+  <h2 id="具体实现">具体实现</h2> 
+  <h3 id="项目结构">项目结构</h3> 
+  <pre><code class="language-bash">├── java
+│&nbsp;&nbsp; └── cc
+│&nbsp;&nbsp;     └── ryanc
+│&nbsp;&nbsp;         └── halo
+│&nbsp;&nbsp;             ├── Application.java
+│&nbsp;&nbsp;             ├── model
+│&nbsp;&nbsp;             ├── repository
+│&nbsp;&nbsp;             ├── service
+│&nbsp;&nbsp;             ├── util
+│&nbsp;&nbsp;             └── web
+│&nbsp;&nbsp;                 ├── controller   //控制器
+│&nbsp;&nbsp;                 └── interceptor  //拦截器
+└── resources
+    ├── static
+    └── templates					//模板目录
+        └── themes					//主题目录
+            ├── anatole
+            ├── halo
+            └── material
+</code></pre> 
+  <h3 id="更换主题">更换主题</h3> 
+  <p>由于使用了freemarker模板引擎，换主题这个功能就变得非常简单了，在Controller里面渲染页面的时候，只需要修改主题存在路径就可以了，具体实现方式如下：</p> 
+  <p>BaseController：</p> 
+  <pre><code class="language-java">public abstract class BaseController {
+
+    /**
+     * 定义默认主题
+     */
+    public static String THEME = "halo";
+    /**
+     * 根据主题名称渲染页面
+     *
+     * @param pageName pageName
+     * @return 返回拼接好的模板路径
+     */
+    public String render(String pageName){
+        StringBuffer themeStr = new StringBuffer("themes/");
+        themeStr.append(THEME);
+        themeStr.append("/");
+        return themeStr.append(pageName).toString();
+    }
+}
+</code></pre> 
+  <p>IndexController（页面控制器），继承BaseController：</p> 
+  <pre><code class="language-Java">@GetMapping(value = "page/{page}")
+public String index(Model model,
+                    @PathVariable(value = "page") Integer page){
+    Sort sort = new Sort(Sort.Direction.DESC,"postDate");
+    //默认显示10条
+    Integer size = 10;
+    //所有文章数据，分页
+    Pageable pageable = new PageRequest(page-1,size,sort);
+    Page&lt;Post&gt; posts = postService.findPostByStatus(0,pageable);
+    model.addAttribute("posts",posts);
+    return this.render("index");
+}
+</code></pre> 
+  <p>仔细看上面所示代码可知，在BaseController里面定义了一个静态变量作为主题名称(和主题文件夹名一致)，然后在rander方法里面拼接好主题完整路径返回即可，如<code>/themes/halo</code>，需要注意的是：render方法是有一个参数的，这个参数就是freemarker的模板文件名称，完整拼接如：<code>/themes/halo/index</code>，然后在IndexController的方法里面就可以调用该方法，并传入响应的模板文件名，就可以完成渲染了。</p> 
+  <p>如果需要切换主题，那么只需要在后台管理对BaseController里面的THEME变量重新赋值便可以实现切换主题了。</p> 
+  <h3 id="主题管理界面">主题管理界面</h3> 
+  <p>上面说到了在后台管理对BaseController里面的THEME变量重新赋值，那么既然要切换主题，那就得把所有主题展示出来吧！实现的方法也不是太难，只需要扫描theme文件夹下的所有目录就行了。</p> 
+  <p>具体代码：</p> 
+  <p>Theme实体类：</p> 
+  <pre><code class="language-java">public class Theme implements Serializable {
+    /**
+     * 主题名称
+     */
+    private String themeName;
+
+    /**
+     * 是否支持设置
+     */
+    private boolean hasOptions;
+}
+</code></pre> 
+  <p>本来是不需要创建这个实体类的，但考虑到要确定该主题是否支持设置，所有建一个实体类来传输数据会比较方便。</p> 
+  <p>HaloUtil（工具类）：</p> 
+  <pre><code class="language-java">/**
+ * 获取所有主题
+ * @return list
+ */
+public static List&lt;Theme&gt; getThemes(){
+    List&lt;Theme&gt; themes = new ArrayList&lt;&gt;();
+    try {
+        //获取项目根路径
+        File basePath = new File(ResourceUtils.getURL("classpath:").getPath());
+        //获取主题路径
+        File themesPath = new File(basePath.getAbsolutePath(),"templates/themes");
+        File[] files = themesPath.listFiles();
+        if(null!=files) {
+            Theme theme = null;
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    theme = new Theme();
+                    theme.setThemeName(file.getName());
+                    File optionsPath = new File(themesPath.getAbsolutePath(), file.getName() + "/module/options.ftl");
+                    //判断是否存在options.ftl模板
+                    if (optionsPath.exists()) {
+                        theme.setHasOptions(true);
+                    } else {
+                        theme.setHasOptions(false);
+                    }
+                    themes.add(theme);
+                }
+            }
+        }
+    }catch (Exception e){
+        log.error("主题获取失败："+e.getMessage());
+    }
+    return themes;
+}
+</code></pre> 
+  <p>这里返回的themes就是所有主题的List集合了。</p> 
+  <p>ThemeController：</p> 
+  <pre><code class="language-java">/**
+ * 渲染主题设置页面
+ *
+ * @return String
+ */
+@GetMapping
+public String themes(Model model){
+    model.addAttribute("activeTheme",BaseController.THEME);
+    if(null!=HaloConst.THEMES){
+        model.addAttribute("themes",HaloUtil.getThemes());
+    }
+    return "admin/admin_theme";
+}
+</code></pre> 
+  <p>页面上：</p> 
+  <pre><code class="language-html">&lt;#list themes as theme&gt;
+    &lt;div class="col-md-3"&gt;
+        &lt;div class="box box-solid"&gt;
+            &lt;div class="box-body theme-thumbnail" style="background-image: url(/${theme.themeName?if_exists}/screenshot.png)"&gt;&lt;/div&gt;
+            &lt;div class="box-footer"&gt;
+                &lt;span class="theme-title"&gt;${theme.themeName?if_exists?upper_case}&lt;/span&gt;
+                &lt;#if theme.hasOptions==true&gt;
+                    &lt;button class="btn btn-primary btn-sm pull-right btn-flat" onclick="openSetting('${theme.themeName?if_exists}')"&gt;设置&lt;/button&gt;
+                &lt;/#if&gt;
+                &lt;#if activeTheme == "${theme.themeName}"&gt;
+                    &lt;button class="btn btn-primary btn-sm pull-right btn-flat" disabled&gt;已启用&lt;/button&gt;
+                &lt;#else&gt;
+                    &lt;button onclick="setTheme('${theme.themeName?if_exists}')" class="btn btn-primary btn-sm pull-right btn-flat"&gt;启用&lt;/button&gt;
+                &lt;/#if&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/#list&gt;
+</code></pre> 
+  <p>效果：</p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/halo-workout-themes/halo-theme-1.png" alt=""></p> 
+  <h3 id="后台上传主题">后台上传主题</h3> 
+  <p>这个功能可以实现，在后台管理可以上传主题压缩包并解压到themes目录，实现起来也不是太难，实现代码如下：</p> 
+  <p>ThemeController：</p> 
+  <pre><code class="language-java">@RequestMapping(value = "/upload", method = RequestMethod.POST)
+@ResponseBody
+public boolean uploadTheme(@RequestParam("file") MultipartFile file,
+                           HttpServletRequest request){
+    try {
+        if(!file.isEmpty()) {
+            //获取项目根路径
+            File basePath = new File(ResourceUtils.getURL("classpath:").getPath());
+            File themePath = new File(basePath.getAbsolutePath(), new StringBuffer("templates/themes/").append(file.getOriginalFilename()).toString());
+            file.transferTo(themePath);
+            log.info("上传主题成功，路径：" + themePath.getAbsolutePath());
+            logsService.saveByLogs(
+                new Logs(LogsRecord.UPLOAD_THEME,file.getOriginalFilename(),HaloUtil.getIpAddr(request),HaloUtil.getDate())
+            );
+            //调用方法解压该压缩包到themes目录
+            HaloUtil.unZip(themePath.getAbsolutePath(),new File(basePath.getAbsolutePath(),"templates/themes/").getAbsolutePath());
+            //移除压缩包
+            HaloUtil.removeFile(themePath.getAbsolutePath());
+            HaloConst.THEMES.clear();
+            HaloConst.THEMES = HaloUtil.getThemes();
+            return true;
+        }else{
+            log.error("上传失败，没有选择文件");
+        }
+    }catch (Exception e){
+        log.error("上传失败："+e.getMessage());
+    }
+    return false;
+}
+</code></pre> 
+  <p>unZip：</p> 
+  <pre><code class="language-java">public static void unZip(String zipFilePath,String descDir){
+    File zipFile=new File(zipFilePath);
+    File pathFile=new File(descDir);
+    if(!pathFile.exists()){
+        pathFile.mkdirs();
+    }
+    ZipFile zip=null;
+    InputStream in=null;
+    OutputStream out=null;
+    try {
+        zip=new ZipFile(zipFile);
+        Enumeration&lt;?&gt; entries=zip.entries();
+        while(entries.hasMoreElements()){
+            ZipEntry entry=(ZipEntry) entries.nextElement();
+            String zipEntryName=entry.getName();
+            in=zip.getInputStream(entry);
+
+            String outPath=(descDir+"/"+zipEntryName).replace("\\*", "/");
+            File file=new File(outPath.substring(0, outPath.lastIndexOf('/')));
+            if(!file.exists()){
+                file.mkdirs();
+            }
+            if(new File(outPath).isDirectory()){
+                continue;
+            }
+            out=new FileOutputStream(outPath);
+            byte[] buf=new byte[4*1024];
+            int len;
+            while((len=in.read(buf))&gt;=0){
+                out.write(buf, 0, len);
+            }
+            in.close();
+        }
+    } catch (Exception e) {
+        log.error("解压失败："+e.getMessage());
+    }finally{
+        try {
+            if(zip!=null)
+                zip.close();
+            if(in!=null)
+                in.close();
+            if(out!=null)
+                out.close();
+        } catch (IOException e) {
+            log.error("未知错误："+e.getMessage());
+        }
+    }
+}
+</code></pre> 
+  <h3 id="主题的设置">主题的设置</h3> 
+  <p>在整个主题系统中，在某些情况下是需要对主题进行单独设置的。比如社交选项，样式选项等，其实要存储这些设置是非常简单的，和上一篇文章其实是一样的，将各个设置选项和值以key，value的方式存储在数据表中就可以了，在这里就不多讲了。</p> 
+  <p>效果图：</p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/halo-workout-themes/halo-theme-2.png" alt=""></p> 
+  <p>注：这个弹出层是使用的layer实现的，非常感谢该框架！</p> 
+  <h2 id="总结">总结</h2> 
+  <p>整个主题系统的完善还是花了不少时间的，这里只是讲了核心的实现方法，如果有朋友对此感兴趣的话，可以去github上看具体实现的代码：<a href="https://github.com/ruibaby/halo">https://github.com/ruibaby/halo</a>。如果对你有帮助的话，请给个Star，也欢迎大家提pull request。</p> 
+ </body>
+</html>
+                </div>
+            </div>
+
+<nav class="post-pagination">
+        <a class="newer-posts" href="/archives/halo-star-100">
+        上一篇<br>Halo-Star过百
+    </a>
+    <span class="page-number"></span>
+    <a class="older-posts" href="/archives/halo-workout-options">
+        下一篇<br>Halo-博客设置存储的实现
+    </a>
+</nav>
+
+    <div class="post-comment-wrapper">
+      	<script>
+        var settings = {
+        	autoLoad: false
+        }  
+        </script>
+        <halo-comment id="26" type="post" :settings="settings"/>
+    </div>
+        </div>
+    </div>
+<div class="single-column-footer">
+    Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+    &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+</div></div>
+
+</div>
+<script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"
+        integrity="sha256-EGs9T1xMHdvM1geM8jPpoo8EZ1V1VRsmcJz8OByENLA=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"
+        integrity="sha256-CI4Gq5E0io1Pv0xM3qPM+NUIOhbIBvC3GiN1Y4KhXpw=" crossorigin="anonymous"></script>
+<script src="/halo-theme-Journal/source/js/journal.js"></script>
+
+<!-- Import prettify js  -->
+        <script src="/halo-theme-Journal/source/js/prettify.min.js"></script>
+        <script>
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+            })
+        </script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="http://localhost:8090/halo-comment.min.js?version=1.1.2"></script>
+</body>
+</html>

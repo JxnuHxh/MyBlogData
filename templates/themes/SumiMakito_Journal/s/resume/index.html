@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>简历 - Ryan Wang's Blog</title>
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Ryan Wang">
+    <meta name="description" content="Ryan Wang 的博客。">
+    <meta name="keywords" content="ryan0up,halo博客,halo,java,ruibaby,ryanwang">
+    <link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml">
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="renderer" content="webkit">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="/halo-theme-Journal/source/css/journal.min.css">
+        <meta name="robots" content="none">
+    <meta name="generator" content="Halo "/>
+    <script data-ad-client="ca-pub-5271828906478846" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        <link rel="shortcut icon" type="images/x-icon" href="https://ryanc.cc/upload/2018/4/favicon.png">
+    <script src="/halo-theme-Journal/source/js/loadCSS.js"></script>
+
+    <!-- Import prettify css  -->
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify.min.css">
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify/github-v2.min.css">
+
+    <script>
+        loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Material+Icons");
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110780416-1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-110780416-1');
+</script>
+
+    <noscript>
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora|Montserrat|Anonymous+Pro:400|Material+Icons"/>
+    </noscript>
+</head>
+<body>
+<div id="top"></div>
+<div id="app"><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+                            <a class="a-block drawer-menu-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block drawer-menu-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block drawer-menu-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block drawer-menu-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block drawer-menu-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+            <a class="a-block drawer-menu-item" href="/atom.xml">
+                RSS
+            </a>
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="">
+            Ryan Wang's Blog
+        </a>
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">Ryan Wang's Blog</div>
+        <div class="single-column-header-subtitle">Life is fantastic.</div>
+    </a>
+</div><div ref="sideContainer" class="side-container">
+    <a class="a-block nav-head " href="">
+        <div class="nav-title">
+            Ryan Wang's Blog
+        </div>
+        <div class="nav-subtitle">
+            Life is fantastic.
+        </div>
+    </a>
+
+    <div class="nav-link-list">
+
+                <a class="a-block nav-link-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block nav-link-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block nav-link-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block nav-link-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block nav-link-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+        <a class="a-block no-tint nav-link-item" href="/atom.xml">
+            RSS
+        </a>
+    </div>
+
+    <div class="nav-footer">
+        Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+        &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+    </div>
+</div><div ref="extraContainer" class="extra-container">
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+
+    </div>
+</div>
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            <div class="post-head-wrapper-text-only"
+                 style="background-image: url('')">
+                <div class="post-title">
+                    简历
+                    <div class="post-meta">
+                        <time datetime="2019-8-16 18:20:59" itemprop="datePublished">
+                            2019-08-16 18:20
+                        </time>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-body-wrapper">
+                <div class="post-body">
+                    <h1 id="xxx">XXX</h1>
+<ul>
+<li>97 年生人</li>
+<li>性别：男</li>
+<li>电话：171xxxxxx32</li>
+<li><a href="mailto:邮箱：i@ryanc.cc">邮箱：i@ryanc.cc</a></li>
+<li>Telegram：<a href="https://t.me/ruibaby">https://t.me/ruibaby</a></li>
+<li>Github：<a href="https://github.com/ruibaby">https://github.com/ruibaby</a></li>
+<li>Blog：<a href="https://ryanc.cc">https://ryanc.cc</a></li>
+</ul>
+<h2 id="求职意向">求职意向</h2>
+<ul>
+<li>目标地点：成都</li>
+<li>工作性质：全职</li>
+<li>目标职位：Java 开发工程师</li>
+<li>期望薪资：8k-12k</li>
+</ul>
+<h2 id="专业技能">专业技能</h2>
+<ul>
+<li>编程语言：Java，Golang，C sharp。</li>
+<li>数据库：MySQL，SQlite，H2 Database，Oracle，M$ SQL Server。</li>
+<li>后端框架：Spring，Spring Boot，Spring Cloud，JFinal，MyBatis，Hibernate with JPA，ElasticSearch。</li>
+<li>前端框架/库：Vue，JQuery，Less，Sass。</li>
+<li>开发工具：IDEA，Eclipse，NetBean，VS Code，GoLand，Git，Svn。</li>
+<li>构建/部署工具：Maven，Gradle，Docker，Docker Compose，Jenkins，Travis ci。</li>
+<li>操作系统：macOS/Linux/Win，钟爱类 Unix，逃离 Win。</li>
+</ul>
+<h2 id="工作经历">工作经历</h2>
+<h3 id="深圳xxx智能科技股份有限公司2018-082019-05">深圳XXX智能科技股份有限公司(2018-08~2019-05)</h3>
+<blockquote>
+<p>这是全国首家智慧酒店，使用了智能门锁，智能机器人(引导用户操作)，办理入住自助机，智能灯控系统等前沿的技术应用到酒店当中。</p>
+</blockquote>
+<ul>
+<li>
+<p>工作职位：互联网部-Java开发工程师</p>
+</li>
+<li>
+<p>主要职责：负责公司业务后台管理系统的开发，APP 接口的开发及维护，官网 CMS 系统的重构，公司运营活动系统的开发。</p>
+</li>
+<li>
+<p>主要贡献</p>
+<ul>
+<li>参与开发公司的主要业务流程，包括但不限于：优惠券模块的开发，钟点房模块的开发，会员等级制度的开发等。整个系统的技术栈为：Spring MVC，Shiro，MySQL，M$ SQL Server，Redis，Rabbit MQ等。</li>
+<li>独立完成公司官网的后端开发任务，整个系统采用 Spring Boot 作为 MVC 框架，Freemarker 提供页面渲染，MySQL 提供数据持久化，Ehcache 提供二级缓存，Spring Data Jpa 作为持久层框架，Docker 作为部署工具，提供全自动构建以及部署。</li>
+</ul>
+</li>
+</ul>
+<h3 id="重庆xxx科技有限公司2018-032018-08">重庆XXX科技有限公司(2018-03~2018-08)</h3>
+<blockquote>
+<p>这是一家提供技术服务的公司，俗称外包，在职期间，我们中标了中国中铁一局的OA系统，中国石油的OA系统，中国邮政的管理系统。</p>
+</blockquote>
+<ul>
+<li>工作职位：Java 开发工程师</li>
+<li>主要职责：负责公司负责的软件的主要开发任务。</li>
+<li>主要贡献</li>
+<li>参与开发中铁的OA系统，包括但不限于：考试系统的开发(包含多题库，多题型)，并顺利完成中铁员工统一考试的服务。员工审批系统的开发等。整个系统的技术栈为：Spring MVC，MySQL，Shiro等。</li>
+<li>完成对公司代码管理从 Svn 到 Git 的迁移。</li>
+</ul>
+<h2 id="开源项目">开源项目</h2>
+<h3 id="halo-博客系统">Halo 博客系统</h3>
+<blockquote>
+<p>这是一个类似于 WordPress，Ghost 等博客平台的开源软件，开发的目的是为了让更多用户用到符合国内用户习惯的博客系统，也让更多习惯于写博客的同学一个更多的选择。再者，不能啥软件都是国外的吧。</p>
+</blockquote>
+<ul>
+<li>组织地址：<a href="https://github.com/halo-dev">https://github.com/halo-dev</a></li>
+<li>主要贡献
+<ul>
+<li>负责维护 Halo 后端程序，以及使用 Vue 开发的 halo-admin。</li>
+<li>负责管理整个 Halo 组织。</li>
+<li>Review 小伙伴提交的代码。</li>
+</ul>
+</li>
+<li>主要成就
+<ul>
+<li>开源一个月 Star 量达到 700+。</li>
+<li>目前 Star 量已达到 7500+，Fork 量达到 2000+。</li>
+<li>Docker hub 累计 pull 量达到 4300+。</li>
+<li>催生了更多模板开发者的加入，以及提供了更多的模板。</li>
+<li>催生了独立评论模块(halo-comment)，使用 Vue 开发。</li>
+<li>催生了管理端 APP(halo-app)，使用 Flutter 开发。</li>
+</ul>
+</li>
+</ul>
+<h2 id="其他项目">其他项目</h2>
+<h3 id="scholarnet-学术网导航">ScholarNet 学术网导航</h3>
+<blockquote>
+<p>该项目开发的宗旨是提供更加全面的学术资源，用户可以非常方便的检索到自己所需要的学术资料。</p>
+</blockquote>
+<ul>
+<li>网站地址：<a href="https://www.scholarnet.cn/">https://www.scholarnet.cn/</a></li>
+<li>主要贡献
+<ul>
+<li>负责整个系统的搭建，包括后端服务和前端页面。</li>
+<li>负责上线以及维护。</li>
+</ul>
+</li>
+<li>主要成就
+<ul>
+<li>目前在各大搜索引擎的&quot;学术网&quot;关键词均在前三位。</li>
+<li>目前日访问量达到了 400 IP。</li>
+</ul>
+</li>
+</ul>
+<h2 id="自我评价">自我评价</h2>
+<ul>
+<li>一个爱学习的同学。</li>
+<li>一个负责任的男子汉。</li>
+<li>一个拥抱开源的程序员。</li>
+<li>一个热衷折腾的 Geek。</li>
+<li>一个热爱绘画的伪文艺青年。</li>
+<li>一个装载了有趣灵魂的美男子。</li>
+</ul>
+
+                </div>
+            </div>
+
+    <p style="opacity: 0.6; padding: 30px 15px" align="center">
+        <small>这篇内容的评论功能已被禁用</small>
+    </p>
+        </div>
+    </div>
+<div class="single-column-footer">
+    Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+    &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+</div></div>
+
+</div>
+<script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"
+        integrity="sha256-EGs9T1xMHdvM1geM8jPpoo8EZ1V1VRsmcJz8OByENLA=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"
+        integrity="sha256-CI4Gq5E0io1Pv0xM3qPM+NUIOhbIBvC3GiN1Y4KhXpw=" crossorigin="anonymous"></script>
+<script src="/halo-theme-Journal/source/js/journal.js"></script>
+
+<!-- Import prettify js  -->
+        <script src="/halo-theme-Journal/source/js/prettify.min.js"></script>
+        <script>
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+            })
+        </script>
+</body>
+</html>

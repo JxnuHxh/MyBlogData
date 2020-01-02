@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Maven 使用笔记 - Ryan Wang's Blog</title>
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Ryan Wang">
+    <meta name="description" content="前两天做项目的时候，偶然知道了Maven这个工具，据说可以非常方便的管理JAR文件，和生成War包等操作。于是乎，就花了点时间在项目中使用了Maven。下面就简单的记录一下使用心得。管理JAR包这个功能简直好用到爆……起初做项目的时候，遇到需要使用JAR包的时候，百度各种找……比如在IDEA中是不集">
+    <meta name="keywords" content="Maven 使用笔记,ryan0up,halo博客,halo,java,ruibaby,ryanwang,">
+    <link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml">
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="renderer" content="webkit">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="/halo-theme-Journal/source/css/journal.min.css">
+        <meta name="robots" content="none">
+    <meta name="generator" content="Halo "/>
+    <script data-ad-client="ca-pub-5271828906478846" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        <link rel="shortcut icon" type="images/x-icon" href="https://ryanc.cc/upload/2018/4/favicon.png">
+    <script src="/halo-theme-Journal/source/js/loadCSS.js"></script>
+
+    <!-- Import prettify css  -->
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify.min.css">
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify/github-v2.min.css">
+
+    <script>
+        loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Material+Icons");
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110780416-1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-110780416-1');
+</script>
+
+    <noscript>
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora|Montserrat|Anonymous+Pro:400|Material+Icons"/>
+    </noscript>
+</head>
+<body>
+<div id="top"></div>
+<div id="app"><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+                            <a class="a-block drawer-menu-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block drawer-menu-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block drawer-menu-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block drawer-menu-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block drawer-menu-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+            <a class="a-block drawer-menu-item" href="/atom.xml">
+                RSS
+            </a>
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="">
+            Ryan Wang's Blog
+        </a>
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">Ryan Wang's Blog</div>
+        <div class="single-column-header-subtitle">Life is fantastic.</div>
+    </a>
+</div><div ref="sideContainer" class="side-container">
+    <a class="a-block nav-head " href="">
+        <div class="nav-title">
+            Ryan Wang's Blog
+        </div>
+        <div class="nav-subtitle">
+            Life is fantastic.
+        </div>
+    </a>
+
+    <div class="nav-link-list">
+
+                <a class="a-block nav-link-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block nav-link-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block nav-link-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block nav-link-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block nav-link-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+        <a class="a-block no-tint nav-link-item" href="/atom.xml">
+            RSS
+        </a>
+    </div>
+
+    <div class="nav-footer">
+        Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+        &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+    </div>
+</div><div ref="extraContainer" class="extra-container">
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+
+    </div>
+</div>
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            <div class="post-head-wrapper-text-only">
+                <div class="post-title">
+                    Maven 使用笔记
+                    <div class="post-meta">
+                        <time datetime="2017-9-21 10:32:49" itemprop="datePublished">
+                            2017-09-21 10:32
+                        </time>&nbsp;
+                            <i class="material-icons" style="">folder</i>
+                                <a href='/categories/study-notes'>学习笔记</a>
+
+                            <i class="material-icons" style="">label</i>
+                                <a href='/tags/java'>Java</a>, 
+                                <a href='/tags/maven'>maven</a>, 
+                                <a href='/tags/diving'>水文</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-body-wrapper">
+                <div class="post-body" v-pre>
+                    <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>前两天做项目的时候，偶然知道了Maven这个工具，据说可以非常方便的管理JAR文件，和生成War包等操作。于是乎，就花了点时间在项目中使用了Maven。下面就简单的记录一下使用心得。</p> 
+  </blockquote> 
+  <h2 id="管理jar包">管理JAR包</h2> 
+  <p>这个功能简直好用到爆......起初做项目的时候，遇到需要使用JAR包的时候，百度各种找......比如在IDEA中是不集成JSTL标签库的，于是乎就得去网上找JAR包，找到了之后，下载也特别麻烦，不是要注册就是要积分，搞得很头疼。但是如果使用Maven的话，我只需要在<code>pom.xml</code>中配置一下就自动下载到Maven本地仓库而且可以直接使用了。如：</p> 
+  <pre><code class="language-xml">&lt;dependency&gt;
+&nbsp;&nbsp;&lt;groupId&gt;jstl&lt;/groupId&gt;
+&nbsp;&nbsp;&lt;artifactId&gt;jstl&lt;/artifactId&gt;
+&nbsp;&nbsp;&lt;version&gt;1.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+&nbsp;&nbsp;&lt;groupId&gt;taglibs&lt;/groupId&gt;
+&nbsp;&nbsp;&lt;artifactId&gt;standard&lt;/artifactId&gt;
+&nbsp;&nbsp;&lt;version&gt;1.1.2&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre> 
+  <p>当换电脑继续写项目的时候，也就不用再配置一次了，非常方便。</p> 
+  <p>但是问题来了，当我在学校打开项目继续写的时候，那个下载速度简直比蜗牛还慢......本来学校的网就慢的出奇，Maven的中央仓库又在国外，直接导致下载速度异常的慢。</p> 
+  <p>然后网上查了一下，可以把Maven中央仓库地址改为阿里的Maven仓库地址，只需要在Maven的settings.xml文件里的mirrors节点，添加下面的子节点：</p> 
+  <pre><code class="language-xml">&lt;mirror&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;id&gt;nexus-aliyun&lt;/id&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;mirrorOf&gt;*&lt;/mirrorOf&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;Nexus aliyun&lt;/name&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;url&gt;http://maven.aliyun.com/nexus/content/groups/public&lt;/url&gt;
+&lt;/mirror&gt; 
+</code></pre> 
+  <blockquote> 
+   <p>不得不说，阿里在Java技术方面确实很强大，之前我也了解过阿里的「<a href="https://github.com/alibaba/druid">druid</a>」这个连接池。据说是全世界第一的Java连接池，但是在我使用druid连接池的时候，并没有发现和其他连接池的区别，可能还是我太年轻了吧。在连接池这方面我还得下点功夫深入理解一下，顺便再了解一下高并发。</p> 
+  </blockquote> 
+  <p>在我使用druid连接池的时候，我是这样配置的：</p> 
+  <p>在<code>pom.xml</code>中配置：</p> 
+  <pre><code class="language-xml">&lt;dependency&gt;
+&nbsp;&nbsp;&lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+&nbsp;&nbsp;&lt;artifactId&gt;druid&lt;/artifactId&gt;
+&nbsp;&nbsp;&lt;version&gt;1.1.3&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre> 
+  <p>在resources路径下的<code>druid.properties</code>：</p> 
+  <pre><code class="language-xml">driverClassName=com.mysql.jdbc.Driver
+url=jdbc:mysql://localhost:3306/examDB?useUnicode=true&amp;characterEncoding=UTF-8
+username=root
+password=123456
+initialSize=1
+minIdle=1
+maxActive=2000
+maxWait=60000
+timeBetweenEvictionRunsMillis=60000
+minEvictableIdleTimeMillis=300000
+validationQuery=SELECT 'x'
+testWhileIdle=true
+testOnBorrow=false
+testOnReturn=true
+poolPreparedStatements=false
+maxPoolPreparedStatementPerConnectionSize=20
+filters=stat
+</code></pre> 
+  <p>然后在数据库连接工具类<code>DBUtil</code>中加载<code>druid.properties</code>：</p> 
+  <pre><code class="language-java">//加载配置文件
+Properties pr = new Properties();
+//获取resources资源路径下的连接池配置文件
+pr.load(this.getClass().getResourceAsStream("/druid.properties"));
+DataSource dataSource = DruidDataSourceFactory.createDataSource(pr);
+</code></pre> 
+  <h2 id="生成war包">生成war包</h2> 
+  <p>这个功能暂时还没怎么使用过，但也还是简单测试了一下。使用方法很简单，只需要在控制台输入<code>mvn clean package</code>或者直接在IDEA的Maven Projects中选择package就行了，接着在target就可以找到生成好的war包了。</p> 
+  <p>我尝试上传到服务器上去，然后打开tomcat服务器就可以访问了。非常方便，但我还是觉得IDEA自动部署到远程服务器的功能更好用。</p> 
+  <h2 id="结尾">结尾</h2> 
+  <p>对于这样的工具简直是相见恨晚呐，不过目前对Maven的使用还不是特别溜，所以在以后的项目中就一直使用Maven构建和管理JAR包了。</p> 
+ </body>
+</html>
+                </div>
+            </div>
+
+<nav class="post-pagination">
+        <a class="newer-posts" href="/archives/springboot-study-1">
+        上一篇<br>Spring Boot 学习笔记（一）
+    </a>
+    <span class="page-number"></span>
+    <a class="older-posts" href="/archives/sql-99-biao">
+        下一篇<br>SQL变量和循环用法的体现-打印九九乘法表
+    </a>
+</nav>
+
+    <div class="post-comment-wrapper">
+      	<script>
+        var settings = {
+        	autoLoad: false
+        }  
+        </script>
+        <halo-comment id="15" type="post" :settings="settings"/>
+    </div>
+        </div>
+    </div>
+<div class="single-column-footer">
+    Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+    &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+</div></div>
+
+</div>
+<script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"
+        integrity="sha256-EGs9T1xMHdvM1geM8jPpoo8EZ1V1VRsmcJz8OByENLA=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"
+        integrity="sha256-CI4Gq5E0io1Pv0xM3qPM+NUIOhbIBvC3GiN1Y4KhXpw=" crossorigin="anonymous"></script>
+<script src="/halo-theme-Journal/source/js/journal.js"></script>
+
+<!-- Import prettify js  -->
+        <script src="/halo-theme-Journal/source/js/prettify.min.js"></script>
+        <script>
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+            })
+        </script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="http://localhost:8090/halo-comment.min.js?version=1.1.2"></script>
+</body>
+</html>

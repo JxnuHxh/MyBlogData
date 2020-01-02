@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>使用 Caddy 自动部署 Gridea 博客 - Ryan Wang's Blog</title>
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Ryan Wang">
+    <meta name="description" content="Gridea是一个静态博客客户端，也可以称之为博客生成器，和Hexo之类的静态博客生成器很类似，唯一不同的是，Gridea提供了一个非常好的可视化界面，非常容易就可以完成一个博客的搭建，而且配置都是可视化的，所以对小白来说非常友好。但是目前Gridea仅支持部署到Github和Coding，由于众所">
+    <meta name="keywords" content="使用 Caddy 自动部署 Gridea 博客,ryan0up,halo博客,halo,java,ruibaby,ryanwang,">
+    <link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml">
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="renderer" content="webkit">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="/halo-theme-Journal/source/css/journal.min.css">
+        <meta name="robots" content="none">
+    <meta name="generator" content="Halo "/>
+    <script data-ad-client="ca-pub-5271828906478846" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        <link rel="shortcut icon" type="images/x-icon" href="https://ryanc.cc/upload/2018/4/favicon.png">
+    <script src="/halo-theme-Journal/source/js/loadCSS.js"></script>
+
+    <!-- Import prettify css  -->
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify.min.css">
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify/github-v2.min.css">
+
+    <script>
+        loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Material+Icons");
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110780416-1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-110780416-1');
+</script>
+
+    <noscript>
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora|Montserrat|Anonymous+Pro:400|Material+Icons"/>
+    </noscript>
+</head>
+<body>
+<div id="top"></div>
+<div id="app"><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+                            <a class="a-block drawer-menu-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block drawer-menu-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block drawer-menu-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block drawer-menu-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block drawer-menu-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+            <a class="a-block drawer-menu-item" href="/atom.xml">
+                RSS
+            </a>
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="">
+            Ryan Wang's Blog
+        </a>
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">Ryan Wang's Blog</div>
+        <div class="single-column-header-subtitle">Life is fantastic.</div>
+    </a>
+</div><div ref="sideContainer" class="side-container">
+    <a class="a-block nav-head " href="">
+        <div class="nav-title">
+            Ryan Wang's Blog
+        </div>
+        <div class="nav-subtitle">
+            Life is fantastic.
+        </div>
+    </a>
+
+    <div class="nav-link-list">
+
+                <a class="a-block nav-link-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block nav-link-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block nav-link-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block nav-link-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block nav-link-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+        <a class="a-block no-tint nav-link-item" href="/atom.xml">
+            RSS
+        </a>
+    </div>
+
+    <div class="nav-footer">
+        Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+        &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+    </div>
+</div><div ref="extraContainer" class="extra-container">
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+
+    </div>
+</div>
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            <div class="post-head-wrapper" style="background-image: url('https://cdn.ryanc.cc/img/blog/thumbnails/04a1742a5983c5fd09a0905bba39358c.png')"
+                 >
+                <div class="post-title">
+                    使用 Caddy 自动部署 Gridea 博客
+                    <div class="post-meta">
+                        <time datetime="2019-10-13 21:05:28" itemprop="datePublished">
+                            2019-10-13 21:05
+                        </time>&nbsp;
+                            <i class="material-icons" style="">folder</i>
+                                <a href='/categories/study-notes'>学习笔记</a>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-body-wrapper">
+                <div class="post-body" v-pre>
+                    <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>Gridea 是一个静态博客客户端，也可以称之为博客生成器，和 Hexo 之类的静态博客生成器很类似，唯一不同的是，Gridea 提供了一个非常好的可视化界面，非常容易就可以完成一个博客的搭建，而且配置都是可视化的，所以对小白来说非常友好。但是目前 Gridea 仅支持部署到 Github 和 Coding，由于众所周知的原因，Github Pages 会偶尔出现访问不了的情况（而且访问相对较慢），而且百度是不收录 Github Pages 的站点的。Coding 的话，抽风就更严重了。所以下面介绍一种方式，可以自动部署到自己的服务器。</p> 
+  </blockquote> 
+  <h2 id="前言">前言</h2> 
+  <p>在开始之前，你至少需要了解 Gridea 如何部署到 Github，并且需要熟悉 Linux 的一些基本命令。对了，此方法基于 Github Pages，所以最好先在 Github Pages 上部署好博客。</p> 
+  <h2 id="gridea-客户端配置">Gridea 客户端配置</h2> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/c948ccfe138ceb0f95e92e72723cbfd6.png" alt="image.png"></p> 
+  <p>需要注意的是，这里的域名一定要填写为解析到自己服务器 ip 的地址。</p> 
+  <h2 id="服务器环境配置">服务器环境配置</h2> 
+  <blockquote> 
+   <p>在这里我使用 Ubuntu 16.04 作为演示，其他发行版大同小异。</p> 
+  </blockquote> 
+  <h3 id="安装-git">安装 Git</h3> 
+  <pre><code class="language-bash">sudo apt-get install git
+</code></pre> 
+  <h3 id="安装-caddy">安装 Caddy</h3> 
+  <blockquote> 
+   <p>Caddy 是一个使用 Go 语言编写的 web 服务器。如果需要详细了解，请访问：<a href="https://caddyserver.com">https://caddyserver.com</a> 在这里就不在赘述。</p> 
+  </blockquote> 
+  <pre><code class="language-bash"># 安装 Caddy
+curl https://getcaddy.com | bash -s personal http.git
+</code></pre> 
+  <pre><code class="language-bash"># 配置 systemd，方便管理 Caddy 的运行状态
+wget https://raw.githubusercontent.com/caddyserver/caddy/master/dist/init/linux-systemd/caddy.service
+sudo cp caddy.service /etc/systemd/system/
+sudo chown root:root /etc/systemd/system/caddy.service
+sudo chmod 644 /etc/systemd/system/caddy.service
+sudo systemctl daemon-reload
+sudo systemctl start caddy.service
+</code></pre> 
+  <h3 id="编写-caddyfile">编写 Caddyfile</h3> 
+  <blockquote> 
+   <p>Caddyfile 即 Caddy 的站点配置文件，类似于 Nginx 的 nginx.conf。</p> 
+  </blockquote> 
+  <pre><code class="language-bash">touch /etc/caddy/Caddyfile
+
+vim /etc/caddy/Caddyfile
+</code></pre> 
+  <pre><code class="language-text">https://[DOMAIN] {
+    tls [EMAIL]
+    gzip
+    root [ROOT]
+    git {GITHUB} {
+        path [ROOT]
+        hook /webhook [SECRET]
+        hook_type github
+        clone_args --recursive
+        pull_args --recurse-submodules
+    }
+}
+</code></pre> 
+  <p>配置详解：</p> 
+  <ol> 
+   <li>[DOMAIN]：即博客地址，需要注意是否已经将服务器 ip 以 A 记录的类型解析到域名。</li> 
+   <li>[EMAIL]：SSL 证书申请邮箱，填写自己的即可。</li> 
+   <li>[ROOT]：静态页面存放地址，如：/data/wwwroot/gridea</li> 
+   <li>[SECRET]：Github 的 webhook secret key，下面会详解如何获取。</li> 
+  </ol> 
+  <p>根据自己的实际情况填写完成之后应该是类似这个样子的：</p> 
+  <pre><code class="language-text">https://gridea.ryanc.cc {
+    tls i@ryanc.cc
+    gzip
+    root /data/wwwroot/gridea.ryanc.cc
+    git github.com/ruibaby/ruibaby.github.io {
+        path /data/wwwroot/gridea.ryanc.cc
+        hook /webhook 123456
+        hook_type github
+        clone_args --recursive
+        pull_args --recurse-submodules
+    }
+}
+</code></pre> 
+  <h3 id="github-的-webhook-设置">Github 的 Webhook 设置</h3> 
+  <blockquote> 
+   <p>为啥需要设置这个？因为我们需要做到每次更新到 Github Pages 的时候，让 Caddy 知道有更新，然后会自动拉取最新的静态页面资源，完成自动更新网站内容。</p> 
+  </blockquote> 
+  <p>找到部署的仓库，然后选择 Settings -&gt; Webhooks。点击 Add Webhook。</p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/139402b4c4a6437c6b56299085217358.png" alt="image.png"></p> 
+  <p><img src="https://cdn.ryanc.cc/img/blog/thumbnails/7fb5a1274050e4b5918dcad542ee7550.png" alt="image.png"></p> 
+  <ol> 
+   <li>Payload URL 的填写规则为：博客地址/webhook。</li> 
+   <li>Secret 自行设置。</li> 
+   <li>然后点击 Add webhook 即可。</li> 
+   <li>将填写好的 Secret 填写到上面 Caddyfile 的 [SECRET]。</li> 
+  </ol> 
+  <h3 id="启动-caddy">启动 Caddy</h3> 
+  <p>进行到这里，我们只需要启动 Caddy 服务即可。</p> 
+  <pre><code class="language-bash"># 开机自启 Caddy
+sudo systemctl enable caddy.service
+</code></pre> 
+  <pre><code class="language-bash"># 启动 Caddy
+sudo service caddy start
+</code></pre> 
+  <pre><code class="language-bash"># 重启 Caddy
+sudo service caddy restart
+</code></pre> 
+  <pre><code class="language-bash"># 停止 Caddy
+sudo service caddy stop
+</code></pre> 
+  <h2 id="结尾">结尾</h2> 
+  <p>其实这种方式适用于任何部署在 Github Pages 的静态博客，有兴趣的小伙伴可以自己去折腾试试。</p> 
+ </body>
+</html>
+                </div>
+            </div>
+
+<nav class="post-pagination">
+        <a class="newer-posts" href="/archives/flarum-install-and-config">
+        上一篇<br>Flarum 的安装与配置
+    </a>
+    <span class="page-number"></span>
+    <a class="older-posts" href="/archives/try-ifttt">
+        下一篇<br>玩玩 IFTTT
+    </a>
+</nav>
+
+    <div class="post-comment-wrapper">
+      	<script>
+        var settings = {
+        	autoLoad: false
+        }  
+        </script>
+        <halo-comment id="253" type="post" :settings="settings"/>
+    </div>
+        </div>
+    </div>
+<div class="single-column-footer">
+    Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+    &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+</div></div>
+
+</div>
+<script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"
+        integrity="sha256-EGs9T1xMHdvM1geM8jPpoo8EZ1V1VRsmcJz8OByENLA=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"
+        integrity="sha256-CI4Gq5E0io1Pv0xM3qPM+NUIOhbIBvC3GiN1Y4KhXpw=" crossorigin="anonymous"></script>
+<script src="/halo-theme-Journal/source/js/journal.js"></script>
+
+<!-- Import prettify js  -->
+        <script src="/halo-theme-Journal/source/js/prettify.min.js"></script>
+        <script>
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+            })
+        </script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="http://localhost:8090/halo-comment.min.js?version=1.1.2"></script>
+</body>
+</html>

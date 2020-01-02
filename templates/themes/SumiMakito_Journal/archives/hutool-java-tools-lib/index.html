@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Hutool-贼好用的Java工具类库 - Ryan Wang's Blog</title>
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="Ryan Wang">
+    <meta name="description" content="Hutool，一个Java的工具集合，是我前几天在码云上闲的时候发现的。发现其功能贼强大，于是乎就测试了一下其中的部分工具，一下子就被这个工具给吸引住了。简介Hutool是Hu+tool的自造词，前者致敬我的“前任公司”，后者为工具之意，谐音“糊涂”，寓意追求“万事都作糊涂观，无所谓失，无所谓得”的">
+    <meta name="keywords" content="Hutool-贼好用的Java工具类库,ryan0up,halo博客,halo,java,ruibaby,ryanwang,">
+    <link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml">
+    <meta charset="utf-8">
+    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="renderer" content="webkit">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" crossorigin="anonymous">
+    <link rel="stylesheet" href="/halo-theme-Journal/source/css/journal.min.css">
+        <meta name="robots" content="none">
+    <meta name="generator" content="Halo "/>
+    <script data-ad-client="ca-pub-5271828906478846" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+        <link rel="shortcut icon" type="images/x-icon" href="https://ryanc.cc/upload/2018/4/favicon.png">
+    <script src="/halo-theme-Journal/source/js/loadCSS.js"></script>
+
+    <!-- Import prettify css  -->
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify.min.css">
+            <link rel="stylesheet" href="/halo-theme-Journal/source/css/prettify/github-v2.min.css">
+
+    <script>
+        loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Material+Icons");
+    </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-110780416-1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-110780416-1');
+</script>
+
+    <noscript>
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora|Montserrat|Anonymous+Pro:400|Material+Icons"/>
+    </noscript>
+</head>
+<body>
+<div id="top"></div>
+<div id="app"><div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+                            <a class="a-block drawer-menu-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block drawer-menu-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block drawer-menu-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block drawer-menu-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block drawer-menu-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+            <a class="a-block drawer-menu-item" href="/atom.xml">
+                RSS
+            </a>
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="">
+            Ryan Wang's Blog
+        </a>
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="">
+        <div class="single-column-header-title">Ryan Wang's Blog</div>
+        <div class="single-column-header-subtitle">Life is fantastic.</div>
+    </a>
+</div><div ref="sideContainer" class="side-container">
+    <a class="a-block nav-head " href="">
+        <div class="nav-title">
+            Ryan Wang's Blog
+        </div>
+        <div class="nav-subtitle">
+            Life is fantastic.
+        </div>
+    </a>
+
+    <div class="nav-link-list">
+
+                <a class="a-block nav-link-item" href="/" target="_self">
+                    Home
+                </a>
+                <a class="a-block nav-link-item" href="/archives" target="_self">
+                    Archives
+                </a>
+                <a class="a-block nav-link-item" href="/links" target="_self">
+                    Links
+                </a>
+                <a class="a-block nav-link-item" href="/journals" target="_self">
+                    Journals
+                </a>
+                <a class="a-block nav-link-item" href="/s/about" target="_self">
+                    About
+                </a>
+
+        <a class="a-block no-tint nav-link-item" href="/atom.xml">
+            RSS
+        </a>
+    </div>
+
+    <div class="nav-footer">
+        Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+        &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+    </div>
+</div><div ref="extraContainer" class="extra-container">
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+
+    </div>
+</div>
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            <div class="post-head-wrapper-text-only">
+                <div class="post-title">
+                    Hutool-贼好用的Java工具类库
+                    <div class="post-meta">
+                        <time datetime="2018-6-20 17:29:55" itemprop="datePublished">
+                            2018-06-20 17:29
+                        </time>&nbsp;
+                            <i class="material-icons" style="">folder</i>
+                                <a href='/categories/study-notes'>学习笔记</a>
+
+                            <i class="material-icons" style="">label</i>
+                                <a href='/tags/java'>Java</a>, 
+                                <a href='/tags/diving'>水文</a>, 
+                                <a href='/tags/hutools'>Hutools</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-body-wrapper">
+                <div class="post-body" v-pre>
+                    <html>
+ <head></head>
+ <body>
+  <blockquote> 
+   <p>Hutool，一个Java的工具集合，是我前几天在码云上闲 的时候发现的。发现其功能贼强大，于是乎就测试了一下其中的部分工具，一下子就被这个工具给吸引住了。</p> 
+  </blockquote> 
+  <h2>简介</h2> 
+  <p>Hutool是Hu + tool的自造词，前者致敬我的“前任公司”，后者为工具之意，谐音“糊涂”，寓意追求“万事都作糊涂观，无所谓失，无所谓得”的境界。</p> 
+  <p>Hutool是一个Java工具包，也只是一个工具包，它帮助我们简化每一行代码，减少每一个方法，让Java语言也可以“甜甜的”。Hutool最初是我项目中“util”包的一个整理，后来慢慢积累并加入更多非业务相关功能，并广泛学习其它开源项目精髓，经过自己整理修改，最终形成丰富的开源工具集。（抄自作者简介）</p> 
+  <h2>功能</h2> 
+  <p>一个Java基础工具类，对文件、流、加密解密、转码、正则、线程、XML等JDK方法进行封装，组成各种Util工具类，同时提供以下组件：</p> 
+  <ul> 
+   <li>hutool-aop JDK动态代理封装，提供非IOC下的切面支持</li> 
+   <li>hutool-bloomFilter 布隆过滤，提供一些Hash算法的布隆过滤</li> 
+   <li>hutool-cache 缓存</li> 
+   <li>hutool-core 核心，包括Bean操作、日期、各种Util等</li> 
+   <li>hutool-cron 定时任务模块，提供类Crontab表达式的定时任务</li> 
+   <li>hutool-crypto 加密解密模块</li> 
+   <li>hutool-db JDBC封装后的数据操作，基于ActiveRecord思想</li> 
+   <li>hutool-dfa 基于DFA模型的多关键字查找</li> 
+   <li>hutool-extra 扩展模块，对第三方封装（模板引擎、邮件等）</li> 
+   <li>hutool-http 基于HttpUrlConnection的Http客户端封装</li> 
+   <li>hutool-log 自动识别日志实现的日志门面</li> 
+   <li>hutool-script 脚本执行封装，例如Javascript</li> 
+   <li>hutool-setting 功能更强大的Setting配置文件和Properties封装</li> 
+   <li>hutool-system 系统参数调用封装（JVM信息等）</li> 
+   <li>hutool-json JSON实现</li> 
+   <li>hutool-captcha 图片验证码实现</li> 
+  </ul> 
+  <h2>简单测试</h2> 
+  <p>这两天使用Hutool把Halo里面的一些代码给替换掉了，不得不说，用起来十分顺心，下面简单介绍一下我用到的一些Hutool的工具类。</p> 
+  <h3>SecureUtil（加密解密工具）</h3> 
+  <p>主要是在登录的时候还有修改密码的时候用到的，因为数据库里面的密码是md5加密处理的，所以登录的时候需要先加密之后再到数据库进行查询，使用Hutool的话，只需要调用<code>SecureUtil</code>中的md5方法就可以了。</p> 
+  <pre><code class="language-java">user = userService.userLoginByName(loginName,SecureUtil.md5(loginPwd));
+</code></pre> 
+  <h3>HtmlUtil（HTML工具类）</h3> 
+  <p>这个工具类就比较厉害了，不过我在Halo当中用得最多的还是<code>HtmlUtil.encode</code>，可以将一些字符转化为安全字符，防止xss注入和SQL注入，比如下面的评论提交。</p> 
+  <pre><code class="language-java">comment.setCommentAuthor(HtmlUtil.encode(comment.getCommentAuthor()));
+</code></pre> 
+  <p>这就是防止有小坏蛋故意写一些可执行的js代码，然后提交评论，在后台面板就会执行这一段代码，比较危险，使用encode方法就可以将<code>&lt;script&gt;</code>标签给转化成<code>&lt;script&gt;</code>，这样转化之后，js代码就不会执行了。</p> 
+  <p>另外，HtmlUtil还提供了以下方法，有兴趣的可以去试一下。</p> 
+  <ul> 
+   <li>HtmlUtil.restoreEscaped 还原被转义的HTML特殊字符</li> 
+   <li>HtmlUtil.encode 转义文本中的HTML字符为安全的字符</li> 
+   <li>HtmlUtil.cleanHtmlTag 清除所有HTML标签</li> 
+   <li>HtmlUtil.removeHtmlTag 清除指定HTML标签和被标签包围的内容</li> 
+   <li>HtmlUtil.unwrapHtmlTag 清除指定HTML标签，不包括内容</li> 
+   <li>HtmlUtil.removeHtmlAttr 去除HTML标签中的属性</li> 
+   <li>HtmlUtil.removeAllHtmlAttr 去除指定标签的所有属性</li> 
+   <li>HtmlUtil.filter 过滤HTML文本，防止XSS攻击</li> 
+  </ul> 
+  <h3>CronUtil（定时任务）</h3> 
+  <p>这个工具就更厉害了，完全不需要类似<code>quartz</code>这样的框架来做定时任务，而且CronUtil也不需要任何其他依赖，只需要在resources下建一个配置文件，然后在程序启动的时候将定时任务开启就行了，如Halo的定时备份功能（每天凌晨1点备份一次）。</p> 
+  <p>cron.setting:</p> 
+  <pre><code class="language-bash">cc.ryanc.halo.web.controller.admin.BackupController.backupResources = 0 0 1 * * ?
+cc.ryanc.halo.web.controller.admin.BackupController.backupDatabase = 0 0 1 * * ?
+cc.ryanc.halo.web.controller.admin.BackupController.backupPosts = 0 0 1 * * ?
+</code></pre> 
+  <pre><code class="language-java">@Override
+public void onApplicationEvent(ContextRefreshedEvent event){
+	this.loadActiveTheme();
+	this.loadOptions();
+	this.loadFiles();
+	this.loadThemes();
+	//启动定时任务
+	CronUtil.start();
+	log.info("定时任务启动成功！");
+}
+</code></pre> 
+  <p>具体使用方法请看文档<a href="http://hutool.mydoc.io/?t=255673">http://hutool.mydoc.io/?t=255673</a></p> 
+  <blockquote> 
+   <p>好了，就介绍这三个工具类，有兴趣的可以去试试其他的工具，挺全的，这应该是我用过最好用的一个工具类库了，值得一试。</p> 
+  </blockquote> 
+  <p>官网地址：<a href="http://www.hutool.cn/">http://www.hutool.cn/</a></p> 
+ </body>
+</html>
+                </div>
+            </div>
+
+<nav class="post-pagination">
+        <a class="newer-posts" href="/archives/halo-add-html-page">
+        上一篇<br>Halo-自助添加HTML静态页面
+    </a>
+    <span class="page-number"></span>
+    <a class="older-posts" href="/archives/how-to-use-h2-database">
+        下一篇<br>H2 Database使用教程
+    </a>
+</nav>
+
+    <div class="post-comment-wrapper">
+      	<script>
+        var settings = {
+        	autoLoad: false
+        }  
+        </script>
+        <halo-comment id="45" type="post" :settings="settings"/>
+    </div>
+        </div>
+    </div>
+<div class="single-column-footer">
+    Proudly published with <a href="https://halo.run/" target="_blank" rel="noreferrer noopener">Halo</a><br>
+        Theme <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> by <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a><br>
+    &copy; 2019 <a href="">Ryan Wang's Blog</a>
+    <br />
+Server on Raspberry Pi
+<br />
+<a href="https://www.upyun.com/" target="_blank"><img src="/upload/2018/5/又拍云_logo5.png" style="width:48px"></img></a>
+<script>
+console.log("%c    __  __      __\n" +
+                "   / / / /___ _/ /___\n" +
+                "  / /_/ / __ `/ / __ \\\n" +
+                " / __  / /_/ / / /_/ /\n" +
+                "/_/ /_/\\__,_/_/\\____/ %c v1.1.1 https://github.com/halo-dev/halo","color:#4571ca;","color:red");
+</script>
+</div></div>
+
+</div>
+<script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"
+        integrity="sha256-EGs9T1xMHdvM1geM8jPpoo8EZ1V1VRsmcJz8OByENLA=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha256-VsEqElsCHSGmnmHXGQzvoWjWwoznFSZc6hs7ARLRacQ=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/smooth-scroll@14.2.1/dist/smooth-scroll.polyfills.min.js"
+        integrity="sha256-CI4Gq5E0io1Pv0xM3qPM+NUIOhbIBvC3GiN1Y4KhXpw=" crossorigin="anonymous"></script>
+<script src="/halo-theme-Journal/source/js/journal.js"></script>
+
+<!-- Import prettify js  -->
+        <script src="/halo-theme-Journal/source/js/prettify.min.js"></script>
+        <script>
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+            })
+        </script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+        integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY=" crossorigin="anonymous"></script>
+<script src="http://localhost:8090/halo-comment.min.js?version=1.1.2"></script>
+</body>
+</html>
